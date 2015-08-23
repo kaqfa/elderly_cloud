@@ -37,7 +37,13 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'backend',
+    'elder_profile',
+    'feedback',
+    'member',
+    'notification',
+    'partner',
+    'info',
+    'tracker',
 	'rest_framework',
 )
 
