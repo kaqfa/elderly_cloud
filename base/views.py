@@ -1,5 +1,8 @@
 from django.shortcuts import render
 
-# Create your views here.
-def dashboard(request):
-    return render(request, 'index.html')
+
+def load_page(request, page = None):
+    if page == None:
+        return render(request, 'index.html')
+
+    return render(request, page+'.html')
