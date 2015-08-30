@@ -26,38 +26,38 @@
                     <li><a><i class="fa fa-wheelchair"></i> Data Orang Tua
                        <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
-                            <li><a href="parents.html">List Orang Tua</a></li>
-                            <li><a href="form_advanced.html">Bunda Kirana</a></li>
-                            <li><a href="form_validation.html">Bapak Karno</a></li>
-                            <li><a href="form_wizards.html">Mbah Uti</a></li>
-                            <li><a href="form_upload.html">Mbah Uyut</a></li>
+                            <li><a href="{% url 'load' 'parents' %}">List Orang Tua</a></li>
+                            <li><a href="{% url 'load' 'parents' %}">Bunda Kirana</a></li>
+                            <li><a href="{% url 'load' 'parents' %}">Bapak Karno</a></li>
+                            <li><a href="{% url 'load' 'parents' %}">Mbah Uti</a></li>
+                            <li><a href="{% url 'load' 'parents' %}">Mbah Uyut</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-bar-chart"></i> Riwayat Kesehatan
                        <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
-                            <li><a href="daily_condition.html">Kondisi Harian</a></li>
-                            <li><a href="disease_hist.html">Riwayat Penyakit</a></li>
-                            <li><a href="medic_treatment_hist.html">Riwayat Perawatan Medis</a></li>
+                            <li><a href="{% url 'load' 'daily_condition' %}">Kondisi Harian</a></li>
+                            <li><a href="{% url 'load' 'disease_hist' %}">Riwayat Penyakit</a></li>
+                            <li><a href="{% url 'load' 'medic_treatment_hist' %}">Riwayat Perawatan Medis</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-book"></i>Catatan
                        <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
-                            <li><a href="notes.html">Catatan Kondisi</a></li>
-                            <li><a href="medications.html">Obat-Obatan</a></li>
-                            <li><a href="contacts.html">Kontak Penting</a></li>
+                            <li><a href="{% url 'load' 'notes' %}">Catatan Kondisi</a></li>
+                            <li><a href="{% url 'load' 'medications' %}">Obat-Obatan</a></li>
+                            <li><a href="{% url 'load' 'contacts' %}">Kontak Penting</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-newspaper-o"></i> Informasi
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
-                            <li><a href="info.html">Informasi</a></li>
-                            <li><a href="tips.html">Tips dan Trik</a></li>
-                            <li><a href="locations.html">Lokasi Penting</a></li>
+                            <li><a href="{% url 'load' 'info' %}">Informasi</a></li>
+                            <li><a href="{% url 'load' 'tips' %}">Tips dan Trik</a></li>
+                            <li><a href="{% url 'load' 'locations' %}">Lokasi Penting</a></li>
                         </ul>
                     </li>
-                    <li><a href="feeback.html">
+                    <li><a href="{% url 'load' 'feeback' %}">
                         <i class="fa fa-exclamation-circle"></i>Berikan Feedback!</a>
                     </li>
                 </ul>

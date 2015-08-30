@@ -20,5 +20,5 @@ from base.views import load_page
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', load_page),
-    url(r'^(?P<page>\w+)/', load_page),
+    url(r'^(?P<page>\w+)/', load_page, name='load'),
 ]

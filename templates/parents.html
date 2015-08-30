@@ -12,49 +12,28 @@
                         <h2>List Orang Tua yang Dirawat</h2>
                         <div class="clearfix"></div>
                     </div>
+                    <button data-toggle="dropdown" class="btn btn-primary" type="button">
+                            <span class="fa fa-plus"></span> Tambah Data Orang Tua </button>
                     <div class="x_content">
-                        <div class="row">
+                       {% for rep in "xxx" %}
+                        <div class="row parent-row">
                             <div class="col-md-2">
                                 <img src="{% static 'images/picture.jpg' %}"
-                                    class="img-circle profile_img">
+                                    class="img-circle parent-img">
                             </div>
                             <div class="col-md-8">
-                                <h3>Bunda Kirana</h3>
+                                <h3>Bunda Kirana
+                                <button class="btn btn-warning" type="button"><i class="fa fa-edit"></i></button>
+                                <button class="btn btn-danger" type="button"><i class="fa fa-trash"></i></button>
+                                </h3>
                                 <div>Jl. Dewi Sartika Raya, No. 14, Gunung Pati, Semarang</div>
                             </div>
                             <div class="col-md-2">
                                 <button type="button" style="margin-top:30px;"
-                                    class="btn btn-round btn-primary">5KBCX6</button>
+                                    class="btn btn-round btn-success">5KBCX6</button>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                <img src="{% static 'images/picture.jpg' %}"
-                                    class="img-circle profile_img">
-                            </div>
-                            <div class="col-md-8">
-                                <h3>Bunda Kirana</h3>
-                                <div>Jl. Dewi Sartika Raya, No. 14, Gunung Pati, Semarang</div>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" style="margin-top:30px;"
-                                    class="btn btn-round btn-primary">5KBCX6</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-2">
-                                <img src="{% static 'images/picture.jpg' %}"
-                                    class="img-circle profile_img">
-                            </div>
-                            <div class="col-md-8">
-                                <h3>Bunda Kirana</h3>
-                                <div>Jl. Dewi Sartika Raya, No. 14, Gunung Pati, Semarang</div>
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" style="margin-top:30px;"
-                                    class="btn btn-round btn-primary">5KBCX6</button>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
