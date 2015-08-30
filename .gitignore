@@ -1,6 +1,9 @@
 # SQLite database
 *.sqlite3
 
+# google drive metadata or some viruses
+*.ini
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
