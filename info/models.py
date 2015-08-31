@@ -9,6 +9,13 @@ class Posting(models.Model):
     category = models.CharField(max_length=45)
 
 
+class Comment(models.Model):
+    owner = models.ForeignKey(User)
+    posting = models.ForeignKey(Posting)
+    content = models.TextField()
+
+
+# Django Geo ????
 class PointOfInterest(models.Model):
     name = models.CharField(max_length=45)
     category = models.CharField(max_length=45)

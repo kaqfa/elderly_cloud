@@ -21,9 +21,10 @@ class DailyCondition(models.Model):
 
 
 class Note(models.Model):
-	user = models.ForeignKey(User)
-	elder = models.ForeignKey(Elder)
-	title = models.CharField(max_length=45)
+    user = models.ForeignKey(User)
+    elder = models.ForeignKey(Elder)
+    daily_condition = models.ForeignKey(DailyCondition, null=True, blank=True)
+    title = models.CharField(max_length=45)
 
 
 class Medications(models.Model):

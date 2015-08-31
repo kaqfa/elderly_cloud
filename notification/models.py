@@ -17,7 +17,7 @@ class Notifications(models.Model):
 class EmergencyCall(models.Model):
     elder = models.ForeignKey(Elder)
     emergancy_time = models.DateTimeField()
-    responded_by = models.ManyToManyField(User, null=True, blank=True,
+    responded_by = models.ManyToManyField(User, blank=True,
                                           through='ResponseEmergencyCall')
 
 
