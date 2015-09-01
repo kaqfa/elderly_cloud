@@ -9,25 +9,28 @@ class Elder(models.Model):
 	
 	@staticmethod
 	def get_cared_elder(user):
-		return Elder.objects.filter(cared_by__in=user)
+		return Elder.objects.filter(cared_by__in=[user])
 		
-	def get_kondisi():
+	def get_kondisi(self):
 		return self.dailycondition_set
 		
-	def get_kondisi_terakhir():
+	def get_kondisi_terakhir(self):
 		return self.dailycondition_set.latest('id')
 	
-	def count_perawat():
+	def count_perawat(self):
 		return self.cared_by.count()
 		
-	def get_riwayat_penyakit():
+	def get_riwayat_penyakit(self):
 		return self.diseasehist_set
 		
-	def get_perawatan_medis():
+	def get_perawatan_medis(self):
 		return self.medicaltreatmenthist_set
 		
-	def get_note():
+	def get_note(self):
 		return self.note_set
+		
+	def __str__(self):              # __unicode__ on Python 2
+		return self.name
 
 
 class Caregiving(models.Model):
