@@ -5,7 +5,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="16">
+          <list size="19">
             <item index="0" class="java.lang.String" itemvalue="django-polymorphic" />
             <item index="1" class="java.lang.String" itemvalue="Django-Select2" />
             <item index="2" class="java.lang.String" itemvalue="django-debug-toolbar" />
@@ -22,6 +22,9 @@
             <item index="13" class="java.lang.String" itemvalue="djangorestframework-filters" />
             <item index="14" class="java.lang.String" itemvalue="django-contrib-comments" />
             <item index="15" class="java.lang.String" itemvalue="django-suit-ckeditor" />
+            <item index="16" class="java.lang.String" itemvalue="Django" />
+            <item index="17" class="java.lang.String" itemvalue="futures" />
+            <item index="18" class="java.lang.String" itemvalue="django-pipeline" />
           </list>
         </value>
       </option>

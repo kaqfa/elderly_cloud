@@ -8,6 +8,7 @@ class Elder(models.Model):
     address = models.TextField(null=True, blank=True)
     birthday = models.DateField(null=True)
     gender = models.CharField(max_length=1)
+    phone = models.CharField(max_length=20)
     cared_by = models.ManyToManyField(User, through='Caregiving')
 
     @staticmethod
