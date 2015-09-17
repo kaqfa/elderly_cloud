@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dt-example table-type="html" order="1">
 
-<css lib="datatables tabletools font-awesome">
-	tr td:first-child {
-		text-align: center;
-	}
+    <css lib="datatables tabletools font-awesome">
+        tr td:first-child {
+        text-align: center;
+        }
 
-	tr td:first-child:before {
-		content: "\f096"; /* fa-square-o */
-		font-family: FontAwesome;
-	}
+        tr td:first-child:before {
+        content: "\f096"; /* fa-square-o */
+        font-family: FontAwesome;
+        }
 
-	tr.selected td:first-child:before {
-		content: "\f046"; /* fa-check-square-o */
-	}
-</css>
-<js lib="jquery datatables tabletools">
-<![CDATA[
+        tr.selected td:first-child:before {
+        content: "\f046"; /* fa-check-square-o */
+        }
+    </css>
+    <js lib="jquery datatables tabletools">
+        <![CDATA[
 
 $(document).ready(function() {
 	$('#example').DataTable( {
@@ -40,11 +40,11 @@ $(document).ready(function() {
 	} );
 } );
 ]]>
-</js>
+    </js>
 
-<title lib="TableTools">Row selection - row selector on specific cells</title>
+    <title lib="TableTools">Row selection - row selector on specific cells</title>
 
-<info><![CDATA[
+    <info><![CDATA[
 
 By default, TableTools' row selector option will register a row selection click on any part of the row. Although this is often desirable, you might wish at times to limit the row selection to just a single column, or other elements in the row. This might be useful, for example, with [Editor's](//editor.datatables.net) inline editing, so you don't select the row on click of a cell that is to be edited.
 
@@ -54,20 +54,20 @@ In this case, the row selector is attached to the cells in the first column of t
 
 ]]></info>
 
-<custom-table>
-	<table id="example" class="display" cellspacing="0" width="100%">
-		<thead>
-			<tr>
-				<th></th>
-				<th>Name</th>
-				<th>Position</th>
-				<th>Office</th>
-				<th>Age</th>
-				<th>Start date</th>
-				<th>Salary</th>
-			</tr>
-		</thead>
-	</table>
-</custom-table>
+    <custom-table>
+        <table id="example" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Office</th>
+                    <th>Age</th>
+                    <th>Start date</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+        </table>
+    </custom-table>
 
 </dt-example>

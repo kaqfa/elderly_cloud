@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dt-example table-type="html" order="1">
 
-<css lib="datatables tabletools" />
-<js lib="jquery datatables tabletools">
-<![CDATA[
+    <css lib="datatables tabletools"/>
+    <js lib="jquery datatables tabletools">
+        <![CDATA[
 $(document).ready(function() {
 	$('#example').DataTable( {
 		"dom": 'T<"clear">lfrtip',
@@ -28,11 +28,11 @@ $(document).ready(function() {
 	} );
 } );
 ]]>
-</js>
+    </js>
 
-<title lib="TableTools">Custom button text</title>
+    <title lib="TableTools">Custom button text</title>
 
-<info><![CDATA[
+    <info><![CDATA[
 
 You may wish to set your own text for the buttons in the TableTools toolbar, rather than relying on the default built-in text. This is done by overriding the `sButtonText` parameter of whatever button you wish to alter. The way TableTools allows you to alter a predefined button is by 'extending' it (using the `sExtends` parameter) and then setting the overriding parameter.
 

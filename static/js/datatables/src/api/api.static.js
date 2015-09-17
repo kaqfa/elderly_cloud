@@ -11,26 +11,24 @@
  *  @example
  *    alert( $.fn.dataTable.fnVersionCheck( '1.9.0' ) );
  */
-DataTable.fnVersionCheck = function( sVersion )
-{
-	var aThis = DataTable.ext.sVersion.split('.');
-	var aThat = sVersion.split('.');
-	var iThis, iThat;
+DataTable.fnVersionCheck = function (sVersion) {
+    var aThis = DataTable.ext.sVersion.split('.');
+    var aThat = sVersion.split('.');
+    var iThis, iThat;
 
-	for ( var i=0, iLen=aThat.length ; i<iLen ; i++ ){
-		iThis = parseInt( aThis[i], 10 ) || 0;
-		iThat = parseInt( aThat[i], 10 ) || 0;
+    for (var i = 0, iLen = aThat.length; i < iLen; i++) {
+        iThis = parseInt(aThis[i], 10) || 0;
+        iThat = parseInt(aThat[i], 10) || 0;
 
-		// Parts are the same, keep comparing
-		if (iThis === iThat)
-		{
-			continue;
-		}
+        // Parts are the same, keep comparing
+        if (iThis === iThat) {
+            continue;
+        }
 
-		// Parts are different, return immediately
-		return iThis > iThat;
-	}
-	return true;
+        // Parts are different, return immediately
+        return iThis > iThat;
+    }
+    return true;
 };
 
 
@@ -48,19 +46,16 @@ DataTable.fnVersionCheck = function( sVersion )
  *      $(ex).dataTable();
  *    }
  */
-DataTable.fnIsDataTable = function ( nTable )
-{
-	var o = DataTable.settings;
+DataTable.fnIsDataTable = function (nTable) {
+    var o = DataTable.settings;
 
-	for ( var i=0 ; i<o.length ; i++ )
-	{
-		if ( o[i].nTable === nTable || o[i].nScrollHead === nTable || o[i].nScrollFoot === nTable )
-		{
-			return true;
-		}
-	}
+    for (var i = 0; i < o.length; i++) {
+        if (o[i].nTable === nTable || o[i].nScrollHead === nTable || o[i].nScrollFoot === nTable) {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 };
 
 
@@ -79,17 +74,15 @@ DataTable.fnIsDataTable = function ( nTable )
  *      $(table).dataTable().fnAdjustColumnSizing();
  *    }
  */
-DataTable.fnTables = function ( bVisible )
-{
-	var out = [];
+DataTable.fnTables = function (bVisible) {
+    var out = [];
 
-	jQuery.each( DataTable.settings, function (i, o) {
-		if ( !bVisible || (bVisible === true && $(o.nTable).is(':visible')) )
-		{
-			out.push( o.nTable );
-		}
-	} );
+    jQuery.each(DataTable.settings, function (i, o) {
+        if (!bVisible || (bVisible === true && $(o.nTable).is(':visible'))) {
+            out.push(o.nTable);
+        }
+    });
 
-	return out;
+    return out;
 };
 

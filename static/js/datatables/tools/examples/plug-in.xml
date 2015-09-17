@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dt-example table-type="html" order="1">
 
-<css lib="datatables tabletools" />
-<js lib="jquery datatables tabletools">
-<![CDATA[
+    <css lib="datatables tabletools"/>
+    <js lib="jquery datatables tabletools">
+        <![CDATA[
 
 $.fn.dataTable.TableTools.buttons.copy_to_div = $.extend(
 	true,
@@ -32,20 +32,20 @@ $(document).ready(function() {
 	} );
 } );
 ]]>
-</js>
+    </js>
 
-<title lib="TableTools">Plug-in button types</title>
+    <title lib="TableTools">Plug-in button types</title>
 
-<info><![CDATA[
+    <info><![CDATA[
 
 This example shows how you can add a message to the saved PDF using the `sPdfMessage` parameter. It also shows that the orientation of the output PDF can be changed to landscape which is useful if you have a lot of columns.
 
 ]]></info>
 
-<demo-html>
-	<div id="copy" class="box" style="height: 100px; overflow: auto">
-		Copy output will go here
-	</div>
-</demo-html>
+    <demo-html>
+        <div id="copy" class="box" style="height: 100px; overflow: auto">
+            Copy output will go here
+        </div>
+    </demo-html>
 
 </dt-example>

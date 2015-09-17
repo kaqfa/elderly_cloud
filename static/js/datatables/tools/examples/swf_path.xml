@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dt-example table-type="html" order="1">
 
-<css lib="datatables tabletools" />
-<js lib="jquery datatables tabletools">
-<![CDATA[
+    <css lib="datatables tabletools"/>
+    <js lib="jquery datatables tabletools">
+        <![CDATA[
 $(document).ready(function() {
 	$('#example').DataTable( {
 		dom: 'T<"clear">lfrtip',
@@ -13,11 +13,11 @@ $(document).ready(function() {
 	} );
 } );
 ]]>
-</js>
+    </js>
 
-<title lib="TableTools">Setting the SWF path</title>
+    <title lib="TableTools">Setting the SWF path</title>
 
-<info><![CDATA[
+    <info><![CDATA[
 
 TableTools uses a Flash SWF file to provide the ability to copy text to the system clipboard and save files locally. TableTools must be able to load the SWF file in order to provide these facilities. If you aren't using the same directory structure as the TableTools package, you will need to set the `sSwfPath` TableTools parameter, as shown in this example.
 

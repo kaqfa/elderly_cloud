@@ -6,7 +6,6 @@ from django.conf import settings
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('member', '0001_initial'),
@@ -49,6 +48,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='emergencycall',
             name='responded_by',
-            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL, null=True, through='notification.ResponseEmergencyCall', blank=True),
+            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL, null=True,
+                                         through='notification.ResponseEmergencyCall', blank=True),
         ),
     ]

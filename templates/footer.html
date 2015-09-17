@@ -1,129 +1,129 @@
 {% load staticfiles %}
-    <div id="custom_notifications" class="custom-notifications dsp_none">
-        <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
-        </ul>
-        <div class="clearfix"></div>
-        <div id="notif-group" class="tabbed_notifications"></div>
-    </div>
+<div id="custom_notifications" class="custom-notifications dsp_none">
+    <ul class="list-unstyled notifications clearfix" data-tabbed_notifications="notif-group">
+    </ul>
+    <div class="clearfix"></div>
+    <div id="notif-group" class="tabbed_notifications"></div>
+</div>
 
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/nicescroll/jquery.nicescroll.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/nicescroll/jquery.nicescroll.min.js' %}"></script>
 
-    <script src="{% static 'js/chartjs/chart.min.js' %}"></script>
-    <script src="{% static 'js/progressbar/bootstrap-progressbar.min.js' %}"></script>
-    <script src="{% static 'js/icheck/icheck.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
-    <script src="{% static 'js/sparkline/jquery.sparkline.min.js' %}"></script>
+<script src="{% static 'js/chartjs/chart.min.js' %}"></script>
+<script src="{% static 'js/progressbar/bootstrap-progressbar.min.js' %}"></script>
+<script src="{% static 'js/icheck/icheck.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+<script src="{% static 'js/sparkline/jquery.sparkline.min.js' %}"></script>
 
-    <script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 
-    <!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
-    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.pie.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.orderBars.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.time.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/date.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.spline.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.stack.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/curvedLines.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/flot/jquery.flot.resize.js' %}"></script>
+<!--[if lte IE 8]><script type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
+<script type="text/javascript" src="{% static 'js/flot/jquery.flot.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/jquery.flot.pie.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/jquery.flot.orderBars.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/jquery.flot.time.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/date.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/jquery.flot.spline.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/jquery.flot.stack.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/curvedLines.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/flot/jquery.flot.resize.js' %}"></script>
 
-    <script type="text/javascript">
-        var chartColours = ['#96CA59', '#3F97EB', '#72c380', '#6f7a8a', '#f7cb38', '#5a8022', '#2c7282'];
+<script type="text/javascript">
+    var chartColours = ['#96CA59', '#3F97EB', '#72c380', '#6f7a8a', '#f7cb38', '#5a8022', '#2c7282'];
 
-        randNum = function () {
-            return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+    randNum = function () {
+        return (Math.floor(Math.random() * (1 + 40 - 20))) + 20;
+    }
+
+    $(function () {
+        var d1 = [];
+
+        for (var i = 0; i < 30; i++) {
+            d1.push([new Date(Date.today().add(i).days()).getTime(), randNum() + i + i + 10]);
         }
 
-        $(function () {
-            var d1 = [];
+        var chartMinDate = d1[0][0];
+        var chartMaxDate = d1[20][0];
 
-            for (var i = 0; i < 30; i++) {
-                d1.push([new Date(Date.today().add(i).days()).getTime(), randNum() + i + i + 10]);
-            }
+        var tickSize = [1, "day"];
+        var tformat = "%d/%m/%y";
 
-            var chartMinDate = d1[0][0];
-            var chartMaxDate = d1[20][0];
-
-            var tickSize = [1, "day"];
-            var tformat = "%d/%m/%y";
-
-            var options = {
-                grid: {
-                    show: true,
-                    aboveData: true,
-                    color: "#3f3f3f",
-                    labelMargin: 10,
-                    axisMargin: 0,
-                    borderWidth: 0,
-                    borderColor: null,
-                    minBorderMargin: 5,
-                    clickable: true,
-                    hoverable: true,
-                    autoHighlight: true,
-                    mouseActiveRadius: 100
-                },
-                series: {
-                    lines: {
-                        show: true,
-                        fill: true,
-                        lineWidth: 2,
-                        steps: false
-                    },
-                    points: {
-                        show: true,
-                        radius: 4.5,
-                        symbol: "circle",
-                        lineWidth: 3.0
-                    }
-                },
-                legend: {
-                    position: "ne",
-                    margin: [0, -25],
-                    noColumns: 0,
-                    labelBoxBorderColor: null,
-                    labelFormatter: function (label, series) {
-                        return label + '&nbsp;&nbsp;';
-                    },
-                    width: 40,
-                    height: 1
-                },
-                colors: chartColours,
-                shadowSize: 0,
-                tooltip: true,
-                tooltipOpts: {
-                    content: "%s: %y.0",
-                    xDateFormat: "%d/%m",
-                    shifts: {
-                        x: -30,
-                        y: -50
-                    },
-                    defaultTheme: false
-                },
-                yaxis: {
-                    min: 0
-                },
-                xaxis: {
-                    mode: "time",
-                    minTickSize: tickSize,
-                    timeformat: tformat,
-                    min: chartMinDate,
-                    max: chartMaxDate
-                }
-            };
-            var plot = $.plot($("#placeholder33x"), [{
-                label: "Rata-rata Detak Jantung Harian",
-                data: d1,
+        var options = {
+            grid: {
+                show: true,
+                aboveData: true,
+                color: "#3f3f3f",
+                labelMargin: 10,
+                axisMargin: 0,
+                borderWidth: 0,
+                borderColor: null,
+                minBorderMargin: 5,
+                clickable: true,
+                hoverable: true,
+                autoHighlight: true,
+                mouseActiveRadius: 100
+            },
+            series: {
                 lines: {
-                    fillColor: "rgba(150, 202, 89, 0.12)"
+                    show: true,
+                    fill: true,
+                    lineWidth: 2,
+                    steps: false
                 },
                 points: {
-                    fillColor: "#fff"
+                    show: true,
+                    radius: 4.5,
+                    symbol: "circle",
+                    lineWidth: 3.0
                 }
-            }], options);
-        });
-    </script>
+            },
+            legend: {
+                position: "ne",
+                margin: [0, -25],
+                noColumns: 0,
+                labelBoxBorderColor: null,
+                labelFormatter: function (label, series) {
+                    return label + '&nbsp;&nbsp;';
+                },
+                width: 40,
+                height: 1
+            },
+            colors: chartColours,
+            shadowSize: 0,
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s: %y.0",
+                xDateFormat: "%d/%m",
+                shifts: {
+                    x: -30,
+                    y: -50
+                },
+                defaultTheme: false
+            },
+            yaxis: {
+                min: 0
+            },
+            xaxis: {
+                mode: "time",
+                minTickSize: tickSize,
+                timeformat: tformat,
+                min: chartMinDate,
+                max: chartMaxDate
+            }
+        };
+        var plot = $.plot($("#placeholder33x"), [{
+            label: "Rata-rata Detak Jantung Harian",
+            data: d1,
+            lines: {
+                fillColor: "rgba(150, 202, 89, 0.12)"
+            },
+            points: {
+                fillColor: "#fff"
+            }
+        }], options);
+    });
+</script>
 </body>
 
 </html>

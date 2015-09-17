@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+
 from member.models import Elder
 
 
@@ -16,7 +17,7 @@ class Notifications(models.Model):
 
 class EmergencyCall(models.Model):
     elder = models.ForeignKey(Elder)
-    emergancy_time = models.DateTimeField()
+    emergency_time = models.DateTimeField()
     responded_by = models.ManyToManyField(User, blank=True,
                                           through='ResponseEmergencyCall')
 

@@ -30,59 +30,57 @@
  */
 var TableTools;
 
-(function(window, document, undefined) {
+(function (window, document, undefined) {
 
 
-var factory = function( $, DataTable ) {
-"use strict";
+    var factory = function ($, DataTable) {
+        "use strict";
 
 
 //include ZeroClipboard.js
 //include TableTools.js
 
-/*
- * Register a new feature with DataTables
- */
-if ( typeof $.fn.dataTable == "function" &&
-	 typeof $.fn.dataTableExt.fnVersionCheck == "function" &&
-	 $.fn.dataTableExt.fnVersionCheck('1.9.0') )
-{
-	$.fn.dataTableExt.aoFeatures.push( {
-		"fnInit": function( oDTSettings ) {
-			var oOpts = typeof oDTSettings.oInit.oTableTools != 'undefined' ?
-				oDTSettings.oInit.oTableTools : {};
+        /*
+         * Register a new feature with DataTables
+         */
+        if (typeof $.fn.dataTable == "function" &&
+            typeof $.fn.dataTableExt.fnVersionCheck == "function" &&
+            $.fn.dataTableExt.fnVersionCheck('1.9.0')) {
+            $.fn.dataTableExt.aoFeatures.push({
+                "fnInit": function (oDTSettings) {
+                    var oOpts = typeof oDTSettings.oInit.oTableTools != 'undefined' ?
+                        oDTSettings.oInit.oTableTools : {};
 
-			var oTT = new TableTools( oDTSettings.oInstance, oOpts );
-			TableTools._aInstances.push( oTT );
+                    var oTT = new TableTools(oDTSettings.oInstance, oOpts);
+                    TableTools._aInstances.push(oTT);
 
-			return oTT.dom.container;
-		},
-		"cFeature": "T",
-		"sFeature": "TableTools"
-	} );
-}
-else
-{
-	alert( "Warning: TableTools 2 requires DataTables 1.9.0 or newer - www.datatables.net/download");
-}
+                    return oTT.dom.container;
+                },
+                "cFeature": "T",
+                "sFeature": "TableTools"
+            });
+        }
+        else {
+            alert("Warning: TableTools 2 requires DataTables 1.9.0 or newer - www.datatables.net/download");
+        }
 
 
-$.fn.dataTable.TableTools = TableTools;
-$.fn.DataTable.TableTools = TableTools;
+        $.fn.dataTable.TableTools = TableTools;
+        $.fn.DataTable.TableTools = TableTools;
 
 
-return TableTools;
-}; // /factory
+        return TableTools;
+    }; // /factory
 
 
 // Define as an AMD module if possible
-if ( typeof define === 'function' && define.amd ) {
-	define( 'datatables-tabletools', ['jquery', 'datatables'], factory );
-}
-else if ( jQuery && !jQuery.fn.dataTable.TableTools ) {
-	// Otherwise simply initialise as normal, stopping multiple evaluation
-	factory( jQuery, jQuery.fn.dataTable );
-}
+    if (typeof define === 'function' && define.amd) {
+        define('datatables-tabletools', ['jquery', 'datatables'], factory);
+    }
+    else if (jQuery && !jQuery.fn.dataTable.TableTools) {
+        // Otherwise simply initialise as normal, stopping multiple evaluation
+        factory(jQuery, jQuery.fn.dataTable);
+    }
 
 
 })(window, document);

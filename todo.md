@@ -1,11 +1,22 @@
-<!-- 
-Yang perlu dikerjain saat ini
-NB: 
-- yang udah selesai ditandain v ya....
-- latihan sementara bisa diimplementasikan di halaman admin
-- tampilane asal aja, nanti yang bagian desain aku
-- kalo udah implementasikan juga di rest framework
--->
+# Profil Aplikasi
+- Nama Aplikasi
+- Icon Aplikasi
+- Social media content, image, & buzzer
+- Bikin backlog & Sprint
+- Bikin How To dan dokumentasi
+- Bikin timeline
+- Video profile panti asuhan (2 menit)
+
+## UI & UX
+- Desain Icon
+- Struktur aplikasi
+- Wireframe lengkap untuk semua tampilan
+- Konten untuk semua tampilan
+- Desain Tampilan
+- Kalau bisa perlu ada yang desain grafis & konten
+
+## Service Available
+
 
 ## Models
 - Lengkapin atribut di model kalau boleh

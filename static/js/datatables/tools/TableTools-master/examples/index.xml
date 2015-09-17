@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dt-example table-type="html" order="0">
 
-<title lib="TableTools">TableTools examples</title>
+    <title lib="TableTools">TableTools examples</title>
 
-<js lib="jquery" />
-<info><![CDATA[
+    <js lib="jquery"/>
+    <info><![CDATA[
 
 TableTools is a plug-in for the DataTables HTML table enhancer, which adds a highly customisable button toolbar to a DataTable. Key features include:
 

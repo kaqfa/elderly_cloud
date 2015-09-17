@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dt-example table-type="html" order="1">
 
-<css lib="datatables tabletools" />
-<js lib="jquery datatables tabletools">
-<![CDATA[
+    <css lib="datatables tabletools"/>
+    <js lib="jquery datatables tabletools">
+        <![CDATA[
 $(document).ready(function() {
 	$('#example').DataTable( {
 		"dom": 'T<"clear">lfrtip',
@@ -21,11 +21,11 @@ $(document).ready(function() {
 	} );
 } );
 ]]>
-</js>
+    </js>
 
-<title lib="TableTools">Button collections</title>
+    <title lib="TableTools">Button collections</title>
 
-<info><![CDATA[
+    <info><![CDATA[
 
 TableTools provides the ability to group buttons into a hidden drop down list, which is activated by clicking on a top-level button. This is achieved by extending the 'collection' predefined button type and setting it's `aButtons` parameter with the same options as the top level buttons (note that you cannot currently use a collection within a collection).
 

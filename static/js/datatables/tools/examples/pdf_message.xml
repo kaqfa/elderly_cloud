@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <dt-example table-type="html" order="1">
 
-<css lib="datatables tabletools" />
-<js lib="jquery datatables tabletools">
-<![CDATA[
+    <css lib="datatables tabletools"/>
+    <js lib="jquery datatables tabletools">
+        <![CDATA[
 $(document).ready(function() {
 	$('#example').DataTable( {
 		dom: 'T<"clear">lfrtip',
@@ -23,11 +23,11 @@ $(document).ready(function() {
 	} );
 } );
 ]]>
-</js>
+    </js>
 
-<title lib="TableTools">PDF message</title>
+    <title lib="TableTools">PDF message</title>
 
-<info><![CDATA[
+    <info><![CDATA[
 
 This example shows how you can add a message to the saved PDF using the `sPdfMessage` parameter. It also shows that the orientation of the output PDF can be changed to landscape which is useful if you have a lot of columns.
 

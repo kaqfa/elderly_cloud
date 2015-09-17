@@ -5,7 +5,7 @@
 
         <div class="navbar nav_title" style="border: 0;">
             <a href="index.html" class="site_title"><i class="fa fa-paw"></i>
-            <span>Elder Caring</span></a>
+                <span>Elder Caring</span></a>
         </div>
         <div class="clearfix"></div>
         <div class="profile">
@@ -13,18 +13,21 @@
                 <img src="{% static 'images/picture.jpg' %}" alt="..." class="img-circle profile_img">
             </div>
             <div class="profile_info">
-                <span>Data seputar:</span><h2>Bunda Kirana</h2>
+                <span>Data seputar:</span>
+
+                <h2>Bunda Kirana</h2>
             </div>
         </div>
 
-        <br />
+        <br/>
+
         <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
             <div class="menu_section">
                 <h3>&nbsp;</h3>
                 <ul class="nav side-menu">
                     <li><a href="index.html"><i class="fa fa-home"></i> Beranda</a></li>
                     <li><a><i class="fa fa-wheelchair"></i> Data Orang Tua
-                       <span class="fa fa-chevron-down"></span></a>
+                        <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                             <li><a href="{% url 'load' 'parents' %}">List Orang Tua</a></li>
                             <li><a href="{% url 'load' 'parents' %}">Bunda Kirana</a></li>
@@ -34,7 +37,7 @@
                         </ul>
                     </li>
                     <li><a><i class="fa fa-bar-chart"></i> Riwayat Kesehatan
-                       <span class="fa fa-chevron-down"></span></a>
+                        <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                             <li><a href="{% url 'load' 'daily_condition' %}">Kondisi Harian</a></li>
                             <li><a href="{% url 'load' 'disease_hist' %}">Riwayat Penyakit</a></li>
@@ -42,7 +45,7 @@
                         </ul>
                     </li>
                     <li><a><i class="fa fa-book"></i>Catatan
-                       <span class="fa fa-chevron-down"></span></a>
+                        <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                             <li><a href="{% url 'load' 'notes' %}">Catatan Kondisi</a></li>
                             <li><a href="{% url 'load' 'medications' %}">Obat-Obatan</a></li>
@@ -121,12 +124,12 @@
                         <span class="badge bg-green">12</span>
                     </a>
                     <ul id="menu1"
-                       class="dropdown-menu list-unstyled msg_list animated fadeInDown"
-                       role="menu">
+                        class="dropdown-menu list-unstyled msg_list animated fadeInDown"
+                        role="menu">
                         <li>
                             <a>
                                 <span class="image">
-                                    <img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
+                                    <img src="{% static 'images/img.jpg' %}" alt="Profile Image"/>
                                 </span>
                                 <span>
                                 <span>John Smith</span>
@@ -138,7 +141,7 @@
                         <li>
                             <a>
                                 <span class="image">
-                            <img src="{% static 'images/img.jpg' %}" alt="Profile Image" />
+                            <img src="{% static 'images/img.jpg' %}" alt="Profile Image"/>
                         </span>
                                 <span>
                             <span>John Smith</span>

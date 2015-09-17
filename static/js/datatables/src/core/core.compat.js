@@ -1,5 +1,3 @@
-
-
 /**
  * Create a mapping object that allows camel case parameters to be looked up
  * for their Hungarian counterparts. The mapping is stored in a private
@@ -7,30 +5,27 @@
  *  @param {object} o
  *  @memberof DataTable#oApi
  */
-function _fnHungarianMap ( o )
-{
-	var
-		hungarian = 'a aa ao as b fn i m o s ',
-		match,
-		newKey,
-		map = {};
+function _fnHungarianMap(o) {
+    var
+        hungarian = 'a aa ao as b fn i m o s ',
+        match,
+        newKey,
+        map = {};
 
-	$.each( o, function (key, val) {
-		match = key.match(/^([^A-Z]+?)([A-Z])/);
+    $.each(o, function (key, val) {
+        match = key.match(/^([^A-Z]+?)([A-Z])/);
 
-		if ( match && hungarian.indexOf(match[1]+' ') !== -1 )
-		{
-			newKey = key.replace( match[0], match[2].toLowerCase() );
-			map[ newKey ] = key;
+        if (match && hungarian.indexOf(match[1] + ' ') !== -1) {
+            newKey = key.replace(match[0], match[2].toLowerCase());
+            map[newKey] = key;
 
-			if ( match[1] === 'o' )
-			{
-				_fnHungarianMap( o[key] );
-			}
-		}
-	} );
+            if (match[1] === 'o') {
+                _fnHungarianMap(o[key]);
+            }
+        }
+    });
 
-	o._hungaianMap = map;
+    o._hungaianMap = map;
 }
 
 
@@ -45,28 +40,24 @@ function _fnHungarianMap ( o )
  *    won't be.
  *  @memberof DataTable#oApi
  */
-function _fnCamelToHungarian ( src, user, force )
-{
-	if ( ! src._hungaianMap )
-	{
-		return;
-	}
+function _fnCamelToHungarian(src, user, force) {
+    if (!src._hungaianMap) {
+        return;
+    }
 
-	var hungarianKey;
+    var hungarianKey;
 
-	$.each( user, function (key, val) {
-		hungarianKey = src._hungaianMap[ key ];
+    $.each(user, function (key, val) {
+        hungarianKey = src._hungaianMap[key];
 
-		if ( hungarianKey !== undefined && (force || user[hungarianKey] === undefined) )
-		{
-			user[hungarianKey] = user[ key ];
+        if (hungarianKey !== undefined && (force || user[hungarianKey] === undefined)) {
+            user[hungarianKey] = user[key];
 
-			if ( hungarianKey.charAt(0) === 'o' )
-			{
-				_fnCamelToHungarian( src[hungarianKey], user[key] );
-			}
-		}
-	} );
+            if (hungarianKey.charAt(0) === 'o') {
+                _fnCamelToHungarian(src[hungarianKey], user[key]);
+            }
+        }
+    });
 }
 
 
@@ -77,24 +68,21 @@ function _fnCamelToHungarian ( src, user, force )
  *  @param {object} oSettings dataTables settings object
  *  @memberof DataTable#oApi
  */
-function _fnLanguageCompat( oLanguage )
-{
-	var oDefaults = DataTable.defaults.oLanguage;
+function _fnLanguageCompat(oLanguage) {
+    var oDefaults = DataTable.defaults.oLanguage;
 
-	/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
-	 * sZeroRecords - assuming that is given.
-	 */
-	if ( !oLanguage.sEmptyTable && oLanguage.sZeroRecords &&
-		oDefaults.sEmptyTable === "No data available in table" )
-	{
-		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable' );
-	}
+    /* Backwards compatibility - if there is no sEmptyTable given, then use the same as
+     * sZeroRecords - assuming that is given.
+     */
+    if (!oLanguage.sEmptyTable && oLanguage.sZeroRecords &&
+        oDefaults.sEmptyTable === "No data available in table") {
+        _fnMap(oLanguage, oLanguage, 'sZeroRecords', 'sEmptyTable');
+    }
 
-	/* Likewise with loading records */
-	if ( !oLanguage.sLoadingRecords && oLanguage.sZeroRecords &&
-		oDefaults.sLoadingRecords === "Loading..." )
-	{
-		_fnMap( oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords' );
-	}
+    /* Likewise with loading records */
+    if (!oLanguage.sLoadingRecords && oLanguage.sZeroRecords &&
+        oDefaults.sLoadingRecords === "Loading...") {
+        _fnMap(oLanguage, oLanguage, 'sZeroRecords', 'sLoadingRecords');
+    }
 }
 
