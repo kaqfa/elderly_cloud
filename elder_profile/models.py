@@ -17,7 +17,7 @@ class MedicalTreatmentHist(models.Model):
 class DailyCondition(models.Model):
     elder = models.ForeignKey(Elder)
     condition = models.CharField(max_length=1)
-    photo = models.ImageField()
+    photo = models.ImageField(null=True)
     time_record = models.DateTimeField()
 
 
