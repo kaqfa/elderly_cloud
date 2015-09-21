@@ -4,4 +4,5 @@ django-pipeline==1.5.3
 djangorestframework==3.2.2
 futures==3.0.3
 Pillow
-djangopolymorphism
+django-polymorphic
+django-model-utils

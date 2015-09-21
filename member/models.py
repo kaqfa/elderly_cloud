@@ -1,15 +1,24 @@
 from django.db import models
 from django.contrib.auth.models import User
+from polymorphic import PolymorphicModel
 
 
-class Elder(models.Model):
-    code = models.CharField(max_length=8, blank=False, null=False)
+class Member(PolymorphicModel):
+    user = models.OneToOneField(User)
     name = models.CharField(max_length=100, blank=False, null=False, default='')
     address = models.TextField(null=True, blank=True)
     birthday = models.DateField(null=True)
     gender = models.CharField(max_length=1)
     phone = models.CharField(max_length=20)
-    cared_by = models.ManyToManyField(User, through='Caregiving')
+
+
+class CareGiver(Member):
+    pass
+
+
+class Elder(Member):
+    code = models.CharField(max_length=8, blank=False, null=False)
+    cared_by = models.ManyToManyField(User, through='CareGiving')
 
     @staticmethod
     def get_cared_elder(user):
@@ -40,8 +49,8 @@ class Elder(models.Model):
         return self.name
 
 
-class Caregiving(models.Model):
-    user = models.ForeignKey(User)
+class CareGiving(models.Model):
+    user = models.OneToOneField(User)
     elder = models.ForeignKey(Elder)
 
 
