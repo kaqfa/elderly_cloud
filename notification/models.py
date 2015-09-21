@@ -10,7 +10,7 @@ class NotificationTemplate(models.Model):
     LEVEL_CHOICES = (('1', 'info'), ('2', 'warning'), ('3', 'emergency'))
     title = models.CharField(max_length=45)
     content = models.TextField()
-    level = models.CharField(max_length=1, choices=LEVEL_CHOICES)
+    level = models.CharField(max_length=1, choices=LEVEL_CHOICES, default='1')
 
 
 class Notification(TimeStampedModel, StatusModel):

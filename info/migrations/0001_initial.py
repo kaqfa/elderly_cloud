@@ -6,11 +6,20 @@ from django.conf import settings
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
+        migrations.CreateModel(
+            name='Comment',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('content', models.TextField()),
+                ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
         migrations.CreateModel(
             name='PointOfInterest',
             fields=[
@@ -31,5 +40,10 @@ class Migration(migrations.Migration):
                 ('category', models.CharField(max_length=45)),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
+        ),
+        migrations.AddField(
+            model_name='comment',
+            name='posting',
+            field=models.ForeignKey(to='info.Posting'),
         ),
     ]

@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'partner',
     'info',
     'tracker',
+    'contact',
     'rest_framework',
 )
 

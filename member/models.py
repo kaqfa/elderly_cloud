@@ -1,11 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
 from polymorphic import PolymorphicModel
+from model_utils.models import TimeStampedModel, StatusModel
+from model_utils import Choices
 
 
-class Member(PolymorphicModel):
+class Member(PolymorphicModel, TimeStampedModel):
+    GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
     user = models.OneToOneField(User)
-    name = models.CharField(max_length=100, blank=False, null=False, default='')
+    # name = models.CharField(max_length=100, blank=False, null=False, default='')
     address = models.TextField(null=True, blank=True)
     birthday = models.DateField(null=True)
     gender = models.CharField(max_length=1)
@@ -16,10 +19,13 @@ class CareGiver(Member):
     pass
 
 
+class Partner(Member):
+    pass
+
+
 class Elder(Member):
     code = models.CharField(max_length=8, blank=False, null=False)
-    cared_by = models.ManyToManyField(User, through='CareGiving')
-    gender = models.CharField(max_length=1, null=True)
+    cared_by = models.ManyToManyField(CareGiver, through='CareGiving')
 
     @staticmethod
     def get_cared_elder(user):
@@ -50,12 +56,12 @@ class Elder(Member):
         return self.name
 
 
-class CareGiving(models.Model):
-    user = models.OneToOneField(User)
-    elder = models.ForeignKey(Elder)
+class CareGiving(TimeStampedModel):
+    caregiver = models.ForeignKey(CareGiver, null=True)
+    elder = models.ForeignKey(Elder, null=True)
 
 
-class AdminInvitation(models.Model):
+class AdminInvitation(TimeStampedModel, StatusModel):
+    STATUS = Choices(('1', 'sent'), ('2', 'accepted'), ('3', 'rejected'))
     user = models.ForeignKey(User)
     email_to_invite = models.CharField(max_length=45)
-    status = models.CharField(max_length=1)

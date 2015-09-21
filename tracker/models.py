@@ -7,13 +7,13 @@ from member.models import Elder
 
 class Tracker(TimeStampedModel):
     TYPE_CHOICES = (('cd', 'daily condition'), ('hr', 'heart rate'), ('bg', 'blood glucose'))
-    CONDITION_CHOICES = (('1', 'tidak baik'), ('2', 'biasa'), ('3', 'baik'))
+    CONDITION_CHOICES = ((1, 'tidak baik'), (2, 'biasa'), (3, 'baik'))
 
     elder = models.ForeignKey(User)
-    condition = models.CharField(max_length=1, choices=CONDITION_CHOICES)
+    condition = models.SmallIntegerField(choices=CONDITION_CHOICES, default=3)
     photo = models.ImageField(null=True)
-    type = models.CharField(max_length=2, choices=TYPE_CHOICES)
-    value = models.IntegerField()
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='cd')
+    value = models.SmallIntegerField(default=0)
 
 
 # class LogTracker(models.Model):
