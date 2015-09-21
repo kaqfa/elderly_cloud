@@ -20,7 +20,6 @@ class Elder(Member):
     code = models.CharField(max_length=8, blank=False, null=False)
     cared_by = models.ManyToManyField(User, through='CareGiving')
     gender = models.CharField(max_length=1, null=True)
-    cared_by = models.ManyToManyField(User, through='Caregiving')
 
     @staticmethod
     def get_cared_elder(user):
