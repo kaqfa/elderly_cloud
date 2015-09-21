@@ -20,6 +20,13 @@ class MedicalTreatmentHist(models.Model):
     status = models.CharField(max_length=1)
 
 
+class DailyCondition(models.Model):
+    elder = models.ForeignKey(Elder)
+    condition = models.CharField(max_length=1)
+    photo = models.ImageField(null=True)
+    time_record = models.DateTimeField()
+
+
 class Note(models.Model):
     user = models.ForeignKey(User)
     elder = models.ForeignKey(Elder)

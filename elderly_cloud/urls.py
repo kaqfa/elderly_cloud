@@ -17,6 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from base.views import load_page, user_auth, status, user_logout
+from notification.views import notif_list
 
 
 urlpatterns = [
@@ -25,5 +26,6 @@ urlpatterns = [
     url(r'^login/', user_auth, name='login'),
     url(r'^status/', status, name='status'),
     url(r'^logout/', user_logout, name='logout'),
+	url(r'^notif/', notif_list, name='notif'),
     url(r'^(?P<page>\w+)/', load_page, name='load'),
 ]
