@@ -12,7 +12,7 @@ def load_page(request, page=None):
 
 
 def user_auth(request):
-    user = authenticate(username='john', password='johnpassword')
+    user = authenticate(username='coba', password='lel')
     login(request, user)
     return HttpResponseRedirect(reverse('status'))
 

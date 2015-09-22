@@ -42,11 +42,20 @@ INSTALLED_APPS = (
     'feedback',
     'member',
     'notification',
+	'contact',
     'partner',
     'info',
     'tracker',
     'rest_framework',
+	'django_filters'
 )
+
+REST_FRAMEWORK = {
+	'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+	'DEFAULT_PERMISSION_CLASSES': (
+		'rest_framework.permissions.DjangoModelPermissions',
+    )
+}
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

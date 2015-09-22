@@ -17,8 +17,17 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 from base.views import load_page, user_auth, status, user_logout
-from notification.views import notif_list
+from notification.views import notifs
+from contact.views import contacts
+from elder_profile.views import diseases, medicalTreatments
 
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'notifs', notifs, 'Notification')
+router.register(r'contacts', contacts, 'Contacts')
+router.register(r'disease_hists', diseases, 'Diseases')
+router.register(r'med_hists', medicalTreatments, 'Medical Treatments')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
@@ -26,6 +35,6 @@ urlpatterns = [
     url(r'^login/', user_auth, name='login'),
     url(r'^status/', status, name='status'),
     url(r'^logout/', user_logout, name='logout'),
-	url(r'^notif/', notif_list, name='notif'),
+	url(r'^api/', include(router.urls)),
     url(r'^(?P<page>\w+)/', load_page, name='load'),
 ]
