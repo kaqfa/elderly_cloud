@@ -20,9 +20,17 @@
   <component name="ProjectModuleManager">
     <modules />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.9 virtualenv at C:\Users\Fahri Firdausillah\env-django8" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 2.7.9 virtualenv at C:\Users\Fahri Firdausillah\Envs\elderly" project-jdk-type="Python SDK" />
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$USER_HOME$/Envs/django8/Scripts/python.exe" />
+    <property name="options.lastSelected" value="configurable.group.appearance" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+  </component>
+  <component name="PyConsoleOptionsProvider">
+    <option name="myPythonConsoleState">
+      <console-settings />
+    </option>
   </component>
   <component name="RunManager">
     <list size="0" />
