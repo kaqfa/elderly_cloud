@@ -42,19 +42,24 @@ INSTALLED_APPS = (
     'feedback',
     'member',
     'notification',
-	'contact',
+    'contact',
     'partner',
     'info',
     'tracker',
     'rest_framework',
-	'django_filters'
+    'django_filters'
 )
 
 REST_FRAMEWORK = {
 	'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
 	'DEFAULT_PERMISSION_CLASSES': (
 		'rest_framework.permissions.DjangoModelPermissions',
-    )
+    ),
+		'DEFAULT_PARSER_CLASSES': (
+		'rest_framework.parsers.JSONParser',
+		'rest_framework.parsers.FormParser',
+		'rest_framework.parsers.MultiPartParser',
+	),
 }
 
 MIDDLEWARE_CLASSES = (
@@ -122,3 +127,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     STATIC_PATH,
 )
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

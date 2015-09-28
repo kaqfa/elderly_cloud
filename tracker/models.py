@@ -1,31 +1,25 @@
 from django.db import models
+from model_utils.models import TimeStampedModel
+from django.contrib.auth.models import User
 
 from member.models import Elder
 
 
-class TrackerTemplate(models.Model):
-    name = models.CharField(max_length=45, blank=False, default='')
-    field1 = models.CharField(max_length=45)
-    field2 = models.CharField(max_length=45)
-    field3 = models.CharField(max_length=45)
-    field4 = models.CharField(max_length=45)
-    field5 = models.CharField(max_length=45)
+class Tracker(TimeStampedModel):
+    TYPE_CHOICES = (('cd', 'daily condition'), ('hr', 'heart rate'), ('bg', 'blood glucose'))
+    CONDITION_CHOICES = ((1, 'tidak baik'), (2, 'biasa'), (3, 'baik'))
+
+    elder = models.ForeignKey(User)
+    condition = models.SmallIntegerField(choices=CONDITION_CHOICES, default=3)
+    photo = models.ImageField(null=True)
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='cd')
+    value = models.SmallIntegerField(default=0)
 
 
-class Tracker(models.Model):
-    elder = models.ForeignKey(Elder)
-    name = models.CharField(max_length=45, blank=False, default='')
-    field1 = models.CharField(max_length=45)
-    field2 = models.CharField(max_length=45)
-    field3 = models.CharField(max_length=45)
-    field4 = models.CharField(max_length=45)
-    field5 = models.CharField(max_length=45)
-
-
-class LogTracker(models.Model):
-    tracker = models.ForeignKey(Tracker)
-    value1 = models.IntegerField(default=0)
-    value2 = models.IntegerField(default=0)
-    value3 = models.IntegerField(default=0)
-    value4 = models.IntegerField(default=0)
-    value5 = models.IntegerField(default=0)
+# class LogTracker(models.Model):
+#     tracker = models.ForeignKey(Tracker)
+#     value1 = models.IntegerField(default=0)
+#     value2 = models.IntegerField(default=0)
+#     value3 = models.IntegerField(default=0)
+#     value4 = models.IntegerField(default=0)
+#     value5 = models.IntegerField(default=0)

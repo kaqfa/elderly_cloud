@@ -5,14 +5,16 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
+
     dependencies = [
-        ('elder_profile', '0001_initial'),
+        ('contact', '0001_initial'),
+        ('member', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='note',
-            name='daily_condition',
-            field=models.ForeignKey(blank=True, to='elder_profile.DailyCondition', null=True),
+            model_name='contact',
+            name='elder',
+            field=models.ForeignKey(to='member.Elder'),
         ),
     ]

@@ -1,15 +1,14 @@
 from rest_framework import viewsets, filters
-from notification.models import Notifications
-from notification.serializers import NotificationsSerializer
-from rest_framework.permissions import AllowAny
+from notification.models import Notification
+from notification.serializers import NotificationSerializer
 
 # Create your views here.
 
 class notifs(viewsets.ModelViewSet):
-	serializer_class = NotificationsSerializer
+	serializer_class = NotificationSerializer
 	filter_backends = (filters.DjangoFilterBackend,)
-	filter_fields = ('elder',)
+	filter_fields = ('receiver',)
 	
 	def get_queryset(self):
-		return Notifications.objects.all()
+		return Notification.objects.all()
 		
