@@ -47,7 +47,8 @@ INSTALLED_APPS = (
     'info',
     'tracker',
     'rest_framework',
-    'django_filters'
+    'django_filters',
+    'wpadmin',
 )
 
 REST_FRAMEWORK = {
