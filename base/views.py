@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 
 
 def load_page(request, page=None):
-    if page == None:
+    if None == page:
         return render(request, 'index.html')
 
     return render(request, page + '.html')

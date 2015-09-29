@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    'wpadmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,7 +49,7 @@ INSTALLED_APPS = (
     'tracker',
     'rest_framework',
     'django_filters',
-    'wpadmin',
+    'django_summernote',
 )
 
 REST_FRAMEWORK = {
@@ -88,6 +89,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
             ],
         },
     },
@@ -131,3 +133,18 @@ STATICFILES_DIRS = (
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+WPADMIN = {
+    'admin': {
+        # 'admin_site': 'elderly_cloud.admin.admin',
+        'title': 'Elderly Application',
+        'menu': {
+            'top': 'wpadmin.menu.menus.BasicTopMenu',
+            'left': 'wpadmin.menu.menus.BasicLeftMenu',
+        },
+        'dashboard': {
+            'breadcrumbs': True,
+        },
+        'custom_style': STATIC_URL + 'wpadmin/css/themes/ocean.css',
+    }
+}

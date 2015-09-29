@@ -19,7 +19,6 @@ class Comment(models.Model):
     content = models.TextField()
 
 
-# Django Geo ????
 class PointOfInterest(models.Model):
     name = models.CharField(max_length=45)
     category = models.CharField(max_length=45)
