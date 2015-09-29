@@ -9,7 +9,7 @@ class Tracker(TimeStampedModel):
     TYPE_CHOICES = (('cd', 'daily condition'), ('hr', 'heart rate'), ('bg', 'blood glucose'))
     CONDITION_CHOICES = ((1, 'tidak baik'), (2, 'biasa'), (3, 'baik'))
 
-    elder = models.ForeignKey(User)
+    elder = models.ForeignKey(Elder)
     condition = models.SmallIntegerField(choices=CONDITION_CHOICES, default=3)
     photo = models.ImageField(null=True)
     type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='cd')

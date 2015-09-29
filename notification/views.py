@@ -1,6 +1,6 @@
 from rest_framework import viewsets, filters
-from notification.models import Notification
-from notification.serializers import NotificationSerializer
+from notification.models import Notification, NotificationTemplate
+from notification.serializers import NotificationSerializer, NotificationTemplateSerializer
 
 # Create your views here.
 
@@ -12,3 +12,8 @@ class notifs(viewsets.ModelViewSet):
 	def get_queryset(self):
 		return Notification.objects.all()
 		
+class hello(viewsets.ReadOnlyModelViewSet):
+	serializer_class = NotificationTemplateSerializer
+	
+	def get_queryset(self):
+		return NotificationTemplate.objects.all()
