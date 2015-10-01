@@ -33,3 +33,7 @@ class PointOfInterest(models.Model):
     address = models.CharField('Alamat', max_length=45)
     latitude = models.CharField(max_length=45)
     longitude = models.CharField(max_length=45)
+
+    class Meta:
+        verbose_name = 'Lokasi Menarik'
+        verbose_name_plural = 'Data Lokasi Menarik'

@@ -7,16 +7,23 @@ from model_utils import Choices
 
 class Member(PolymorphicModel, TimeStampedModel):
     GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
-    user = models.OneToOneField(User)
-    address = models.TextField(null=True, blank=True)
-    birthday = models.DateField(null=True)
-    gender = models.CharField(max_length=1)
-    phone = models.CharField(max_length=20)
-    photo = models.ImageField(null=True, blank=True)
+    user = models.OneToOneField(User, verbose_name='Untuk Pengguna')
+    address = models.TextField(null=True, blank=True, verbose_name='Alamat')
+    birthday = models.DateField('Tanggal Lahir', null=True)
+    gender = models.CharField('Kelamin', max_length=1)
+    phone = models.CharField('Telepon', max_length=20)
+    photo = models.ImageField('Foto Profil', null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Anggota"
+        verbose_name_plural = "Data Anggota"
 
 
 class CareGiver(Member):
-    pass
+
+    class Meta:
+        verbose_name = 'Perawat'
+        verbose_name_plural = 'Data Perawat'
 
 
 class Partner(Member):
@@ -25,13 +32,17 @@ class Partner(Member):
 
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
-    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='pj')
+    description = models.TextField('Deskripsi', null=True, blank=True)
+    type = models.CharField('Golongan Institusi', max_length=2, choices=TYPE_CHOICES, default='pj')
 
 
 class Elder(Member):
-    code = models.CharField(max_length=8, blank=False, null=False)
-    cared_by = models.ManyToManyField(CareGiver, through='CareGiving')
+    code = models.CharField('Kode Orang Tua', max_length=8, blank=False, null=False)
+    cared_by = models.ManyToManyField(CareGiver, through='CareGiving', verbose_name='Dirawat oleh')
+
+    class Meta:
+        verbose_name = 'Orang Tua'
+        verbose_name_plural = 'Data Orang Tua'
 
     @staticmethod
     def get_cared_elder(user):
@@ -63,11 +74,19 @@ class Elder(Member):
 
 
 class CareGiving(TimeStampedModel):
-    caregiver = models.ForeignKey(CareGiver, null=True)
-    elder = models.ForeignKey(Elder, null=True)
+    caregiver = models.ForeignKey(CareGiver, null=True, verbose_name='Perawat')
+    elder = models.ForeignKey(Elder, null=True, verbose_name='Orang Tua')
+
+    class Meta:
+        verbose_name = 'Perawatan'
+        verbose_name_plural = 'Data Perawatan'
 
 
 class AdminInvitation(TimeStampedModel, StatusModel):
     STATUS = Choices(('1', 'sent'), ('2', 'accepted'), ('3', 'rejected'))
-    user = models.ForeignKey(User)
-    email_to_invite = models.CharField(max_length=45)
+    user = models.ForeignKey(User, verbose_name='Pemanggil')
+    email_to_invite = models.CharField(max_length=45, verbose_name='Email yang akan dipanggil')
+
+    class Meta:
+        verbose_name = 'Pemanggilan Admin'
+        verbose_name_plural = 'Data Pemanggilan Admin'
