@@ -5,6 +5,7 @@ from .models import Comment, Posting, PointOfInterest
 
 
 class CommentInline(admin.StackedInline, SummernoteInlineModelAdmin):
+    fields = ('content', )
     model = Comment
     extra = 1
 
@@ -12,6 +13,7 @@ class CommentInline(admin.StackedInline, SummernoteInlineModelAdmin):
 class PostingAdmin(SummernoteModelAdmin):
     list_display = ['owner', 'title', 'category']
     inlines = [CommentInline]
+    fields = ('title', 'content', 'category')
 
 
 class POIAdmin(admin.ModelAdmin):

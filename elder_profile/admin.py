@@ -5,10 +5,12 @@ from .models import DiseaseHist, MedicalTreatmentHist, Note
 
 class DiseaseAdmin(admin.ModelAdmin):
     list_display = ['elder', 'name', 'from_year', 'to_year', 'status']
+    fields = ('elder', 'name', 'from_year', 'to_year', 'status')
 
 
 class TreatmentAdmin(admin.ModelAdmin):
     list_display = ['elder', 'treatment', 'from_year', 'to_year', 'status']
+    fields = ('elder', 'treatment', 'from_year', 'to_year', 'status')
 
 
 class NoteAdmin(admin.ModelAdmin):

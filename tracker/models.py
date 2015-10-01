@@ -9,7 +9,7 @@ class Tracker(TimeStampedModel):
     TYPE_CHOICES = (('cd', 'daily condition'), ('hr', 'heart rate'), ('bg', 'blood glucose'))
     CONDITION_CHOICES = ((1, 'tidak baik'), (2, 'biasa'), (3, 'baik'))
 
-    elder = models.ForeignKey(User, verbose_name='Orang Tua')
+    elder = models.ForeignKey(Elder, verbose_name='Orang Tua')
     condition = models.SmallIntegerField('Kondisi', choices=CONDITION_CHOICES, default=3)
     photo = models.ImageField('Gambar', null=True)
     type = models.CharField('Jenis Penelusuran', max_length=2, choices=TYPE_CHOICES, default='cd')

@@ -10,7 +10,7 @@ class Member(PolymorphicModel, TimeStampedModel):
     user = models.OneToOneField(User, verbose_name='Untuk Pengguna')
     address = models.TextField(null=True, blank=True, verbose_name='Alamat')
     birthday = models.DateField('Tanggal Lahir', null=True)
-    gender = models.CharField('Kelamin', max_length=1)
+    gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES, default='l')
     phone = models.CharField('Telepon', max_length=20)
     photo = models.ImageField('Foto Profil', null=True, blank=True)
 

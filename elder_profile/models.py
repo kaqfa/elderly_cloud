@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 from django.contrib.auth.models import User
 from model_utils.models import TimeStampedModel, StatusModel
 from model_utils import Choices
@@ -10,8 +11,8 @@ class DiseaseHist(TimeStampedModel, StatusModel):
     STATUS = Choices(('1', 'sudah sembuh'), ('2', 'masih diderita'))
     elder = models.ForeignKey(Elder, verbose_name='Orang Tua')
     name = models.CharField('Nama Penyakit', max_length=200, default='')
-    from_year = models.IntegerField('Dari Tahun', default=0)
-    to_year = models.IntegerField('Hingga Tahun', default=0)
+    from_year = models.IntegerField('Dari Tahun', default=datetime.date.today().year)
+    to_year = models.IntegerField('Hingga Tahun', default=datetime.date.today().year)
 
     class Meta:
         verbose_name_plural = 'Riwayat Penyakit'

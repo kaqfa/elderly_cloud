@@ -5,6 +5,7 @@ from .models import Response, Feedback
 
 
 class ResponeInline(admin.StackedInline, SummernoteInlineModelAdmin):
+    fields = ('content',)
     model = Response
     extra = 1
 
@@ -12,6 +13,10 @@ class ResponeInline(admin.StackedInline, SummernoteInlineModelAdmin):
 class FeedbackAdmin(SummernoteModelAdmin):
     list_display = ['owner', 'title', 'status']
     inlines = [ResponeInline]
+    fields = ('title', 'content', 'status')
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 admin.site.register(Feedback, FeedbackAdmin)
