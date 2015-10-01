@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from model_utils.models import TimeStampedModel, StatusModel
 from model_utils import Choices
 
-from member.models import Elder
+from member.models import Elder, CareGiver
 
 
 class Contact(TimeStampedModel, StatusModel):
@@ -13,7 +13,7 @@ class Contact(TimeStampedModel, StatusModel):
     STATUS = Choices(('1', 'aktif'), ('2', 'non aktif'))
 
     elder = models.ForeignKey(Elder, verbose_name='Kontak untuk')
-    added_by = models.ForeignKey(User, verbose_name='Ditambahkan oleh')
+    added_by = models.ForeignKey(CareGiver, verbose_name='Ditambahkan oleh')
     name = models.CharField(max_length=100, default='', verbose_name='Nama Kontak')
     address = models.CharField(max_length=200, null=True, blank=True,
                                verbose_name='Alamat Kontak')
