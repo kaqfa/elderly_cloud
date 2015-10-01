@@ -16,10 +16,10 @@ class Tracker(TimeStampedModel):
     value = models.SmallIntegerField(default=0)
 
 
-# class LogTracker(models.Model):
-#     tracker = models.ForeignKey(Tracker)
-#     value1 = models.IntegerField(default=0)
-#     value2 = models.IntegerField(default=0)
-#     value3 = models.IntegerField(default=0)
-#     value4 = models.IntegerField(default=0)
-#     value5 = models.IntegerField(default=0)
+    # class LogTracker(models.Model):
+    # tracker = models.ForeignKey(Tracker)
+    #     value1 = models.IntegerField(default=0)
+    #     value2 = models.IntegerField(default=0)
+    #     value3 = models.IntegerField(default=0)
+    #     value4 = models.IntegerField(default=0)
+    #     value5 = models.IntegerField(default=0)

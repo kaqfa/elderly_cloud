@@ -53,15 +53,15 @@ INSTALLED_APPS = (
 )
 
 REST_FRAMEWORK = {
-	'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
-	'DEFAULT_PERMISSION_CLASSES': (
-		'rest_framework.permissions.DjangoModelPermissions',
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissions',
     ),
-		'DEFAULT_PARSER_CLASSES': (
-		'rest_framework.parsers.JSONParser',
-		'rest_framework.parsers.FormParser',
-		'rest_framework.parsers.MultiPartParser',
-	),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
 }
 
 MIDDLEWARE_CLASSES = (
@@ -112,7 +112,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'id'
 
 TIME_ZONE = 'UTC'
 

@@ -8,11 +8,11 @@ from model_utils import Choices
 class Member(PolymorphicModel, TimeStampedModel):
     GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
     user = models.OneToOneField(User)
-    # name = models.CharField(max_length=100, blank=False, null=False, default='')
     address = models.TextField(null=True, blank=True)
     birthday = models.DateField(null=True)
     gender = models.CharField(max_length=1)
     phone = models.CharField(max_length=20)
+    photo = models.ImageField(null=True, blank=True)
 
 
 class CareGiver(Member):
@@ -20,7 +20,13 @@ class CareGiver(Member):
 
 
 class Partner(Member):
-    pass
+    TYPE_CHOICES = (('rs', 'Rumah Sakit'), ('pj', 'Panti Jompo'),
+                    ('km', 'Kelompok Minat'))
+
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default='pj')
 
 
 class Elder(Member):

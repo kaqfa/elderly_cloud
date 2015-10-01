@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
+
 from .models import Comment, Posting, PointOfInterest
 
 
@@ -14,7 +15,7 @@ class PostingAdmin(SummernoteModelAdmin):
 
 
 class POIAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'lattitude', 'longitude']
+    list_display = ['name', 'category', 'latitude', 'longitude']
 
 
 admin.site.register(Posting, PostingAdmin)

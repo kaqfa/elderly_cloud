@@ -6,7 +6,6 @@ import model_utils.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('contact', '0002_contact_elder'),
     ]
@@ -25,6 +24,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='contact',
             name='status',
-            field=model_utils.fields.StatusField(default='1', no_check_for_status=True, verbose_name='status', max_length=100, choices=[(0, 'dummy')]),
+            field=model_utils.fields.StatusField(default='1', no_check_for_status=True, verbose_name='status',
+                                                 max_length=100, choices=[(0, 'dummy')]),
         ),
     ]

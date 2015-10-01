@@ -1,8 +1,8 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
 
 from base.views import load_page, user_auth, status, user_logout
 from notification.views import notifs
@@ -11,7 +11,6 @@ from elder_profile.views import diseases, medicalTreatments
 from tracker.views import trackers
 from info.views import infos
 
-from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'notifs', notifs, 'Notification')

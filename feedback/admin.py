@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import Response, Feedback
 from django_summernote.admin import SummernoteModelAdmin, SummernoteInlineModelAdmin
+
+from .models import Response, Feedback
 
 
 class ResponeInline(admin.StackedInline, SummernoteInlineModelAdmin):

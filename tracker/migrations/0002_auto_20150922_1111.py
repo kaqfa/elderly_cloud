@@ -5,7 +5,6 @@ from django.db import models, migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('tracker', '0001_initial'),
     ]
@@ -24,6 +23,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='tracker',
             name='type',
-            field=models.CharField(default='cd', max_length=2, choices=[('cd', 'daily condition'), ('hr', 'heart rate'), ('bg', 'blood glucose')]),
+            field=models.CharField(default='cd', max_length=2,
+                                   choices=[('cd', 'daily condition'), ('hr', 'heart rate'), ('bg', 'blood glucose')]),
         ),
     ]

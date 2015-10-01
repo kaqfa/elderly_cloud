@@ -6,7 +6,6 @@ import model_utils.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('elder_profile', '0001_initial'),
     ]
@@ -25,7 +24,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='diseasehist',
             name='status',
-            field=model_utils.fields.StatusField(default='1', no_check_for_status=True, verbose_name='status', max_length=100, choices=[(0, 'dummy')]),
+            field=model_utils.fields.StatusField(default='1', no_check_for_status=True, verbose_name='status',
+                                                 max_length=100, choices=[(0, 'dummy')]),
         ),
         migrations.AlterField(
             model_name='medicaltreatmenthist',
@@ -35,7 +35,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='medicaltreatmenthist',
             name='status',
-            field=model_utils.fields.StatusField(default='1', no_check_for_status=True, verbose_name='status', max_length=100, choices=[(0, 'dummy')]),
+            field=model_utils.fields.StatusField(default='1', no_check_for_status=True, verbose_name='status',
+                                                 max_length=100, choices=[(0, 'dummy')]),
         ),
         migrations.AlterField(
             model_name='note',
