@@ -3,3 +3,5 @@ django-filter==0.11.0
 django-pipeline==1.5.3
 djangorestframework==3.2.2
 futures==3.0.3
+django-wpadmin
+django-summernote

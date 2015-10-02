@@ -31,71 +31,73 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-	'django.contrib.admin',
-	'django.contrib.auth',
-	'django.contrib.contenttypes',
-	'django.contrib.sessions',
-	'django.contrib.messages',
-	'django.contrib.staticfiles',
-	'base',
-	'elder_profile',
-	'feedback',
-	'member',
-	'notification',
-	'contact',
-	'partner',
-	'info',
-	'tracker',
-	'rest_framework',
-	'django_filters',
-	'rest_framework.authtoken'
+    'wpadmin',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'base',
+    'elder_profile',
+    'feedback',
+    'member',
+    'notification',
+    'contact',
+    'partner',
+    'info',
+    'tracker',
+    'rest_framework',
+    'django_filters',
+    'django_summernote',
 )
 
 REST_FRAMEWORK = {
-	'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
-	'DEFAULT_PERMISSION_CLASSES': (
-		'rest_framework.permissions.DjangoModelPermissions',
-	),
-	'DEFAULT_PARSER_CLASSES': (
-		'rest_framework.parsers.JSONParser',
-		'rest_framework.parsers.FormParser',
-		'rest_framework.parsers.MultiPartParser',
-	),
-	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'rest_framework.authentication.TokenAuthentication',
-		'rest_framework.authentication.BasicAuthentication',
-		'rest_framework.authentication.SessionAuthentication',
-	)
+    'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissions',
+    ),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    )
 }
 
 MIDDLEWARE_CLASSES = (
-	'django.contrib.sessions.middleware.SessionMiddleware',
-	'django.middleware.common.CommonMiddleware',
-	'django.middleware.csrf.CsrfViewMiddleware',
-	'django.contrib.auth.middleware.AuthenticationMiddleware',
-	'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-	'django.contrib.messages.middleware.MessageMiddleware',
-	'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.security.SecurityMiddleware',
 )
 
 ROOT_URLCONF = 'elderly_cloud.urls'
 TEMPLATE_PATH = os.path.join(BASE_DIR, 'templates')
 
 TEMPLATES = [
-	{
-		'BACKEND': 'django.template.backends.django.DjangoTemplates',
-		'DIRS': [TEMPLATE_PATH, ],
-		'APP_DIRS': True,
-		'OPTIONS': {
-			'context_processors': [
-				'django.template.context_processors.debug',
-				'django.template.context_processors.request',
-				'django.contrib.auth.context_processors.auth',
-				'django.contrib.messages.context_processors.messages',
-			],
-		},
-	},
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [TEMPLATE_PATH, ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                'django.core.context_processors.request',
+            ],
+        },
+    },
 ]
 
 WSGI_APPLICATION = 'elderly_cloud.wsgi.application'
@@ -105,17 +107,17 @@ WSGI_APPLICATION = 'elderly_cloud.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-	'default': {
-		'ENGINE': 'django.db.backends.sqlite3',
-		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-	}
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
 }
 
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'id'
 
 TIME_ZONE = 'UTC'
 
@@ -131,8 +133,23 @@ USE_TZ = True
 STATIC_PATH = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-	STATIC_PATH,
+    STATIC_PATH,
 )
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+WPADMIN = {
+    'admin': {
+        # 'admin_site': 'elderly_cloud.admin.admin',
+        'title': 'Elderly Application',
+        'menu': {
+            'top': 'wpadmin.menu.menus.BasicTopMenu',
+            'left': 'wpadmin.menu.menus.BasicLeftMenu',
+        },
+        'dashboard': {
+            'breadcrumbs': True,
+        },
+        'custom_style': STATIC_URL + 'wpadmin/css/themes/ocean.css',
+    }
+}

@@ -6,66 +6,86 @@ from model_utils import Choices
 
 
 class Member(PolymorphicModel, TimeStampedModel):
-	GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
-	user = models.OneToOneField(User)
-	# name = models.CharField(max_length=100, blank=False, null=False, default='')
-	address = models.TextField(null=True, blank=True)
-	birthday = models.DateField(null=True)
-	gender = models.CharField(max_length=1)
-	phone = models.CharField(max_length=20)
+    GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
+    user = models.OneToOneField(User, verbose_name='Untuk Pengguna')
+    address = models.TextField(null=True, blank=True, verbose_name='Alamat')
+    birthday = models.DateField('Tanggal Lahir', null=True)
+    gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES, default='l')
+    phone = models.CharField('Telepon', max_length=20)
+    photo = models.ImageField('Foto Profil', null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Anggota"
+        verbose_name_plural = "Data Anggota"
 
 
 class CareGiver(Member):
-	def __unicode__(self):
-		return self.user.last_name
-
-	def __str__(self):  # __unicode__ on Python 2
-		return self.user.last_name
+    class Meta:
+        verbose_name = 'Perawat'
+        verbose_name_plural = 'Data Perawat'
 
 
 class Partner(Member):
-	pass
+    TYPE_CHOICES = (('rs', 'Rumah Sakit'), ('pj', 'Panti Jompo'),
+                    ('km', 'Kelompok Minat'))
+
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    description = models.TextField('Deskripsi', null=True, blank=True)
+    type = models.CharField('Golongan Institusi', max_length=2, choices=TYPE_CHOICES, default='pj')
 
 
 class Elder(Member):
-	code = models.CharField(max_length=8, blank=False, null=False)
-	cared_by = models.ManyToManyField(CareGiver, through='CareGiving')
+    code = models.CharField('Kode Orang Tua', max_length=8, blank=False, null=False)
+    cared_by = models.ManyToManyField(CareGiver, through='CareGiving', verbose_name='Dirawat oleh')
 
-	@staticmethod
-	def get_cared_elder(user):
-		return Elder.objects.filter(cared_by__in=[user])
+    class Meta:
+        verbose_name = 'Orang Tua'
+        verbose_name_plural = 'Data Orang Tua'
 
-	def get_kondisi(self):
-		return self.dailycondition_set
+    @staticmethod
+    def get_cared_elder(user):
+        return Elder.objects.filter(cared_by__in=[user])
 
-	def get_kondisi_terakhir(self):
-		return self.dailycondition_set.latest('id')
-
-	def count_perawat(self):
-		return self.cared_by.count()
-
-	def get_riwayat_penyakit(self):
-		return self.diseasehist_set
-
-	def get_perawatan_medis(self):
-		return self.medicaltreatmenthist_set
-
-	def get_note(self):
-		return self.note_set
-
-	def __unicode__(self):
-		return self.user.username
-
-	def __str__(self):  # __unicode__ on Python 2
-		return self.user.username
+        # def get_kondisi(self):
+        # return self.dailycondition_set
+        #
+        # def get_kondisi_terakhir(self):
+        # 	return self.dailycondition_set.latest('id')
+        #
+        # def count_perawat(self):
+        # 	return self.cared_by.count()
+        #
+        # def get_riwayat_penyakit(self):
+        # 	return self.diseasehist_set
+        #
+        # def get_perawatan_medis(self):
+        # 	return self.medicaltreatmenthist_set
+        #
+        # def get_note(self):
+        # 	return self.note_set
+        #
+        # def __unicode__(self):
+        # 	return self.user.username
+        #
+        # def __str__(self):  # __unicode__ on Python 2
+        # 	return self.user.username
 
 
 class CareGiving(TimeStampedModel):
-	caregiver = models.ForeignKey(CareGiver, null=True)
-	elder = models.ForeignKey(Elder, null=True)
+    caregiver = models.ForeignKey(CareGiver, null=True, verbose_name='Perawat')
+    elder = models.ForeignKey(Elder, null=True, verbose_name='Orang Tua')
+
+    class Meta:
+        verbose_name = 'Perawatan'
+        verbose_name_plural = 'Data Perawatan'
 
 
 class AdminInvitation(TimeStampedModel, StatusModel):
-	STATUS = Choices(('1', 'sent'), ('2', 'accepted'), ('3', 'rejected'))
-	user = models.ForeignKey(User)
-	email_to_invite = models.CharField(max_length=45)
+    STATUS = Choices(('1', 'sent'), ('2', 'accepted'), ('3', 'rejected'))
+    user = models.ForeignKey(User, verbose_name='Pemanggil')
+    email_to_invite = models.CharField(max_length=45, verbose_name='Email yang akan dipanggil')
+
+    class Meta:
+        verbose_name = 'Pemanggilan Admin'
+        verbose_name_plural = 'Data Pemanggilan Admin'

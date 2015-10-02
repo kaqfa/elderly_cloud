@@ -6,7 +6,6 @@ import model_utils.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('feedback', '0001_initial'),
     ]
@@ -20,7 +19,8 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='feedback',
             name='status',
-            field=model_utils.fields.StatusField(default='s', no_check_for_status=True, verbose_name='status', max_length=100, choices=[(0, 'dummy')]),
+            field=model_utils.fields.StatusField(default='s', no_check_for_status=True, verbose_name='status',
+                                                 max_length=100, choices=[(0, 'dummy')]),
         ),
         migrations.AlterField(
             model_name='feedback',
