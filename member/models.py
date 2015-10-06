@@ -13,10 +13,17 @@ class Member(PolymorphicModel, TimeStampedModel):
     gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES, default='l')
     phone = models.CharField('Telepon', max_length=20)
     photo = models.ImageField('Foto Profil', null=True, blank=True)
+    
+    def __unicode__(self):
+        return self.user.last_name
+    
+    def __str__(self):  # __unicode__ on Python 2
+        return self.user.last_name
 
     class Meta:
         verbose_name = "Anggota"
         verbose_name_plural = "Data Anggota"
+        
 
 
 class CareGiver(Member):
@@ -51,25 +58,25 @@ class Elder(Member):
         # return self.dailycondition_set
         #
         # def get_kondisi_terakhir(self):
-        # 	return self.dailycondition_set.latest('id')
+        #     return self.dailycondition_set.latest('id')
         #
         # def count_perawat(self):
-        # 	return self.cared_by.count()
+        #     return self.cared_by.count()
         #
         # def get_riwayat_penyakit(self):
-        # 	return self.diseasehist_set
+        #     return self.diseasehist_set
         #
         # def get_perawatan_medis(self):
-        # 	return self.medicaltreatmenthist_set
+        #     return self.medicaltreatmenthist_set
         #
         # def get_note(self):
-        # 	return self.note_set
+        #     return self.note_set
         #
         # def __unicode__(self):
-        # 	return self.user.username
+        #     return self.user.username
         #
         # def __str__(self):  # __unicode__ on Python 2
-        # 	return self.user.username
+        #     return self.user.username
 
 
 class CareGiving(TimeStampedModel):

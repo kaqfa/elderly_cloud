@@ -37,7 +37,7 @@ class SignupSerializer(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     password = serializers.CharField(required=False)
-    email = serializers.CharField()
+    email = serializers.EmailField()
     cared_by = serializers.PrimaryKeyRelatedField(queryset=CareGiver.objects.all(), many=True, required=False)
 
     def validate(self, data):
