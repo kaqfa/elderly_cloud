@@ -13,12 +13,13 @@ class Diseases(viewsets.ModelViewSet):
     filter_fields = ('elder',)
 
     def get_queryset(self):
-        if CareGiver.objects.filter(user=self.request.user):
-            caregiver = CareGiver.objects.get(user=self.request.user)
-            return DiseaseHist.objects.filter(elder__in=Elder.get_cared_elder(caregiver))
-        elif Elder.objects.filter(user=self.request.user):
-            elder = Elder.objects.get(user=self.request.user)
-            return DiseaseHist.objects.filter(elder=elder)
+        if self.request.user.is_authenticated():
+            if CareGiver.objects.filter(user=self.request.user):
+                caregiver = CareGiver.objects.get(user=self.request.user)
+                return DiseaseHist.objects.filter(elder__in=Elder.get_cared_elder(caregiver))
+            elif Elder.objects.filter(user=self.request.user):
+                elder = Elder.objects.get(user=self.request.user)
+                return DiseaseHist.objects.filter(elder=elder)
         return DiseaseHist.objects.all()
 
 
@@ -28,10 +29,11 @@ class MedicalTreatments(viewsets.ModelViewSet):
     filter_fields = ('elder',)
 
     def get_queryset(self):
-        if CareGiver.objects.filter(user=self.request.user):
-            caregiver = CareGiver.objects.get(user=self.request.user)
-            return MedicalTreatmentHist.objects.filter(elder__in=Elder.get_cared_elder(caregiver))
-        elif Elder.objects.filter(user=self.request.user):
-            elder = Elder.objects.get(user=self.request.user)
-            return MedicalTreatmentHist.objects.filter(elder=elder)
+        if self.request.user.is_authenticated():
+            if CareGiver.objects.filter(user=self.request.user):
+                caregiver = CareGiver.objects.get(user=self.request.user)
+                return MedicalTreatmentHist.objects.filter(elder__in=Elder.get_cared_elder(caregiver))
+            elif Elder.objects.filter(user=self.request.user):
+                elder = Elder.objects.get(user=self.request.user)
+                return MedicalTreatmentHist.objects.filter(elder=elder)
         return MedicalTreatmentHist.objects.all()

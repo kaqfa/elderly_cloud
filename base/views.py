@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
+from django.views.generic import View
 
 """
 Authentication Start
@@ -13,6 +14,7 @@ from base.serializers import LoginSerializer
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from member.models import CareGiver, Elder
+from base.forms import LoginForm
 
 
 class Login(viewsets.GenericViewSet):
@@ -48,22 +50,39 @@ class Login(viewsets.GenericViewSet):
 Authentication End
 """
 
+class load_page(View):
 
-def load_page(request, page=None):
-    if None == page:
-        return render(request, 'index.html')
-    return render(request, page + '.html')
+    def get(self, request, page=None, error=None):
+        if request.user.is_authenticated():
+            if None == page:
+                return render(request, 'index.html')
+            else:
+                return render(request, page + '.html')
+        return render(request, 'login.html')
+    
+    def post(self, request):
+        if('login' in request.POST):
+            form = LoginForm(request.POST)
+            if form.is_valid():
+                login = user_auth(request, form.cleaned_data['username'], form.cleaned_data['password'])
+                if not login:
+                    return render(request, 'login.html', {'error':'Username dan password tidak cocok'})
+                else:
+                    return render(request, 'index.html')
+            else:
+                return render(request, 'index.html')
 
-
-def user_auth(request):
-    user = authenticate(username='lel', password='asdfg4321')
-    login(request, user)
-    return HttpResponseRedirect(reverse('status'))
-
+def user_auth(request, username, password):
+    user = authenticate(username=username, password=password)
+    if user is not None and user.is_active and CareGiver.objects.filter(user=user):
+        login(request, user)
+    else:
+        return False
+    return True
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect(reverse('status'))
+    return HttpResponseRedirect(reverse('index'))
 
 
 def status(request):

@@ -140,6 +140,8 @@ STATICFILES_DIRS = (
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+LOGIN_URL = '/'
+
 WPADMIN = {
     'admin': {
         # 'admin_site': 'elderly_cloud.admin.admin',

@@ -8,6 +8,7 @@ from notification.views import Hello
 from rest_framework.routers import DefaultRouter
 from base.views import load_page, user_auth, status, user_logout
 from notification.views import Notifs
+from django.views.generic import TemplateView
 
 from contact.views import contacts
 from elder_profile.views import Diseases, MedicalTreatments
@@ -31,10 +32,10 @@ router.register(r'login', Login, 'Login')
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(router.urls)),
-    url(r'^(?P<page>[\w]*)/$', load_page, name='load'),
     url(r'^login/', user_auth, name='login'),
-    url(r'^status/', status, name='status'),
-    url(r'^logout/', user_logout, name='logout'),
+	url(r'^logout/', user_logout, name='logout'),
+	url(r'^status/', status, name='status'),
+    url(r'^(?P<page>[\w]*)/$', load_page.as_view(), name='load'),
     url(r'^summernote/', include('django_summernote.urls')),
-    url(r'$/', load_page, name='index'),
+    url(r'^$', load_page.as_view(), name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
