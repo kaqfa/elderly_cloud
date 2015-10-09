@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
+from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.generic import View
@@ -15,6 +16,7 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from member.models import CareGiver, Elder
 from base.forms import LoginForm
+from member.forms import CareGiverForm, UserForm
 
 
 class Login(viewsets.GenericViewSet):
@@ -50,7 +52,7 @@ class Login(viewsets.GenericViewSet):
 Authentication End
 """
 
-class load_page(View):
+class Index(View):
 
     def get(self, request, page=None, error=None):
         if request.user.is_authenticated():
@@ -64,21 +66,30 @@ class load_page(View):
         if('login' in request.POST):
             form = LoginForm(request.POST)
             if form.is_valid():
-                login = user_auth(request, form.cleaned_data['username'], form.cleaned_data['password'])
-                if not login:
-                    return render(request, 'login.html', {'error':'Username dan password tidak cocok'})
-                else:
+                user = form.login(request)
+                if user:
+                    login(request, user)
                     return render(request, 'index.html')
             else:
-                return render(request, 'index.html')
-
-def user_auth(request, username, password):
-    user = authenticate(username=username, password=password)
-    if user is not None and user.is_active and CareGiver.objects.filter(user=user):
-        login(request, user)
-    else:
-        return False
-    return True
+                return render(request, 'login.html', {'error':form.errors})
+        elif('signup' in request.POST):
+            userform = UserForm(request.POST)
+            if userform.is_valid():
+                caregiverform = CareGiverForm(request.POST)
+                if caregiverform.is_valid():
+                    user = userform.save()
+                    caregiver = caregiverform.save(commit=False)
+                    caregiver.user=user
+                    caregiver.save()
+                    g = Group.objects.get(name='CareGiver')
+                    g.user_set.add(user)
+                    return render(request, 'login.html', {'success': "Pendaftaran Berhasil, silahkan login"})
+                else:
+                    return HttpResponse(caregiverform.errors.as_json())
+            else:
+                return HttpResponse(userform.errors.as_json())
+        else:
+            return render(request, 'login.html')
 
 def user_logout(request):
     logout(request)
