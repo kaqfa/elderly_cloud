@@ -57,7 +57,12 @@ class Index(View):
     def get(self, request, page=None, error=None):
         if request.user.is_authenticated():
             if None == page:
-                return render(request, 'index.html')
+                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
+                    elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+                    return render(request, 'index.html', {'active_elder':elder, 'elders':elders})
+                else:
+                    return render(request, 'index.html')
             else:
                 return render(request, page + '.html')
         return render(request, 'login.html')
@@ -69,25 +74,30 @@ class Index(View):
                 user = form.login(request)
                 if user:
                     login(request, user)
-                    return render(request, 'index.html')
+                    caregiver=CareGiver.objects.get(user=user)
+                    elders=Elder.get_cared_elder(caregiver)
+                    if elders:
+                        request.session['active_elder']=elders[0].id
+                        return render(request, 'index.html', {'active_elder':elders[0], 'elders':elders})
+                    else:
+                        request.session['active_elder']=0
+                        return render(request, 'index.html', {'elders':elders})
             else:
-                return render(request, 'login.html', {'error':form.errors})
+                return render(request, 'login.html', {'error_login':form.errors})
         elif('signup' in request.POST):
             userform = UserForm(request.POST)
-            if userform.is_valid():
-                caregiverform = CareGiverForm(request.POST)
-                if caregiverform.is_valid():
-                    user = userform.save()
-                    caregiver = caregiverform.save(commit=False)
-                    caregiver.user=user
-                    caregiver.save()
-                    g = Group.objects.get(name='CareGiver')
-                    g.user_set.add(user)
-                    return render(request, 'login.html', {'success': "Pendaftaran Berhasil, silahkan login"})
-                else:
-                    return HttpResponse(caregiverform.errors.as_json())
+            caregiverform = CareGiverForm(request.POST)
+            if userform.is_valid() and caregiverform.is_valid():
+                user = userform.save()
+                caregiver = caregiverform.save(commit=False)
+                caregiver.user=user
+                caregiver.save()
+                g = Group.objects.get(name='CareGiver')
+                g.user_set.add(user)
+                return render(request, 'login.html', {'success': "Pendaftaran Berhasil, silahkan login"})
             else:
-                return HttpResponse(userform.errors.as_json())
+                userform.errors.update(caregiverform.errors)
+                return render(request, 'login.html', {'error_signup':userform.errors})
         else:
             return render(request, 'login.html')
 

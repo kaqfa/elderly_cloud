@@ -40,7 +40,24 @@
 </head>
 
 <body style="background:#F7F7F7;">
-    
+    {% if success %}
+        <div class="modal fade" id="success" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content alert alert-success">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">Registrasi Berhasil</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Akun anda telah berhasil dibuat!</h4>
+                        <p>Anda dapat login untuk masuk ke dalam sistem.</p>
+                    </div>
+    {% endif %}
+                </div>
+            </div>
+        </div>
     <div class="">
         <a class="hiddenanchor" id="toregister"></a>
         <a class="hiddenanchor" id="tologin"></a>
@@ -51,6 +68,19 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         <h1>Form Login</h1>
+                        {% if error_login %}
+                        <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                            </button>
+                            <ul>
+                            {% for name, errors in error_login.items %}
+                                {% for e in errors %}
+                                <li>{{ e }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
                         <div>
                             <input name="username" type="text" class="form-control" placeholder="Username" required="" />
                         </div>
@@ -85,6 +115,19 @@
                     <form method="POST" action="">
                         {% csrf_token %}
                         <h1>Buat Akun</h1>
+                        {% if error_signup %}
+                        <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                            </button>
+                            <ul>
+                            {% for name, errors in error_signup.items %}
+                                {% for e in errors %}
+                                <li>{{ e }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
                         <div>
                             <input name="first_name" type="text" class="form-control" placeholder="Nama Depan" required="" />
                         </div>
@@ -159,6 +202,10 @@
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
+        {% if success %}
+        $('#success').modal('show');
+        window.location.hash='tologin';
+        {% endif %}
     });
 </script>
 </html>
