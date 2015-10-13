@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% block 'title' %}Elder Caring | Dashboard{%endblock 'title' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -14,11 +14,17 @@
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
+                            {% if blood or heartrate or daily_condition %}
                             <div class="col-md-12 col-sm-12 col-xs-12">
                                 <div class="demo-container" style="height:280px">
                                     <div id="placeholder33x" class="demo-placeholder"></div>
                                 </div>
                             </div>
+                            {% elif active_elder %}
+                            Orang tua belum mempunyai data riwayat kesehatan.
+                            {% else %}
+                            Silahkan tambahkan orang tua yang dirawat terlebih dahulu.
+                            {% endif %}
                         </div>
                     </div>
 
@@ -196,3 +202,119 @@
         </div>
     </div>
 {% endblock 'maincontent' %}
+
+{% block 'extra_footer' %}
+{% if blood or heartrate or daily_condition %}
+<script type="text/javascript">
+    var chartColours = ['#96CA59', '#3F97EB', '#72c380', '#6f7a8a', '#f7cb38', '#5a8022', '#2c7282'];
+    $(function () {
+        var blood = [];
+        var heart = [];
+        var daily = [];
+        var d1 = [];
+        {% for track in heartrate %}heart.push([new Date("{{ track.created|date:"m-d-Y" }}").getTime(), {{ track.value }}]);
+        {% endfor %}{% for track in blood %}blood.push([new Date("{{ track.created|date:"m-d-Y" }}").getTime(), {{ track.value }}]);
+        {% endfor %}{% for track in daily_condition %}daily.push([new Date("{{ track.created|date:"m-d-Y" }}").getTime(), {{ track.value }}]);
+        {% endfor %}
+
+        var chartMinDate = new Date(Date.today().add(-7).days()).getTime(); //first day
+        var chartMaxDate = new Date(Date.today()).getTime(); //last day
+
+        var tickSize = [1, "day"];
+        var tformat = "%d/%m/%y";
+
+        var options = {
+            grid: {
+                show: true,
+                aboveData: true,
+                color: "#3f3f3f",
+                labelMargin: 10,
+                axisMargin: 0,
+                borderWidth: 0,
+                borderColor: null,
+                minBorderMargin: 5,
+                clickable: true,
+                hoverable: true,
+                autoHighlight: true,
+                mouseActiveRadius: 100
+            },
+            series: {
+                lines: {
+                    show: true,
+                    fill: true,
+                    lineWidth: 2,
+                    steps: false
+                },
+                points: {
+                    show: true,
+                    radius: 4.5,
+                    symbol: "circle",
+                    lineWidth: 3.0
+                }
+            },
+            legend: {
+                position: "ne",
+                margin: [0, -25],
+                noColumns: 0,
+                labelBoxBorderColor: null,
+                labelFormatter: function (label, series) {
+                    return label + '&nbsp;&nbsp;';
+                },
+                width: 40,
+                height: 1
+            },
+            colors: chartColours,
+            shadowSize: 0,
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s: %y.0",
+                xDateFormat: "%d/%m",
+                shifts: {
+                    x: -30,
+                    y: -50
+                },
+                defaultTheme: false
+            },
+            yaxis: {
+                min: 0
+            },
+            xaxis: {
+                mode: "time",
+                minTickSize: tickSize,
+                timeformat: tformat,
+                min: chartMinDate,
+                max: chartMaxDate
+            }
+        };
+        var plot = $.plot($("#placeholder33x"), [{
+            label: "Rata-rata Detak Jantung Harian",
+            data: heart,
+            lines: {
+                fillColor: "rgba(150, 202, 89, 0.12)"
+            },
+            points: {
+                fillColor: "#fff"
+            }
+        }, {
+            label: "Rata-rata Kadar Gula Darah Harian",
+            data: blood,
+            lines: {
+                fillColor: "rgba(150, 202, 89, 0.12)"
+            },
+            points: {
+                fillColor: "#fff"
+            }
+        }, {
+            label: "Rata-rata Kondisi Harian",
+            data: daily,
+            lines: {
+                fillColor: "rgba(150, 202, 89, 0.12)"
+            },
+            points: {
+                fillColor: "#fff"
+            }
+        }], options);
+    });
+</script>
+{% endif %}
+{% endblock 'extra_footer' %}

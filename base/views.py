@@ -17,6 +17,8 @@ from rest_framework.response import Response
 from member.models import CareGiver, Elder
 from base.forms import LoginForm
 from member.forms import CareGiverForm, UserForm
+from datetime import datetime, date, time
+from datetime import timedelta
 
 
 class Login(viewsets.GenericViewSet):
@@ -59,8 +61,14 @@ class Index(View):
             if None == page:
                 if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
                     elder=Elder.objects.get(pk=request.session.get('active_elder'))
+                    today=datetime.combine(date.today(), time.min)
+                    lastweek=today-timedelta(days=7)
+                    tracker=elder.tracker_set.filter(created__gte=lastweek)
+                    blood=tracker.filter(type="bg")
+                    heartrate=tracker.filter(type="hr")
+                    daily_condition=tracker.filter(type="cd")
                     elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                    return render(request, 'index.html', {'active_elder':elder, 'elders':elders})
+                    return render(request, 'index.html', {'active_elder':elder, 'elders':elders, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
                 else:
                     return render(request, 'index.html')
             else:
@@ -78,7 +86,13 @@ class Index(View):
                     elders=Elder.get_cared_elder(caregiver)
                     if elders:
                         request.session['active_elder']=elders[0].id
-                        return render(request, 'index.html', {'active_elder':elders[0], 'elders':elders})
+                        today=datetime.combine(date.today(), time.min)
+                        lastweek=today-timedelta(days=7)
+                        tracker=elders[0].tracker_set.filter(created__gte=lastweek)
+                        blood=tracker.filter(type="bg")
+                        heartrate=tracker.filter(type="hr")
+                        daily_condition=tracker.filter(type="cd")
+                        return render(request, 'index.html', {'active_elder':elders[0], 'elders':elders, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
                     else:
                         request.session['active_elder']=0
                         return render(request, 'index.html', {'elders':elders})

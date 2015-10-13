@@ -1,5 +1,17 @@
-{% include 'header.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>{% block 'title' %}{%endblock 'title' %}</title>
+    {% include 'header.html' %}
+    {% block 'extra_header' %}{%endblock 'extra_header' %}
+</head>
+
+<body class="nav-md">
 <div class="container body">
 
     {% include 'menu.html' %}
@@ -13,4 +25,8 @@
 </div>
 
 {% include 'footer.html' %}
+{% block 'extra_footer' %}{% endblock 'extra_footer' %}
+</body>
+
+</html>
 
