@@ -53,6 +53,13 @@ class Elder(Member):
     @staticmethod
     def get_cared_elder(user):
         return Elder.objects.filter(cared_by__in=[user])
+        
+    def get_last_activity(self):
+        reverse=self.tracker_set.order_by('-id')
+        if reverse:
+            return self.tracker_set.order_by('-id')[0]
+        else:
+            return None
 
         # def get_kondisi(self):
         # return self.dailycondition_set

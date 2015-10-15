@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load upto %}
 {% block 'title' %}Elder Caring | Dashboard{%endblock 'title' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
@@ -123,29 +124,37 @@
                                     <div class="tile-stats">
                                         <div class="icon"><i class="fa fa-caret-square-o-right"></i>
                                         </div>
-                                        <div class="count">179</div>
-                                        <h3>New Sign ups</h3>
+                                        <div class="count">{{ elders.count }}</div>
+                                        <h3>Orang tua</h3>
 
-                                        <p>Lorem ipsum psdea itgum rixt.</p>
+                                        <p>yang dirawat.</p>
                                     </div>
                                     <div class="tile-stats">
                                         <div class="icon"><i class="fa fa-caret-square-o-right"></i>
                                         </div>
-                                        <div class="count">179</div>
-                                        <h3>New Sign ups</h3>
+                                        <div class="count">{{ user.notif_receiver.count }}</div>
+                                        <h3>Notifikasi</h3>
 
-                                        <p>Lorem ipsum psdea itgum rixt.</p>
+                                        <p>diterima.</p>
                                     </div>
                                     <div class="tile-stats">
                                         <div class="icon"><i class="fa fa-caret-square-o-right"></i>
                                         </div>
-                                        <div class="count">179</div>
-                                        <h3>New Sign ups</h3>
+                                        <div class="count">{{ user.notif_sender.count }}</div>
+                                        <h3>Notifikasi</h3>
 
-                                        <p>Lorem ipsum psdea itgum rixt.</p>
+                                        <p>dikirimkan.</p>
                                     </div>
+                                    <div class="tile-stats">
+                                        <div class="icon"><i class="fa fa-caret-square-o-right"></i>
+                                        </div>
+                                        <div class="count">{{ caregiver.by_user.count }}</div>
+                                        <h3>Catatan</h3>
+                                    </div>
+                                    
                                 </div>
                             </div>
+                            {% if elders %}
                             <div>
                                 <div class="x_title">
                                     <h2>Orang Tua</h2>
@@ -154,38 +163,29 @@
                                 </div>
                                 <ul tabindex="5001" style="overflow: hidden; cursor: grab;"
                                     class="list-unstyled top_profiles scroll-view">
+                                    {% for elder in elders %}
                                     <li class="media event">
-                                        <a class="pull-left border-aero profile_thumb">
-                                            <i class="fa fa-user aero"></i>
+                                        <a class="pull-left border-{% cycle 'aero' 'green' as rowcolors %} profile_thumb">
+                                            <i class="fa fa-user {{ rowcolors }}"></i>
                                         </a>
 
                                         <div class="media-body">
-                                            <a class="title" href="#">Ms. Mary Jane</a>
-
-                                            <p><strong>$2300. </strong> Agent Avarage Sales </p>
-
-                                            <p>
-                                                <small>12 Sales Today</small>
-                                            </p>
-                                        </div>
-                                    </li>
-                                    <li class="media event">
-                                        <a class="pull-left border-green profile_thumb">
-                                            <i class="fa fa-user green"></i>
-                                        </a>
-
-                                        <div class="media-body">
-                                            <a class="title" href="#">Ms. Mary Jane</a>
-
-                                            <p><strong>$2300. </strong> Agent Avarage Sales </p>
+                                            <a class="title" href="#">{% if elder.gender == 'l' %}Bapak{% else %}Ibu{% endif %} {{ elder.user.first_name }} {{ elder.user.last_name }}</a>
+                                            {% with activity=elder.get_last_activity %}
+                                            {% if activity %}
+                                            <p><strong>{{ activity.get_type_display }} :</strong> {{ activity.get_condition_display }} </p>
 
                                             <p>
-                                                <small>12 Sales Today</small>
+                                                <small>{{ activity.value }}</small>
                                             </p>
+                                            {% endif %}
+                                            {% endwith %}
                                         </div>
                                     </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -218,7 +218,7 @@
         {% endfor %}
 
         var chartMinDate = new Date(Date.today().add(-7).days()).getTime(); //first day
-        var chartMaxDate = new Date(Date.today()).getTime(); //last day
+        var chartMaxDate = new Date(Date.today().add(1)).getTime(); //last day
 
         var tickSize = [1, "day"];
         var tformat = "%d/%m/%y";
@@ -283,6 +283,7 @@
                 minTickSize: tickSize,
                 timeformat: tformat,
                 min: chartMinDate,
+                timezone: "browser",
                 max: chartMaxDate
             }
         };
