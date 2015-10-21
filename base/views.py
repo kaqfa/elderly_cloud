@@ -71,7 +71,9 @@ class Index(View):
                     elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
                     return render(request, 'index.html', {'active_elder':elder, 'elders':elders, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
                 else:
-                    return render(request, 'index.html')
+                    caregiver=CareGiver.objects.get(user=request.user)
+                    elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+                    return render(request, 'index.html', {'caregiver':caregiver, 'elders':elders})
             else:
                 return render(request, page + '.html')
         return render(request, 'login.html')
@@ -103,7 +105,9 @@ class Index(View):
             userform = UserForm(request.POST)
             caregiverform = CareGiverForm(request.POST)
             if userform.is_valid() and caregiverform.is_valid():
-                user = userform.save()
+                user = userform.save(commit=False)
+                user.set_password(userform.cleaned_data.get('password'))
+                user.save()
                 caregiver = caregiverform.save(commit=False)
                 caregiver.user=user
                 caregiver.save()
