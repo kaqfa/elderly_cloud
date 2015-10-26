@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-
+{% block 'title' %}Elder Caring | Parents{%endblock 'title' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -11,31 +11,152 @@
                     <div class="x_panel">
                         <div class="x_title">
                             <h2>List Orang Tua yang Dirawat</h2>
-
                             <div class="clearfix"></div>
                         </div>
-                        <button data-toggle="dropdown" class="btn btn-primary" type="button">
+                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addform">
                             <span class="fa fa-plus"></span> Tambah Data Orang Tua
                         </button>
+                        
+                        <form method="post" action="" class="modal fade" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
+                        {% csrf_token %}
+                            <div class="modal-dialog modal-md">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel2">Tambah Orang Tua</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <input name="first_name" type="text" class="form-control" placeholder="Nama Depan" required="" />
+                                        </div>
+                                        <div>
+                                            <input name="last_name" type="text" class="form-control" placeholder="Nama Belakang" required="" />
+                                        </div>
+                                        <div>
+                                            <input name="username" type="text" class="form-control" placeholder="Username" required="" />
+                                        </div>
+                                        <div>
+                                            <input name="email" type="email" class="form-control" placeholder="Email" required="" />
+                                        </div>
+                                        <div>Gender: 
+                                            <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                                    <input type="radio" name="gender" value="l"> &nbsp; Male &nbsp;
+                                                </label>
+                                                <label class="btn btn-default active" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                                    <input type="radio" name="gender" value="p" checked=""> Female
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <input name="address" type="text" class="form-control" placeholder="Alamat" required="" />
+                                        </div>
+                                        <div>
+                                            <input id="birthday" name="birthday" type="text" class="date-picker form-control" placeholder="Tanggal Lahir (mm/dd/yyyy, contoh: 12/31/1980)" required="" />
+                                        </div>
+                                        <div>
+                                            <input name="phone" type="text" class="form-control" placeholder="Nomor Telepon" required="" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                                        <input type="submit" name="add" class="btn btn-primary" value="Tambahkan"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                                
+                                
+                        <button class="btn btn-success" type="button" data-toggle="modal" data-target="#joinform">
+                            <span class="fa fa-users"></span> Gabung Merawat Orang Tua
+                        </button>
+                        
+                        <form method="post" action="" class="modal fade" id="joinform" tabindex="-1" role="dialog" aria-hidden="true">
+                        {% csrf_token %}
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel2">Masukkan Kode Orang Tua</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <input name="kode" type="text" class="form-control" placeholder="Kode" required="" />
+                                            <p>Kode bisa didapatkan dari daftar orang tua pengguna lain.</p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                                        <input type="submit" name="join" class="btn btn-primary" value="Tambahkan"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                        {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                <ul>
+                                {% for name, errors in error.items %}
+                                    {% if name == 'birthday' %}
+                                    {% for e in errors %}
+                                    <li>Tanggal Lahir: {{ e }}</li>
+                                    {% endfor %}
+                                    {% else %}
+                                    {% for e in errors %}
+                                    <li>{{ name }}: {{ e }}</li>
+                                    {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% elif error_join %}
+                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                <ul>
+                                {% for name, errors in error_join.items %}
+                                    {% for e in errors %}
+                                    <li>{{ e }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% elif success %}
+                            <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                {{ success }}
+                            </div>
+                        {% endif %}
                         <div class="x_content">
-                            {% for rep in "xxx" %}
+                            {% for elder in elders %}
                                 <div class="row parent-row">
                                     <div class="col-md-2">
-                                        <img src="{% static 'images/picture.jpg' %}"
-                                             class="img-circle parent-img">
+                                        <img src="{% if active_elder.photo %}{{ active_elder.photo.url }}{% else %}{% static 'images/user.png' %}{% endif %}"
+                                             class="img-circle parent-img"/>
                                     </div>
                                     <div class="col-md-8">
-                                        <h3>Bunda Kirana
-                                            <button class="btn btn-warning" type="button"><i class="fa fa-edit"></i>
+                                        <h3>{{ elder.user.first_name }} {{ elder.user.last_name }}
+                                            <button class="btn btn-warning" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
                                             </button>
-                                            <button class="btn btn-danger" type="button"><i class="fa fa-trash"></i>
+                                            <button class="btn btn-danger" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
+                                            </button>
+                                            <button class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Cari Lokasi"><i class="glyphicon glyphicon-search"></i>
                                             </button>
                                         </h3>
-                                        <div>Jl. Dewi Sartika Raya, No. 14, Gunung Pati, Semarang</div>
+                                        <div>{{ elder.address }}</div>
+                                        <div>No. Telp: {{ elder.phone }}</div>
                                     </div>
                                     <div class="col-md-2">
                                         <button type="button" style="margin-top:30px;"
-                                                class="btn btn-round btn-success">5KBCX6
+                                                class="btn btn-round btn-success">{{ elder.code }}
                                         </button>
                                     </div>
                                 </div>
@@ -47,3 +168,17 @@
         </div>
     </div>
 {% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#birthday').daterangepicker({
+            singleDatePicker: true,
+            calender_style: "picker_4"
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+    });
+</script>
+{% endblock 'extra_footer' %}

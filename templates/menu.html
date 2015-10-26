@@ -33,7 +33,7 @@
                         <ul class="nav child_menu" style="display: none">
                             <li><a href="{% url 'load' 'parents' %}">List Orang Tua</a></li>
                             {% for elder in elders %}
-                            <li><a href="#">{{ elder.user.first_name }} {{ elder.user.last_name }}</a></li>
+                            <li><a href="/activate/{{ elder.id }}/?next={% firstof request.path '/' %}">{{ elder.user.first_name }} {{ elder.user.last_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>

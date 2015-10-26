@@ -14,7 +14,7 @@ from contact.views import contacts
 from elder_profile.views import Diseases, MedicalTreatments
 from tracker.views import Trackers
 from info.views import infos
-from member.views import Elders, Signup
+from member.views import Elders, Signup, Parents, set_active_elder
 
 
 router = DefaultRouter()
@@ -34,6 +34,8 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
 	url(r'^logout/', user_logout, name='logout'),
 	url(r'^status/', status, name='status'),
+    url(r'^parents/$', Parents.as_view(), name='parents'),
+    url(r'^activate/(?P<id>[0-9]*)/', set_active_elder, name='set_elder'),
     url(r'^(?P<page>[\w]*)/$', Index.as_view(), name='load'),
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^$', Index.as_view(), name='index'),

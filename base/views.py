@@ -98,7 +98,7 @@ class Index(View):
                         return render(request, 'index.html', {'active_elder':elders[0], 'elders':elders, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
                     else:
                         request.session['active_elder']=0
-                        return render(request, 'index.html', {'elders':elders})
+                        return render(request, 'index.html', {'caregiver':caregiver,'elders':elders})
             else:
                 return render(request, 'login.html', {'error_login':form.errors})
         elif('signup' in request.POST):

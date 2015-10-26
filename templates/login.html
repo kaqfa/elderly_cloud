@@ -121,9 +121,15 @@
                             </button>
                             <ul>
                             {% for name, errors in error_signup.items %}
+                                {% if name == 'birthday' %}
                                 {% for e in errors %}
-                                <li>{{ e }}</li>
+                                <li>Tanggal Lahir: {{ e }}</li>
                                 {% endfor %}
+                                {% else %}
+                                {% for e in errors %}
+                                <li>{{ name }}: {{ e }}</li>
+                                {% endfor %}
+                                {% endif %}
                             {% endfor %}
                             </ul>
                         </div>
