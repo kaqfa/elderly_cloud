@@ -45,13 +45,16 @@ class Parents(View):
         return login_required(view, redirect_field_name=None)
 
     def get(self, request):
+        elder=None
         if request.user.is_authenticated():
-            elder=Elder.objects.get(pk=request.session.get('active_elder'))
+            if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+                elder=Elder.objects.get(pk=request.session.get('active_elder'))
             elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
             return render(request, 'parents.html', {'elders':elders, 'active_elder':elder})
         return HttpResponseRedirect(reverse('index'))
     
     def post(self, request):
+        elder=None
         if('join' in request.POST):
             form = JoinForm(request.POST, request=request)
             if form.is_valid():
@@ -60,37 +63,42 @@ class Parents(View):
                 caregiver = CareGiver.objects.get(user=request.user)
                 elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
                 CareGiving.objects.create(caregiver=caregiver, elder=elder)
-                elder=Elder.objects.get(pk=request.session.get('active_elder'))
+                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
                 return render(request, 'parents.html', {'elders':elders, 'success': "Orang tua berhasil ditambahkan", 'active_elder':elder})
             else:
-                elder=Elder.objects.get(pk=request.session.get('active_elder'))
+                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
                 elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
                 return render(request, 'parents.html', {'error_join':form.errors, 'active_elder':elder, 'elders': elders})
         elif('add' in request.POST):
             userform = ElderUserForm(request.POST)
             elderform = ElderForm(request.POST)
             if userform.is_valid() and elderform.is_valid():
+                code = get_random_string(length=8)
+                while Elder.objects.filter(code=code):
+                    code = get_random_string(length=8)
                 user = userform.save(commit=False)
+                user.username=code
                 user.set_password('asdfg4321')
                 user.save()
                 elder = elderform.save(commit=False)
                 elder.user=user
-                code = get_random_string(length=8)
-                while Elder.objects.filter(code=code):
-                    code = get_random_string(length=8)
                 elder.code=code
                 elder.save()
                 caregiver = CareGiver.objects.get(user=request.user)
                 CareGiving.objects.create(caregiver=caregiver, elder=elder)
-                g = Group.objects.get(name='active_elder')
+                g = Group.objects.get(name='Elder')
                 g.user_set.add(user)
+                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
                 elders=Elder.get_cared_elder(user=caregiver)
-                elder=Elder.objects.get(pk=request.session.get('active_elder'))
                 return render(request, 'parents.html', {'elders':elders, 'success': "Orang tua berhasil ditambahkan", 'active_elder':elder})
             else:
                 userform.errors.update(elderform.errors)
                 elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                elder=Elder.objects.get(pk=request.session.get('active_elder'))
+                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
                 return render(request, 'parents.html', {'elders':elders, 'error':userform.errors, 'active_elder':elder})
         else:
             return self.get(request)

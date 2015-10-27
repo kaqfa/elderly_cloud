@@ -10,6 +10,7 @@ class CareGiverForm(forms.ModelForm):
         exclude=['user']
         
 class UserForm(forms.ModelForm):
+    email=forms.EmailField(required=True)
     class Meta:
         model=User
         fields=['username','first_name','last_name','email','password']
@@ -23,7 +24,7 @@ class ElderForm(forms.ModelForm):
 class ElderUserForm(forms.ModelForm):
     class Meta:
         model=User
-        fields=['username','first_name','last_name','email']
+        fields=['first_name','last_name']
         
 class JoinForm(forms.Form):
     kode = forms.CharField(label='Kode', required=True)
