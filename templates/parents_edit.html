@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | {{ edit.user.first_name }} {{ edit.user.last_name }}{%endblock 'title' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Edit {{ edit.user.first_name }} {{ edit.user.last_name }}</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <div class="x_content">
+                        <form method="post" action="" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+                            {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                <ul>
+                                {% for name, errors in error.items %}
+                                    {% if name == 'birthday' %}
+                                    {% for e in errors %}
+                                    <li>Tanggal Lahir: {{ e }}</li>
+                                    {% endfor %}
+                                    {% else %}
+                                    {% for e in errors %}
+                                    <li>{{ name }}: {{ e }}</li>
+                                    {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% elif success %}
+                            <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                {{ success }}
+                            </div>
+                        {% endif %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">Nama Depan
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="first_name" id="first_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.user.first_name }}" required="" />
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last_name">Nama Belakang
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="last_name" id="last_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.user.last_name }}" required="" />
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday">Tanggal Lahir
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="birthday" name="birthday" type="text" class="date-picker form-control col-md-7 col-xs-12" value="{{ edit.birthday|date:"m/d/Y" }}" placeholder="(mm/dd/yyyy, contoh: 12/31/1980)" required="" />
+                                </div>
+                            </div>
+                             <div class="form-group">
+                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-default{% if edit.gender == 'l' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="gender" value="l" {% if edit.gender == 'l' %}checked=""{% endif %}> &nbsp; Male &nbsp;
+                                        </label>
+                                        <label class="btn btn-default{% if edit.gender == 'p' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="gender" value="p" {% if edit.gender == 'p' %}checked=""{% endif %}> Female
+                                        </label>
+                                        {{ elder.gender }}
+                                    </div>
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Alamat
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="address" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.address }}" required="" />
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nomor Telepon
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="phone" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.phone }}" required="" />
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="{% url 'parents' %}" class="btn btn-primary">Kembali</a>
+                                    <input type="submit" name="add" class="btn btn-success" value="Simpan"/>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#birthday').daterangepicker({
+            singleDatePicker: true,
+            calender_style: "picker_4"
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+    });
+</script>
+{% endblock 'extra_footer' %}

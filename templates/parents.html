@@ -138,8 +138,8 @@
                                     </div>
                                     <div class="col-md-8">
                                         <h3>{{ elder.user.first_name }} {{ elder.user.last_name }}
-                                            <button class="btn btn-warning" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
-                                            </button>
+                                            <a href="{% url 'parents_edit' elder.id %}" class="btn btn-warning" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
+                                            </a>
                                             <button class="btn btn-danger" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
                                             </button>
                                             <button class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Cari Lokasi"><i class="glyphicon glyphicon-search"></i>

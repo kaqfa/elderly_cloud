@@ -4,7 +4,7 @@
     <div class="left_col scroll-view">
 
         <div class="navbar nav_title" style="border: 0;">
-            <a href="index.html" class="site_title"><i class="fa fa-paw"></i>
+            <a href="{% url 'index' %}" class="site_title"><i class="fa fa-paw"></i>
                 <span>Elder Caring</span></a>
         </div>
         <div class="clearfix"></div>
@@ -27,13 +27,13 @@
             <div class="menu_section">
                 <h3>&nbsp;</h3>
                 <ul class="nav side-menu">
-                    <li><a href="index.html"><i class="fa fa-home"></i> Beranda</a></li>
+                    <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Beranda</a></li>
                     <li><a><i class="fa fa-wheelchair"></i> Data Orang Tua
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
-                            <li><a href="{% url 'load' 'parents' %}">List Orang Tua</a></li>
+                            <li><a href="{% url 'parents' %}">List Orang Tua</a></li>
                             {% for elder in elders %}
-                            <li><a href="/activate/{{ elder.id }}/?next={% firstof request.path '/' %}">{{ elder.user.first_name }} {{ elder.user.last_name }}</a></li>
+                            <li><a href="{% url 'set_elder' elder.id %}?next={% firstof request.path '/' %}">{{ elder.user.first_name }} {{ elder.user.last_name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
