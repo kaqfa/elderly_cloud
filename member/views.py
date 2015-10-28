@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from member.forms import ElderForm, ElderUserForm, JoinForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 from member.models import Elder, CareGiver, Member, CareGiving
@@ -137,8 +138,41 @@ class UpdateElder(View):
             return render(request, 'parents_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active, 'edit':elder[0]})
             
 class DeleteElder(View):
-    pass
-            
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(DeleteElder, cls).as_view(**initkwargs)
+        return login_required(view, redirect_field_name=None)
+
+    def get(self, request, id):
+        active=None
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            active=Elder.objects.get(pk=request.session.get('active_elder'))
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        elder=elders.filter(id=id)
+        if elder:
+            return render(request, 'parents_delete.html', {'elders':elders, 'active_elder':active, 'delete':elder[0]})
+        return HttpResponseRedirect(reverse('parents'))
+    
+    def post(self, request, id):
+        active=None
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            active=Elder.objects.get(pk=request.session.get('active_elder'))
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        elder=elders.filter(id=id)
+        if elder:
+            elder=elder[0]
+            name=elder.user.first_name+" "+elder.user.last_name
+            if elder.cared_by.count()==1:
+                elder.delete()
+            else:
+                CareGiving.objects.filter(elder=elder, caregiver=CareGiver.objects.get(user=request.user)).delete()
+            if id==request.session.get('active_elder'):
+                elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+                request.session['active_elder']=elders[0].id
+            messages.success(request, name+' berhasil dihapus dari daftar anda.')
+        return HttpResponseRedirect(reverse('parents'))
+                
+        
 @login_required(redirect_field_name=None)
 def set_active_elder(request, id):
     if Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user)).filter(id=id):

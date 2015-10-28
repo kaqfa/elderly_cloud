@@ -128,6 +128,14 @@
                                 </button>
                                 {{ success }}
                             </div>
+                        {% elif messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                {{ message }}
+                            </div>
+                            {% endfor %}
                         {% endif %}
                         <div class="x_content">
                             {% for elder in elders %}
@@ -138,10 +146,10 @@
                                     </div>
                                     <div class="col-md-8">
                                         <h3>{{ elder.user.first_name }} {{ elder.user.last_name }}
-                                            <a href="{% url 'parents_edit' elder.id %}" class="btn btn-warning" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
+                                            <a href="{% url 'parents_edit' elder.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
                                             </a>
-                                            <button class="btn btn-danger" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
-                                            </button>
+                                            <a href="{% url 'parents_del' elder.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
+                                            </a>
                                             <button class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Cari Lokasi"><i class="glyphicon glyphicon-search"></i>
                                             </button>
                                         </h3>
