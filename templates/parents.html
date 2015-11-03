@@ -17,7 +17,7 @@
                             <span class="fa fa-plus"></span> Tambah Data Orang Tua
                         </button>
                         
-                        <form method="post" action="" class="modal fade" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
+                        <form method="post" action="" enctype="multipart/form-data" class="modal fade" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
                         {% csrf_token %}
                             <div class="modal-dialog modal-md">
                                 <div class="modal-content">
@@ -52,6 +52,10 @@
                                         </div>
                                         <div>
                                             <input name="phone" type="text" class="form-control" placeholder="Nomor Telepon" required="" />
+                                        </div>
+                                        <br/>
+                                        <div>
+                                        Foto: <div class="btn-group"><input id="photo" name="photo" class="border: none" type="file" class="date-picker form-control col-md-7 col-xs-12"/></div>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
@@ -141,7 +145,7 @@
                             {% for elder in elders %}
                                 <div class="row parent-row">
                                     <div class="col-md-2">
-                                        <img src="{% if active_elder.photo %}{{ active_elder.photo.url }}{% else %}{% static 'images/user.png' %}{% endif %}"
+                                        <img src="{% if elder.photo %}{{ elder.photo.url }}{% else %}{% static 'images/user.png' %}{% endif %}"
                                              class="img-circle parent-img"/>
                                     </div>
                                     <div class="col-md-8">

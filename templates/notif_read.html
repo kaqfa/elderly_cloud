@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | {{ notif.title }}{% endblock 'title' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>{{ notif.title }}</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Dari :</div>
+                                <div class="col-md-8">{{ notif.sender.first_name }} {{ notif.sender.last_name }}</div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Untuk :</div>
+                                <div class="col-md-8">{{ notif.receiver.first_name }} {{ notif.receiver.last_name }}</div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Pesan :</div>
+                                <div class="col-md-8">{{ notif.content }}</div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Tingkat Kepentingan :</div>
+                                <div class="col-md-8">{{ notif.get_level_display }}</div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Dijalankan Pada :</div>
+                                <div class="col-md-8">{{ notif.invoked_on|date:'m/d/Y H:i' }}</div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Diulang Setiap :</div>
+                                <div class="col-md-8">{{ notif.get_recurring_display }}</div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="ln_solid"></div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="{% url 'notif_elder' %}" class="btn btn-primary">Kembali</a>
+                                    <a href="{% url 'edit_notif_elder' notif.id %}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="{% url 'del_notif_elder' notif.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}

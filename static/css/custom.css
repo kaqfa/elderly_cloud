@@ -1440,18 +1440,15 @@ table.jambo_table tbody tr.selected td {
 }
 
 .dataTables_length {
-    width: 40%;
     float: left;
 }
 
 .dataTables_filter {
-    width: 50%;
     float: right;
     text-align: right;
 }
 
 .dataTables_info {
-    width: 60%;
     float: left;
 }
 
@@ -1635,7 +1632,6 @@ td.details {
 }
 
 .paging_full_numbers {
-    width: 400px;
     height: 22px;
     line-height: 22px;
 }

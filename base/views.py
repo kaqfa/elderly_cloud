@@ -20,6 +20,10 @@ from member.forms import CareGiverForm, UserForm
 from datetime import datetime, date, time
 from datetime import timedelta
 
+def cek_session(request):
+    if 'active_elder' not in request.session:
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        request.session['active_elder']=elders[0].id
 
 class Login(viewsets.GenericViewSet):
     serializer_class = LoginSerializer
@@ -58,8 +62,9 @@ class Index(View):
 
     def get(self, request, page=None, error=None):
         if request.user.is_authenticated():
+            cek_session(request)
             if None == page:
-                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+                if request.session['active_elder']!=0:
                     elder=Elder.objects.get(pk=request.session.get('active_elder'))
                     caregiver=CareGiver.objects.get(user=request.user)
                     today=datetime.combine(date.today(), time.min)

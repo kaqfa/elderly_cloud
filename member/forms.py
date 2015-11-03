@@ -17,6 +17,7 @@ class UserForm(forms.ModelForm):
         
 class ElderForm(forms.ModelForm):
     birthday = forms.DateField(input_formats=['%m/%d/%Y'])
+    photo = forms.ImageField(required=False)
     class Meta:
         model=Elder
         exclude=['user','code','cared_by']

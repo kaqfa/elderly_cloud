@@ -62,7 +62,7 @@ class SignupSerializer(serializers.Serializer):
     def create(self, validated_data):
         type = validated_data.get('type')
         if type == 'e' and len(validated_data.get('cared_by')) > 0:
-            code = get_random_string(length=8)
+            code = get_random_string(length=8, allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
             while Elder.objects.filter(code=code):
                 code = get_random_string(length=8)
             user = User.objects.create_user(username=code, email=validated_data.get('email'), password='asdfg4321')

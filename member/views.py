@@ -3,7 +3,6 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponseRedirect
 from django.views.generic import View
-from django.views.generic.edit import View
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from member.forms import ElderForm, ElderUserForm, JoinForm
@@ -15,6 +14,7 @@ from member.models import Elder, CareGiver, Member, CareGiving
 from django.contrib.auth.models import Group
 from django.utils.crypto import get_random_string
 from member.serializers import ElderSerializer, SignupSerializer, CareGiverSerializer
+from base.views import cek_session
 
 
 class Elders(viewsets.ReadOnlyModelViewSet):
@@ -48,6 +48,7 @@ class Parents(View):
         return login_required(view, redirect_field_name=None)
 
     def get(self, request):
+        cek_session(request)
         elder=None
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             elder=Elder.objects.get(pk=request.session.get('active_elder'))
@@ -55,6 +56,7 @@ class Parents(View):
         return render(request, 'parents.html', {'elders':elders, 'active_elder':elder})
     
     def post(self, request):
+        cek_session(request)
         elder=None
         if('join' in request.POST):
             form = JoinForm(request.POST, request=request)
@@ -74,9 +76,9 @@ class Parents(View):
                 return render(request, 'parents.html', {'error_join':form.errors, 'active_elder':elder, 'elders': elders})
         elif('add' in request.POST):
             userform = ElderUserForm(request.POST)
-            elderform = ElderForm(request.POST)
+            elderform = ElderForm(request.POST, request.FILES)
             if userform.is_valid() and elderform.is_valid():
-                code = get_random_string(length=8)
+                code = get_random_string(length=8, allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
                 while Elder.objects.filter(code=code):
                     code = get_random_string(length=8)
                 user = userform.save(commit=False)
@@ -112,6 +114,7 @@ class UpdateElder(View):
         return login_required(view, redirect_field_name=None)
 
     def get(self, request, id):
+        cek_session(request)
         active=None
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             active=Elder.objects.get(pk=request.session.get('active_elder'))
@@ -122,20 +125,23 @@ class UpdateElder(View):
         return HttpResponseRedirect(reverse('parents'))
     
     def post(self, request, id):
+        cek_session(request)
         active=None
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             active=Elder.objects.get(pk=request.session.get('active_elder'))
         elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
         elder=elders.filter(id=id)
-        userform = ElderUserForm(request.POST, instance=elder[0].user)
-        elderform = ElderForm(request.POST, instance=elder[0])
-        if userform.is_valid() and elderform.is_valid():
-            user = userform.save()
-            elder = elderform.save()
-            return render(request, 'parents_edit.html', {'elders':elders, 'success': "Data tersimpan", 'active_elder':active, 'edit':elder})
-        else:
-            userform.errors.update(elderform.errors)            
-            return render(request, 'parents_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active, 'edit':elder[0]})
+        if elder:
+            userform = ElderUserForm(request.POST, instance=elder[0].user)
+            elderform = ElderForm(request.POST, request.FILES, instance=elder[0])
+            if userform.is_valid() and elderform.is_valid():
+                user = userform.save()
+                elder = elderform.save()
+                return render(request, 'parents_edit.html', {'elders':elders, 'success': "Data tersimpan", 'active_elder':active, 'edit':elder})
+            else:
+                userform.errors.update(elderform.errors)            
+                return render(request, 'parents_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active, 'edit':elder[0]})
+        return HttpResponseRedirect(reverse('parents'))
             
 class DeleteElder(View):
     @classmethod
@@ -144,6 +150,7 @@ class DeleteElder(View):
         return login_required(view, redirect_field_name=None)
 
     def get(self, request, id):
+        cek_session(request)
         active=None
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             active=Elder.objects.get(pk=request.session.get('active_elder'))
@@ -154,6 +161,7 @@ class DeleteElder(View):
         return HttpResponseRedirect(reverse('parents'))
     
     def post(self, request, id):
+        cek_session(request)
         active=None
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             active=Elder.objects.get(pk=request.session.get('active_elder'))

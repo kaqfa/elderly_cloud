@@ -27,7 +27,7 @@ class Notification(TimeStampedModel, StatusModel):
     recurring = models.CharField('Diulang Tiap', max_length=1, choices=RECUR_CHOICES,
                                  default='1')
     level = models.CharField('Tingkat Kepentingan', max_length=1, choices=LEVEL_CHOICES,
-                             default='1s')
+                             default='1')
     sender = models.ForeignKey(User, related_name='notif_sender', verbose_name='Pengirim')
     receiver = models.ForeignKey(User, related_name='notif_receiver', verbose_name='Kepada')
     responded = models.ManyToManyField(User, blank=True, through='ResponseNotification',

@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | {{ edit.user.first_name }} {{ edit.user.last_name }}{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Edit {{ notif.title }}{%endblock 'title' %}
+{% block 'extra_header' %}
+ <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+{% endblock 'extra_header' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -10,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Edit {{ edit.user.first_name }} {{ edit.user.last_name }}</h2>
+                            <h2>Edit {{ notif.title }}</h2>
                             <div class="clearfix"></div>
                         </div>
                         
@@ -43,60 +46,54 @@
                             </div>
                         {% endif %}
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">Nama Depan
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="title">Judul
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="first_name" id="first_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.user.first_name }}" required="" />
+                                <input name="title" id="title" type="text" class="form-control col-md-7 col-xs-12" value="{{ notif.title }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last_name">Nama Belakang
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="content">Pesan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="last_name" id="last_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.user.last_name }}" required="" />
+                                <textarea name="content" id="content" type="text" class="form-control col-md-7 col-xs-12" required="" />{{ notif.content }}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="level">Tingkat Kepentingan
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <select class="form-control" name="level" id="level" required="">
+                                        <option value="1">Info</option>
+                                        <option value="2">Warning</option>
+                                        <option value="3">Emergency</option>
+                                    </select>
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday">Tanggal Lahir
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday">Dijalankan Pada
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="birthday" name="birthday" type="text" class="date-picker form-control col-md-7 col-xs-12" value="{{ edit.birthday|date:'m/d/Y' }}" placeholder="(mm/dd/yyyy, contoh: 12/31/1980)" required="" />
-                                </div>
-                            </div>
-                             <div class="form-group">
-                             <label class="control-label col-md-3 col-sm-3 col-xs-12">Gender
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-default{% if edit.gender == 'l' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                            <input type="radio" name="gender" value="l" {% if edit.gender == 'l' %}checked=""{% endif %}> &nbsp; Male &nbsp;
-                                        </label>
-                                        <label class="btn btn-default{% if edit.gender == 'p' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                            <input type="radio" name="gender" value="p" {% if edit.gender == 'p' %}checked=""{% endif %}> Female
-                                        </label>
-                                        {{ elder.gender }}
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <input type='text' class="form-control" id="invoked_on" name="invoked_on" type="text" placeholder="Dijalankan pada" value="{{ notif.invoked_on|date:'m/d/Y H:i' }}" required=""/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Alamat
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="recurring">Diulang Setiap
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="address" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.address }}" required="" />
-                                </div>
-                            </div>
-                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nomor Telepon
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="phone" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.phone }}" required="" />
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="photo">Foto Profil Baru
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="photo" name="photo" style="border:none" type="file" class="date-picker form-control col-md-7 col-xs-12"/>
+                                    <select class="form-control" id="recurring" name="recurring" required="">
+                                        <option value="1">Sekali</option>
+                                        <option value="2">Harian</option>
+                                        <option value="3">Mingguan</option>
+                                        <option value="4">Bulanan</option>
+                                        <option value="5">Weekday</option>
+                                        <option value="6">Weekend</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="ln_solid"></div>
@@ -117,14 +114,13 @@
 {% endblock 'maincontent' %}
 {% block 'extra_footer' %}
 <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript">
+    $("#level").val("{{ notif.level }}");
+    $("#recurring").val("{{ notif.recurring }}");
     $(document).ready(function () {
-        $('#birthday').daterangepicker({
-            singleDatePicker: true,
-            calender_style: "picker_4"
-        }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
+        $('#datetimepicker1').datetimepicker({
+            format: "MM/DD/YYYY HH:mm"
         });
     });
 </script>

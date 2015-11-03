@@ -7,7 +7,7 @@ from base.views import Login
 from notification.views import Hello
 from rest_framework.routers import DefaultRouter
 from base.views import Index, status, user_logout
-from notification.views import Notifs
+from notification.views import Notifs, NotifikasiElder, DetailNotifikasiElder, EditNotifikasiElder, HapusNotifikasiElder
 from django.views.generic import TemplateView
 
 from contact.views import contacts
@@ -35,8 +35,12 @@ urlpatterns = [
 	url(r'^logout/', user_logout, name='logout'),
 	url(r'^status/', status, name='status'),
     url(r'^parents/$', Parents.as_view(), name='parents'),
-    url(r'^parents/edit/(?P<id>[0-9]*)/$', UpdateElder.as_view(), name='parents_edit'),
-    url(r'^parents/del/(?P<id>[0-9]*)/$', DeleteElder.as_view(), name='parents_del'),
+    url(r'^parents/(?P<id>[0-9]*)/edit/$', UpdateElder.as_view(), name='parents_edit'),
+    url(r'^parents/(?P<id>[0-9]*)/delete/$', DeleteElder.as_view(), name='parents_del'),
+    url(r'^notification/elder/$', NotifikasiElder.as_view(), name='notif_elder'),
+    url(r'^notification/elder/(?P<id>[0-9]*)/$', DetailNotifikasiElder.as_view(), name='dt_notif_elder'),
+    url(r'^notification/elder/(?P<id>[0-9]*)/edit/$', EditNotifikasiElder.as_view(), name='edit_notif_elder'),
+    url(r'^notification/elder/(?P<id>[0-9]*)/delete/$', HapusNotifikasiElder.as_view(), name='del_notif_elder'),
     url(r'^activate/(?P<id>[0-9]*)/', set_active_elder, name='set_elder'),
     url(r'^(?P<page>[\w]*)/$', Index.as_view(), name='load'),
     url(r'^summernote/', include('django_summernote.urls')),
