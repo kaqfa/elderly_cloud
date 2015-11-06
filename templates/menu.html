@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load libs %}
 
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
@@ -42,7 +43,7 @@
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                             <li><a href="{% url 'notif_elder' %}">Untuk Orang Tua</a></li>
-                            <li><a href="{% url 'load' 'disease_hist' %}">Untuk Anda</a></li>
+                            <li><a href="{% url 'notif_cg' %}">Untuk Anda</a></li>
                         </ul>
                     </li>
                     {% endif %}
@@ -107,7 +108,7 @@
                 <li class="">
                     <a href="javascript:;" class="user-profile dropdown-toggle"
                        data-toggle="dropdown" aria-expanded="false">
-                        <img src="{% static 'images/user.png' %}" alt="">{{ user.first_name }} {{ user.last_name }}
+                        <img src="{% if user.member.photo %}{{ user.member.photo.url }}{% else %}{% static 'images/user.png' %}{% endif %}" alt="">{{ user.first_name }} {{ user.last_name }}
                         <span class=" fa fa-angle-down"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
@@ -126,53 +127,43 @@
                         </li>
                     </ul>
                 </li>
-
+                {% with unread=user.get_unread_notif %}
                 <li role="presentation" class="dropdown">
                     <a href="javascript:;" class="dropdown-toggle info-number"
                        data-toggle="dropdown" aria-expanded="false">
                         <i class="fa fa-envelope-o"></i>
-                        <span class="badge bg-green">12</span>
+                        {% if unread %}
+                        <span class="badge bg-green">{{ unread.count }}</span>
+                        {% endif %}
                     </a>
                     <ul id="menu1"
                         class="dropdown-menu list-unstyled msg_list animated fadeInDown"
                         role="menu">
+                        {% for n in unread %}
                         <li>
-                            <a>
+                            <a href="{% url 'dt_notif_cg' n.id %}">
                                 <span class="image">
-                                    <img src="{% static 'images/img.jpg' %}" alt="Profile Image"/>
+                                    <img src="{% if n.sender.member.photo %}{{ n.sender.member.photo.url }}{% else %}{% static 'images/user.png' %}{% endif %}" alt="Profile Image"/>
                                 </span>
                                 <span>
-                                <span>John Smith</span>
-                                <span class="time">3 mins ago</span>
+                                <span>{{ n.sender.first_name }} {{ n.sender.last_name }}</span>
+                                <span class="time">{{ n.created|age }}</span>
                                 </span>
-                                <span class="message">Film festivals used to be do-or-die moments for movie makers. They were where... </span>
+                                <span class="message">{{ n.title|truncatechars:40 }}</span>
                             </a>
                         </li>
-                        <li>
-                            <a>
-                                <span class="image">
-                            <img src="{% static 'images/img.jpg' %}" alt="Profile Image"/>
-                        </span>
-                                <span>
-                            <span>John Smith</span>
-                                <span class="time">3 mins ago</span>
-                                </span>
-                                <span class="message">
-                            Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                            </a>
-                        </li>
+                        {% endfor %}
                         <li>
                             <div class="text-center">
-                                <a>
-                                    <strong>See All Alerts</strong>
+                                <a href="{% url 'notif_cg' %}">
+                                    <strong>Lihat semua notifikasi</strong>
                                     <i class="fa fa-angle-right"></i>
                                 </a>
                             </div>
                         </li>
                     </ul>
                 </li>
-
+                {% endwith %}
             </ul>
         </nav>
     </div>

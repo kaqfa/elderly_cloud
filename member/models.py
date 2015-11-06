@@ -4,7 +4,11 @@ from polymorphic import PolymorphicModel
 from model_utils.models import TimeStampedModel, StatusModel
 from model_utils import Choices
 
+def get_unread_notif(self):
+    return self.notif_receiver.filter(status='s').order_by('-invoked_on', '-modified')
 
+User.add_to_class('get_unread_notif', get_unread_notif)
+    
 class Member(PolymorphicModel, TimeStampedModel):
     GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
     user = models.OneToOneField(User, verbose_name='Untuk Pengguna')

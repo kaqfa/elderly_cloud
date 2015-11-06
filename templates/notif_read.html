@@ -26,6 +26,12 @@
                                 <div class="col-md-4 text-right">Pesan :</div>
                                 <div class="col-md-8">{{ notif.content }}</div>
                             </div>
+                            {% if notif.receiver == user %}
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Diterima pada :</div>
+                                <div class="col-md-8">{{ notif.invoked_on|date:'m/d/Y H:i' }}</div>
+                            </div>
+                            {% else %}
                             <div class="col-md-12">
                                 <div class="col-md-4 text-right">Tingkat Kepentingan :</div>
                                 <div class="col-md-8">{{ notif.get_level_display }}</div>
@@ -38,13 +44,25 @@
                                 <div class="col-md-4 text-right">Diulang Setiap :</div>
                                 <div class="col-md-8">{{ notif.get_recurring_display }}</div>
                             </div>
+                            {% endif %}
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Status :</div>
+                                <div class="col-md-8">{{ notif.get_status_display|title }}</div>
+                            </div>
                             <div class="clearfix"></div>
                             <div class="ln_solid"></div>
                             <div class="col-md-12">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <a href="{% url 'notif_elder' %}" class="btn btn-primary">Kembali</a>
+                                    {% if notif.receiver == user %}
+                                    <a href="{% url 'notif_cg' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
+                                    {% if notif.status == 's' %}
+                                    <a href="{% url 'respon_notif' notif.id %}" class="btn btn-success"><i class="fa fa-check"></i> Respon</a>
+                                    {% endif %}
+                                    {% else %}
+                                    <a href="{% url 'notif_elder' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
                                     <a href="{% url 'edit_notif_elder' notif.id %}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
                                     <a href="{% url 'del_notif_elder' notif.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>

@@ -8,12 +8,14 @@ from base.views import cek_session
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from datetime import datetime
 
 from notification.models import Notification
 from notification.serializers import NotificationSerializer
 from notification.forms import NotificationForm
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from itertools import chain
 
 
 # Create your views here.
@@ -56,7 +58,7 @@ class NotifikasiElder(View):
             elder=Elder.objects.get(pk=request.session.get('active_elder'))
             elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
             notif=Notification.objects.filter(receiver=elder.user)
-            return render(request, 'notif.html', {'elders':elders, 'active_elder':elder, 'notifs':notif, 'untuk':"Orang Tua"})
+            return render(request, 'notif.html', {'elders':elders, 'active_elder':elder, 'notifs':notif, 'untuk':1})
         else:
             return HttpResponseRedirect(reverse('index'))
     def post(self, request):
@@ -157,3 +159,68 @@ class HapusNotifikasiElder(View):
                 notif.delete()
                 messages.success(request, 'Notifikasi "'+name+'" telah berhasil dihapus.')
         return HttpResponseRedirect(reverse('notif_elder'))
+        
+class NotifikasiCG(View):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(NotifikasiCG, cls).as_view(**initkwargs)
+        return login_required(view, redirect_field_name=None)
+
+    def get(self, request):
+        cek_session(request)
+        elder=None
+        notif1=request.user.get_unread_notif()
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            elder=Elder.objects.get(pk=request.session.get('active_elder'))
+            notif2=Notification.objects.filter(receiver=elder.user, status='s', invoked_on__lte=datetime.now()).order_by('invoked_on')
+            notif=list(chain(notif1, notif2))
+        notif3=request.user.notif_receiver.filter(status='r').order_by('-invoked_on', '-modified')
+        notif=list(chain(notif, notif3))
+        return render(request, 'notif.html', {'elders':elders, 'active_elder':elder, 'notifs':notif, 'untuk':2})
+        
+class DetailNotifikasiCG(View):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(DetailNotifikasiCG, cls).as_view(**initkwargs)
+        return login_required(view, redirect_field_name=None)
+
+    def get(self, request, id):
+        cek_session(request)
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            elder=Elder.objects.get(pk=request.session.get('active_elder'))
+        notif=Notification.objects.filter(receiver=request.user, id=id)
+        if notif:
+            return render(request, 'notif_read.html', {'elders':elders, 'active_elder':elder, 'notif':notif[0]})
+        return HttpResponseRedirect(reverse('notif_cg'))
+    def post(self, request, id):
+        return self.get(request, id)
+        
+class ResponNotifikasi(View):
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(ResponNotifikasi, cls).as_view(**initkwargs)
+        return login_required(view, redirect_field_name=None)
+
+    def get(self, request, id):
+        cek_session(request)
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            elder=Elder.objects.get(pk=request.session.get('active_elder'))
+        notif=Notification.objects.filter(receiver=request.user, id=id)
+        if notif:
+            return render(request, 'notif_response.html', {'elders':elders, 'active_elder':elder, 'notif':notif[0]})
+        return HttpResponseRedirect(reverse('notif_cg'))
+    def post(self, request, id):
+        cek_session(request)
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            elder=Elder.objects.get(pk=request.session.get('active_elder'))
+        notif=Notification.objects.filter(receiver=request.user, id=id)
+        if notif:
+            notif=notif[0]
+            notif.status='r'
+            notif.save()
+            messages.success(request, 'Notifikasi "'+notif.title+'" telah berhasil direspon.')
+        return HttpResponseRedirect(reverse('notif_cg'))

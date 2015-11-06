@@ -7,7 +7,7 @@ from base.views import Login
 from notification.views import Hello
 from rest_framework.routers import DefaultRouter
 from base.views import Index, status, user_logout
-from notification.views import Notifs, NotifikasiElder, DetailNotifikasiElder, EditNotifikasiElder, HapusNotifikasiElder
+from notification.views import Notifs, NotifikasiElder, DetailNotifikasiElder, EditNotifikasiElder, HapusNotifikasiElder, NotifikasiCG, DetailNotifikasiCG, ResponNotifikasi
 from django.views.generic import TemplateView
 
 from contact.views import contacts
@@ -41,6 +41,9 @@ urlpatterns = [
     url(r'^notification/elder/(?P<id>[0-9]*)/$', DetailNotifikasiElder.as_view(), name='dt_notif_elder'),
     url(r'^notification/elder/(?P<id>[0-9]*)/edit/$', EditNotifikasiElder.as_view(), name='edit_notif_elder'),
     url(r'^notification/elder/(?P<id>[0-9]*)/delete/$', HapusNotifikasiElder.as_view(), name='del_notif_elder'),
+    url(r'^notification/$', NotifikasiCG.as_view(), name='notif_cg'),
+    url(r'^notification/(?P<id>[0-9]*)/$', DetailNotifikasiCG.as_view(), name='dt_notif_cg'),
+    url(r'^notification/(?P<id>[0-9]*)/respon/$', ResponNotifikasi.as_view(), name='respon_notif'),
     url(r'^activate/(?P<id>[0-9]*)/', set_active_elder, name='set_elder'),
     url(r'^(?P<page>[\w]*)/$', Index.as_view(), name='load'),
     url(r'^summernote/', include('django_summernote.urls')),
