@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Edit "{{ medis.treatment }}"{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Edit Catatan "{{ note.title }}"{%endblock 'title' %}
 {% block 'extra_header' %}
  <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
 {% endblock 'extra_header' %}
@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Edit "{{ medis.treatment }}"</h2>
+                            <h2>Edit Catatan "{{ note.title }}"</h2>
                             <div class="clearfix"></div>
                         </div>
                         
@@ -46,33 +46,28 @@
                             </div>
                         {% endif %}
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="treatment">Nama
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="title">Judul
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="treatment" id="treatment" type="text" class="form-control col-md-7 col-xs-12" value="{{ medis.treatment }}" required="" />
+                                <input name="title" id="title" type="text" class="form-control col-md-7 col-xs-12" value="{{ note.title }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tahun Mulai
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="content">Isi
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' class="form-control" id="from_year" name="from_year" type="text" value="{{ medis.from_year }}" required=""/>
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
+                                    <textarea name="content" id="content" type="text" class="form-control col-md-7 col-xs-12" value="{{ note.content }}" required="" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tahun Selesai
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sharable">Dibagikan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class='input-group date' id='datetimepicker2'>
-                                        <input type='text' class="form-control" id="to_year" name="to_year" type="text"value="{{ medis.to_year }}" required=""/>
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
+                                        <select id="sharable" name="sharable" class="form-control">
+                                            <option value="1">Ya</option>
+                                            <option value="0">Tidak</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Edit "{{ disease.treatment }}"{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Edit "{{ disease.name }}"{%endblock 'title' %}
 {% block 'extra_header' %}
  <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
 {% endblock 'extra_header' %}
@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Edit "{{ disease.treatment }}"</h2>
+                            <h2>Edit "{{ disease.name }}"</h2>
                             <div class="clearfix"></div>
                         </div>
                         
@@ -49,11 +49,11 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="name" id="name" type="text" class="form-control col-md-7 col-xs-12" value="{{ disease.treatment }}" required="" />
+                                <input name="name" id="name" type="text" class="form-control col-md-7 col-xs-12" value="{{ disease.name }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tahun Mulai
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="from_year">Tahun Mulai
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class='input-group date' id='datetimepicker1'>
@@ -65,7 +65,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tahun Selesai
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="to_year">Tahun Selesai
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class='input-group date' id='datetimepicker2'>
@@ -77,7 +77,7 @@
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="recurring">Status
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Status
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <select class="form-control" id="status" name="status" required="">
