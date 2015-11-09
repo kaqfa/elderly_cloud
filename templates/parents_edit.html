@@ -60,7 +60,7 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday">Tanggal Lahir
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="birthday" name="birthday" type="text" class="date-picker form-control col-md-7 col-xs-12" value="{{ edit.birthday|date:'m/d/Y' }}" placeholder="(mm/dd/yyyy, contoh: 12/31/1980)" required="" />
+                                <input id="birthday" name="birthday" type="text" class="date-picker form-control col-md-7 col-xs-12" value="{{ edit.birthday|date:'d/m/Y' }}" placeholder="(mm/dd/yyyy, contoh: 12/31/1980)" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
@@ -122,7 +122,10 @@
     $(document).ready(function () {
         $('#birthday').daterangepicker({
             singleDatePicker: true,
-            calender_style: "picker_4"
+            calender_style: "picker_4",
+            locale: {
+                format: 'DD/MM/YYYY'
+            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });

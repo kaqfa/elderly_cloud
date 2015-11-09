@@ -19,10 +19,10 @@ class Member(PolymorphicModel, TimeStampedModel):
     photo = models.ImageField('Foto Profil', null=True, blank=True)
     
     def __unicode__(self):
-        return self.user.last_name
+        return self.user.first_name+" "+self.user.last_name
     
     def __str__(self):  # __unicode__ on Python 2
-        return self.user.last_name
+        return self.user.first_name+" "+self.user.last_name
 
     class Meta:
         verbose_name = "Anggota"

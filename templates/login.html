@@ -165,7 +165,7 @@
                             <input name="address" type="text" class="form-control" placeholder="Alamat" required="" />
                         </div>
                         <div>
-                            <input id="birthday" name="birthday" type="text" class="date-picker form-control" placeholder="Tanggal Lahir (mm/dd/yyyy, contoh: 12/31/1980)" required="" />
+                            <input id="birthday" name="birthday" type="text" class="date-picker form-control" placeholder="Tanggal Lahir" required="" />
                         </div>
                         <div>
                             <input name="phone" type="text" class="form-control" placeholder="Nomor Telepon" required="" />
@@ -204,10 +204,14 @@
     $(document).ready(function () {
         $('#birthday').daterangepicker({
             singleDatePicker: true,
-            calender_style: "picker_4"
+            calender_style: "picker_4",
+            locale: {
+                format: 'DD/MM/YYYY'
+            }
         }, function (start, end, label) {
             console.log(start.toISOString(), end.toISOString(), label);
         });
+        $('#birthday').val("")
         {% if success %}
         $('#success').modal('show');
         window.location.hash='tologin';

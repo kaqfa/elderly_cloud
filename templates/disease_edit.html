@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Edit Notifikasi "{{ notif.title }}"{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Edit "{{ disease.treatment }}"{%endblock 'title' %}
 {% block 'extra_header' %}
  <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
 {% endblock 'extra_header' %}
@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Edit Notifikasi "{{ notif.title }}"</h2>
+                            <h2>Edit "{{ disease.treatment }}"</h2>
                             <div class="clearfix"></div>
                         </div>
                         
@@ -46,36 +46,30 @@
                             </div>
                         {% endif %}
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="title">Judul
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="title" id="title" type="text" class="form-control col-md-7 col-xs-12" value="{{ notif.title }}" required="" />
+                                <input name="name" id="name" type="text" class="form-control col-md-7 col-xs-12" value="{{ disease.treatment }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="content">Pesan
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                <textarea name="content" id="content" type="text" class="form-control col-md-7 col-xs-12" required="" />{{ notif.content }}</textarea>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                             <label class="control-label col-md-3 col-sm-3 col-xs-12" for="level">Tingkat Kepentingan
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control" name="level" id="level" required="">
-                                        <option value="1">Info</option>
-                                        <option value="2">Warning</option>
-                                        <option value="3">Emergency</option>
-                                    </select>
-                                </div>
-                            </div>
-                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday">Dijalankan Pada
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tahun Mulai
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class='input-group date' id='datetimepicker1'>
-                                        <input type='text' class="form-control" id="invoked_on" name="invoked_on" type="text" placeholder="Dijalankan pada" value="{{ notif.invoked_on|date:'d/m/Y H:i' }}" required=""/>
+                                        <input type='text' class="form-control" id="from_year" name="from_year" type="text" value="{{ disease.from_year }}" required=""/>
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12">Tahun Selesai
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class='input-group date' id='datetimepicker2'>
+                                        <input type='text' class="form-control" id="to_year" name="to_year" type="text"value="{{ disease.to_year }}" required=""/>
                                         <span class="input-group-addon">
                                             <span class="glyphicon glyphicon-calendar"></span>
                                         </span>
@@ -83,23 +77,19 @@
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="recurring">Diulang Setiap
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="recurring">Status
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control" id="recurring" name="recurring" required="">
-                                        <option value="1">Sekali</option>
-                                        <option value="2">Harian</option>
-                                        <option value="3">Mingguan</option>
-                                        <option value="4">Bulanan</option>
-                                        <option value="5">Weekday</option>
-                                        <option value="6">Weekend</option>
+                                    <select class="form-control" id="status" name="status" required="">
+                                        <option value="1">Sudah Sembuh</option>
+                                        <option value="2">Masih Diderita</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <a href="{% url 'notif_elder' %}" class="btn btn-primary">Kembali</a>
+                                    <a href="{% url 'treatment' %}" class="btn btn-primary">Kembali</a>
                                     <input type="submit" name="add" class="btn btn-success" value="Simpan"/>
                                 </div>
                             </div>
@@ -116,11 +106,15 @@
 <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript">
-    $("#level").val("{{ notif.level }}");
-    $("#recurring").val("{{ notif.recurring }}");
+    $("#status").val("{{ disease.status }}");
     $(document).ready(function () {
         $('#datetimepicker1').datetimepicker({
-            format: "DD/MM/YYYY HH:mm"
+            format: "YYYY"
+        });
+    });
+    $(document).ready(function () {
+        $('#datetimepicker2').datetimepicker({
+            format: "YYYY"
         });
     });
 </script>

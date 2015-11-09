@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from member.models import CareGiver, Elder, CareGiving
 
 class CareGiverForm(forms.ModelForm):
-    birthday = forms.DateField(input_formats=['%m/%d/%Y'])
+    birthday = forms.DateField(input_formats=['%d/%m/%Y'])
     class Meta:
         model=CareGiver
         exclude=['user']
@@ -16,7 +16,7 @@ class UserForm(forms.ModelForm):
         fields=['username','first_name','last_name','email','password']
         
 class ElderForm(forms.ModelForm):
-    birthday = forms.DateField(input_formats=['%m/%d/%Y'])
+    birthday = forms.DateField(input_formats=['%d/%m/%Y'])
     photo = forms.ImageField(required=False)
     class Meta:
         model=Elder

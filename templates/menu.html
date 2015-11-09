@@ -38,31 +38,34 @@
                             {% endfor %}
                         </ul>
                     </li>
-                    {% if active_elder %}
                     <li><a><i class="fa fa-bell-o"></i> Notifikasi
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
+                            {% if active_elder %}
                             <li><a href="{% url 'notif_elder' %}">Untuk Orang Tua</a></li>
+                            {% endif %}
                             <li><a href="{% url 'notif_cg' %}">Untuk Anda</a></li>
                         </ul>
                     </li>
-                    {% endif %}
+                    {% if active_elder %}
                     <li><a><i class="fa fa-bar-chart"></i> Riwayat Kesehatan
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
-                            <li><a href="{% url 'load' 'daily_condition' %}">Kondisi Harian</a></li>
-                            <li><a href="{% url 'load' 'disease_hist' %}">Riwayat Penyakit</a></li>
-                            <li><a href="{% url 'load' 'medic_treatment_hist' %}">Riwayat Perawatan Medis</a></li>
+                            <li><a href="{% url 'kondisi_harian' %}">Kondisi Harian</a></li>
+                            <li><a href="{% url 'detak_jantung' %}">Detak Jantung</a></li>
+                            <li><a href="{% url 'gula_darah' %}">Gula Darah</a></li>
+                            <li><a href="{% url 'disease' %}">Riwayat Penyakit</a></li>
+                            <li><a href="{% url 'treatment' %}">Riwayat Perawatan Medis</a></li>
                         </ul>
                     </li>
                     <li><a><i class="fa fa-book"></i>Catatan
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
                             <li><a href="{% url 'load' 'notes' %}">Catatan Kondisi</a></li>
-                            <li><a href="{% url 'load' 'medications' %}">Obat-Obatan</a></li>
                             <li><a href="{% url 'load' 'contacts' %}">Kontak Penting</a></li>
                         </ul>
                     </li>
+                    {% endif %}
                     <li><a><i class="fa fa-newspaper-o"></i> Informasi
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">

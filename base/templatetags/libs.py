@@ -21,5 +21,5 @@ def age(value):
         return value
 
     if difference <= timedelta(minutes=1):
-        return 'just now'
+        return 'baru saja'
     return '%(time)s yang lalu' % {'time': timesince(value).split(', ')[0]}

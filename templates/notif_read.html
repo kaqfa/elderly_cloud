@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | {{ notif.title }}{% endblock 'title' %}
+{% block 'title' %}Elder Caring | Notifikasi "{{ notif.title }}"{% endblock 'title' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -10,7 +10,7 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>{{ notif.title }}</h2>
+                            <h2>Notifikasi "{{ notif.title }}"</h2>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
@@ -29,7 +29,7 @@
                             {% if notif.receiver == user %}
                             <div class="col-md-12">
                                 <div class="col-md-4 text-right">Diterima pada :</div>
-                                <div class="col-md-8">{{ notif.invoked_on|date:'m/d/Y H:i' }}</div>
+                                <div class="col-md-8">{{ notif.invoked_on|date:'d/m/Y H:i' }}</div>
                             </div>
                             {% else %}
                             <div class="col-md-12">
@@ -38,7 +38,7 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-4 text-right">Dijalankan Pada :</div>
-                                <div class="col-md-8">{{ notif.invoked_on|date:'m/d/Y H:i' }}</div>
+                                <div class="col-md-8">{{ notif.invoked_on|date:'d/m/Y H:i' }}</div>
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-4 text-right">Diulang Setiap :</div>
@@ -53,13 +53,12 @@
                             <div class="ln_solid"></div>
                             <div class="col-md-12">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="{% if back == '1' %}{% url 'notif_elder' %}{% else %}{% url 'notif_cg' %}{% endif %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
                                     {% if notif.receiver == user %}
-                                    <a href="{% url 'notif_cg' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
                                     {% if notif.status == 's' %}
                                     <a href="{% url 'respon_notif' notif.id %}" class="btn btn-success"><i class="fa fa-check"></i> Respon</a>
                                     {% endif %}
                                     {% else %}
-                                    <a href="{% url 'notif_elder' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
                                     <a href="{% url 'edit_notif_elder' notif.id %}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
                                     <a href="{% url 'del_notif_elder' notif.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
                                     {% endif %}

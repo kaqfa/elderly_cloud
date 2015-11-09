@@ -23,7 +23,10 @@ from datetime import timedelta
 def cek_session(request):
     if 'active_elder' not in request.session:
         elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-        request.session['active_elder']=elders[0].id
+        if elders:
+            request.session['active_elder']=elders[0].id
+        else:
+            request.session['active_elder']=0
 
 class Login(viewsets.GenericViewSet):
     serializer_class = LoginSerializer

@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | {{ judul }}{% endblock 'title' %}
+{% block 'extra_header' %}
+<link href="{% static 'css/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/datatables/css/responsive.dataTables.min.css' %}" rel="stylesheet">
+<style>
+table.dataTable tbody tr.selected {
+    background: rgba(38, 185, 154, 0.16);
+}
+table tbody tr:hover td {
+    background: rgba(38, 185, 154, 0.07);
+    border-top: 1px solid rgba(38, 185, 154, 0.11);
+    border-bottom: 1px solid rgba(38, 185, 154, 0.11);
+}
+</style>
+ <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+{% endblock 'extra_header' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Grafik {{ judul }} {{ active_elder.user.first_name }} {{ active_elder.user.last_name }} dalam 7 Hari Terakhir</h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            {% if graph %}
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <div class="demo-container" style="height:280px">
+                                    <div id="placeholder33x" class="demo-placeholder"></div>
+                                </div>
+                            </div>
+                            {% else %}
+                            Orang tua belum mempunyai data {{ judul }} dalam 7 hari terakhir.
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Tabel {{ judul }} {{ active_elder.user.first_name }} {{ active_elder.user.last_name }} </h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <div class="x_content">
+                            <table class="table table-striped" id="notif-table">
+                                <thead>
+                                    <tr>
+                                        <th width="5px"></th>
+                                        <th>Tanggal</th>
+                                        <th class="desktop tablet-l tablet-p">Kondisi</th>
+                                        <th class="desktop tablet-l tablet-p">Nilai</th>
+                                        <th>Foto</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for t in tracker %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ t.created|date:"d/m/Y" }}</td>
+                                        <td>{{ t.condition }}</td>
+                                        <td>{{ t.value }}</td>
+                                        <td>{% if t.photo %}<img class="img-responsive col" src="{{ t.photo.url }}"/>{% else %}-{% endif %}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'js/datatables/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/datatables/js/dataTables.responsive.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var oTable = $('#notif-table').dataTable({
+            "oLanguage": {
+                "sSearch": "Cari:",
+                "sLengthMenu": "Tampilkan _MENU_ data",
+                "sZeroRecords": "Elder tidak mempunyai data {{ judul|lower }}"
+            },
+            "responsive":{
+                details: {
+                    type: 'column'
+                }
+            },
+            "autoWidth":false,
+            "aaSorting": [],
+            columnDefs: [ {
+                className: 'control',
+                orderable: false,
+                targets:   0
+            }, {
+                className: 'none',
+                orderable: false,
+                targets: 4
+            }],
+            'iDisplayLength': 12,
+            "sPaginationType": "full_numbers",
+        });
+        $('#datetimepicker1').datetimepicker({
+            format: "MM/DD/YYYY HH:mm"
+        });
+    });
+</script>
+{% if graph %}
+<script type="text/javascript">
+    var chartColours = ['#96CA59', '#3F97EB', '#72c380', '#6f7a8a', '#f7cb38', '#5a8022', '#2c7282'];
+    $(function () {
+        var graph = [];
+        {% for track in graph %}graph.push([new Date("{{ track.created|date:"m-d-Y" }}").getTime(), {{ track.value }}]);
+        {% endfor %}
+
+        var chartMinDate = new Date(Date.today().add(-7).days()).getTime(); //first day
+        var chartMaxDate = new Date(Date.today().add(1)).getTime(); //last day
+
+        var tickSize = [1, "day"];
+        var tformat = "%d/%m/%y";
+
+        var options = {
+            grid: {
+                show: true,
+                aboveData: true,
+                color: "#3f3f3f",
+                labelMargin: 10,
+                axisMargin: 0,
+                borderWidth: 0,
+                borderColor: null,
+                minBorderMargin: 5,
+                clickable: true,
+                hoverable: true,
+                autoHighlight: true,
+                mouseActiveRadius: 100
+            },
+            series: {
+                lines: {
+                    show: true,
+                    fill: true,
+                    lineWidth: 2,
+                    steps: false
+                },
+                points: {
+                    show: true,
+                    radius: 4.5,
+                    symbol: "circle",
+                    lineWidth: 3.0
+                }
+            },
+            legend: {
+                position: "ne",
+                margin: [0, -25],
+                noColumns: 0,
+                labelBoxBorderColor: null,
+                labelFormatter: function (label, series) {
+                    return label + '&nbsp;&nbsp;';
+                },
+                width: 40,
+                height: 1
+            },
+            colors: chartColours,
+            shadowSize: 0,
+            tooltip: true,
+            tooltipOpts: {
+                content: "%s: %y.0",
+                xDateFormat: "%d/%m",
+                shifts: {
+                    x: -30,
+                    y: -50
+                },
+                defaultTheme: false
+            },
+            yaxis: {
+                min: 0
+            },
+            xaxis: {
+                mode: "time",
+                minTickSize: tickSize,
+                timeformat: tformat,
+                min: chartMinDate,
+                timezone: "browser",
+                max: chartMaxDate
+            }
+        };
+        var plot = $.plot($("#placeholder33x"), [{
+            label: "Rata-rata {{ judul }}",
+            data: graph,
+            lines: {
+                fillColor: "rgba(150, 202, 89, 0.12)"
+            },
+            points: {
+                fillColor: "#fff"
+            }
+        }], options);
+    });
+</script>
+{% endif %}
+{% endblock 'extra_footer' %}

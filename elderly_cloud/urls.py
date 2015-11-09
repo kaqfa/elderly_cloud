@@ -11,8 +11,8 @@ from notification.views import Notifs, NotifikasiElder, DetailNotifikasiElder, E
 from django.views.generic import TemplateView
 
 from contact.views import contacts
-from elder_profile.views import Diseases, MedicalTreatments
-from tracker.views import Trackers
+from elder_profile.views import Diseases, MedicalTreatments, MTTable, MTDetail, MTEdit, MTDelete, DHTable, DHDetail, DHEdit, DHDelete
+from tracker.views import Trackers, KondisiHarian, DetakJantung, GulaDarah
 from info.views import infos
 from member.views import Elders, Signup, Parents, UpdateElder, DeleteElder, set_active_elder
 
@@ -44,6 +44,17 @@ urlpatterns = [
     url(r'^notification/$', NotifikasiCG.as_view(), name='notif_cg'),
     url(r'^notification/(?P<id>[0-9]*)/$', DetailNotifikasiCG.as_view(), name='dt_notif_cg'),
     url(r'^notification/(?P<id>[0-9]*)/respon/$', ResponNotifikasi.as_view(), name='respon_notif'),
+    url(r'^treatment/$', MTTable.as_view(), name='treatment'),
+    url(r'^treatment/(?P<id>[0-9]*)/$', MTDetail.as_view(), name='dt_treatment'),
+    url(r'^treatment/(?P<id>[0-9]*)/edit/$', MTEdit.as_view(), name='edit_treatment'),
+    url(r'^treatment/(?P<id>[0-9]*)/delete/$', MTDelete.as_view(), name='del_treatment'),
+    url(r'^disease/$', DHTable.as_view(), name='disease'),
+    url(r'^disease/(?P<id>[0-9]*)/$', DHDetail.as_view(), name='dt_disease'),
+    url(r'^disease/(?P<id>[0-9]*)/edit/$', DHEdit.as_view(), name='edit_disease'),
+    url(r'^disease/(?P<id>[0-9]*)/delete/$', DHDelete.as_view(), name='del_disease'),
+    url(r'^history/daily/$', KondisiHarian.as_view(), name='kondisi_harian'),
+    url(r'^history/heartrate/$', DetakJantung.as_view(), name='detak_jantung'),
+    url(r'^history/glucose/$', GulaDarah.as_view(), name='gula_darah'),
     url(r'^activate/(?P<id>[0-9]*)/', set_active_elder, name='set_elder'),
     url(r'^(?P<page>[\w]*)/$', Index.as_view(), name='load'),
     url(r'^summernote/', include('django_summernote.urls')),
