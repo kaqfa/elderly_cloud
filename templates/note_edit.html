@@ -26,15 +26,9 @@
                                 </button>
                                 <ul>
                                 {% for name, errors in error.items %}
-                                    {% if name == 'birthday' %}
-                                    {% for e in errors %}
-                                    <li>Tanggal Lahir: {{ e }}</li>
-                                    {% endfor %}
-                                    {% else %}
                                     {% for e in errors %}
                                     <li>{{ name }}: {{ e }}</li>
                                     {% endfor %}
-                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             </div>
@@ -71,16 +65,6 @@
                                     </div>
                                 </div>
                             </div>
-                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="recurring">Status
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <select class="form-control" id="status" name="status" required="">
-                                        <option value="1">Sudah Sembuh</option>
-                                        <option value="2">Masih Diderita</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
@@ -101,7 +85,7 @@
 <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript">
-    $("#status").val("{{ medis.status }}");
+    $("#sharable").val("{{ note.sharable }}");
     $(document).ready(function () {
         $('#datetimepicker1').datetimepicker({
             format: "YYYY"

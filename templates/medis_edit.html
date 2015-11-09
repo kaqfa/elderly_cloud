@@ -26,15 +26,9 @@
                                 </button>
                                 <ul>
                                 {% for name, errors in error.items %}
-                                    {% if name == 'birthday' %}
-                                    {% for e in errors %}
-                                    <li>Tanggal Lahir: {{ e }}</li>
-                                    {% endfor %}
-                                    {% else %}
                                     {% for e in errors %}
                                     <li>{{ name }}: {{ e }}</li>
                                     {% endfor %}
-                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             </div>

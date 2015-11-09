@@ -98,6 +98,7 @@ table.dataTable tbody tr:hover td {
                                     <tr>
                                         <th width="5px"></th>
                                         <th>Judul</th>
+                                        <th>Pembuat</th>
                                         <th class="desktop col-md-3">Isi</th>
                                         <th class="desktop tablet-l tablet-p">Waktu</th>
                                         <th class="desktop tablet-l tablet-p">Dibagikan</th>
@@ -109,6 +110,7 @@ table.dataTable tbody tr:hover td {
                                     <tr>
                                         <td></td>
                                         <td>{{ n.title }}</td>
+                                        <td>{{ note.user.user.first_name }} {{ note.user.user.last_name }}</td>
                                         <td>{{ n.content }}</td>
                                         <td>{{ n.modified|date:"d/m/Y H:i" }}</td>
                                         <td>{{ n.get_sharable_value }}</td>
