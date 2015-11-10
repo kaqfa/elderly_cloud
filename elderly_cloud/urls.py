@@ -10,8 +10,8 @@ from base.views import Index, status, user_logout
 from notification.views import Notifs, NotifikasiElder, DetailNotifikasiElder, EditNotifikasiElder, HapusNotifikasiElder, NotifikasiCG, DetailNotifikasiCG, ResponNotifikasi
 from django.views.generic import TemplateView
 
-from contact.views import contacts
-from elder_profile.views import Diseases, MedicalTreatments, MTTable, MTDetail, MTEdit, MTDelete, DHTable, DHDetail, DHEdit, DHDelete
+from contact.views import contacts, ContactTable, ContactDetail, ContactEdit, ContactDelete
+from elder_profile.views import Diseases, MedicalTreatments, MTTable, MTDetail, MTEdit, MTDelete, DHTable, DHDetail, DHEdit, DHDelete, NoteTable, NoteDetail, NoteEdit, NoteDelete
 from tracker.views import Trackers, KondisiHarian, DetakJantung, GulaDarah
 from info.views import infos
 from member.views import Elders, Signup, Parents, UpdateElder, DeleteElder, set_active_elder
@@ -52,6 +52,14 @@ urlpatterns = [
     url(r'^disease/(?P<id>[0-9]*)/$', DHDetail.as_view(), name='dt_disease'),
     url(r'^disease/(?P<id>[0-9]*)/edit/$', DHEdit.as_view(), name='edit_disease'),
     url(r'^disease/(?P<id>[0-9]*)/delete/$', DHDelete.as_view(), name='del_disease'),
+    url(r'^note/$', NoteTable.as_view(), name='note'),
+    url(r'^note/(?P<id>[0-9]*)/$', NoteDetail.as_view(), name='dt_note'),
+    url(r'^note/(?P<id>[0-9]*)/edit/$', NoteEdit.as_view(), name='edit_note'),
+    url(r'^note/(?P<id>[0-9]*)/delete/$', NoteDelete.as_view(), name='del_note'),
+    url(r'^contact/$', ContactTable.as_view(), name='contact'),
+    url(r'^contact/(?P<id>[0-9]*)/$', ContactDetail.as_view(), name='dt_contact'),
+    url(r'^contact/(?P<id>[0-9]*)/edit/$', ContactEdit.as_view(), name='edit_contact'),
+    url(r'^contact/(?P<id>[0-9]*)/delete/$', ContactDelete.as_view(), name='del_contact'),
     url(r'^history/daily/$', KondisiHarian.as_view(), name='kondisi_harian'),
     url(r'^history/heartrate/$', DetakJantung.as_view(), name='detak_jantung'),
     url(r'^history/glucose/$', GulaDarah.as_view(), name='gula_darah'),

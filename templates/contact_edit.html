@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Edit Catatan "{{ note.title }}"{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Edit Kontak "{{ contact.name }}"{%endblock 'title' %}
 {% block 'extra_header' %}
  <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
 {% endblock 'extra_header' %}
@@ -13,7 +13,7 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Edit Catatan "{{ note.title }}"</h2>
+                            <h2>Edit Kontak "{{ contact.name }}"</h2>
                             <div class="clearfix"></div>
                         </div>
                         
@@ -40,27 +40,41 @@
                             </div>
                         {% endif %}
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="title">Judul
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="title" id="title" type="text" class="form-control col-md-7 col-xs-12" value="{{ note.title }}" required="" />
+                                <input name="name" id="name" type="text" class="form-control col-md-7 col-xs-12" value="{{ contact.name }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="content">Isi
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Alamat
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                    <textarea name="content" id="content" type="text" class="form-control col-md-7 col-xs-12" required="" >{{ note.content }}</textarea>
+                                    <textarea name="address" id="address" type="text" class="form-control col-md-7 col-xs-12" required="" >{{ contact.address }}</textarea>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="sharable">Dibagikan
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Nomor Telepon
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="phone" id="phone" type="text" class="form-control col-md-7 col-xs-12" value="{{ contact.phone }}" required="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="email" id="email" type="email" class="form-control col-md-7 col-xs-12" value="{{ contact.email }}" required="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="status">Status
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class='input-group date' id='datetimepicker2'>
-                                        <select id="sharable" name="sharable" class="form-control">
-                                            <option value="1">Ya</option>
-                                            <option value="0">Tidak</option>
+                                        <select id="status" name="status" class="form-control">
+                                            <option value="1">Aktif</option>
+                                            <option value="2">Non Aktif</option>
                                         </select>
                                     </div>
                                 </div>
@@ -68,7 +82,7 @@
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <a href="{% url 'note' %}" class="btn btn-primary">Kembali</a>
+                                    <a href="{% url 'contact' %}" class="btn btn-primary">Kembali</a>
                                     <input type="submit" name="add" class="btn btn-success" value="Simpan"/>
                                 </div>
                             </div>
@@ -85,6 +99,6 @@
 <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript">
-    $("#sharable").val("{{ note.sharable }}");
+    $("#status").val("{{ contact.status }}");
 </script>
 {% endblock 'extra_footer' %}

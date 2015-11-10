@@ -57,7 +57,7 @@ class NotifikasiElder(View):
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             elder=Elder.objects.get(pk=request.session.get('active_elder'))
             elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-            notif=Notification.objects.filter(receiver=elder.user)
+            notif=Notification.objects.filter(receiver=elder.user).order_by('-id')
             return render(request, 'notif.html', {'elders':elders, 'active_elder':elder, 'notifs':notif, 'untuk':1})
         else:
             return HttpResponseRedirect(reverse('index'))
@@ -68,14 +68,14 @@ class NotifikasiElder(View):
             elder=Elder.objects.get(pk=request.session.get('active_elder'))
             elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
             form = NotificationForm(request.POST)
-            notif=Notification.objects.filter(receiver=elder.user)
+            notif=Notification.objects.filter(receiver=elder.user).order_by('-id')
             if form.is_valid():
                 new=form.save(commit=False)
                 new.sender=request.user
                 new.receiver=elder.user
                 new.status='s'
                 new.save()
-                notif=Notification.objects.filter(receiver=elder.user)
+                notif=Notification.objects.filter(receiver=elder.user).order_by('-id')
                 return render(request, 'notif.html', {'elders':elders, 'success':"Notifikasi berhasil ditambahkan", 'active_elder':elder, 'notifs':notif, 'untuk':1})
             else:
                 return render(request, 'notif.html', {'elders':elders, 'error':form.errors, 'active_elder':elder, 'notifs':notif, 'untuk':1})

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Catatan Kondisi{% endblock 'title' %}
+{% block 'title' %}Elder Caring | Kontak Penting{% endblock 'title' %}
 {% block 'extra_header' %}
 <link href="{% static 'css/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/datatables/css/responsive.dataTables.min.css' %}" rel="stylesheet">
@@ -24,11 +24,11 @@ table.dataTable tbody tr:hover td {
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Catatan Kondisi</h2>
+                            <h2>Kontak Penting</h2>
                             <div class="clearfix"></div>
                         </div>
                         <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addform">
-                            <span class="fa fa-plus"></span> Tambah Catatan
+                            <span class="fa fa-plus"></span> Tambah Kontak
                         </button>
                         
                         <form method="post" action="" class="modal fade" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
@@ -39,20 +39,26 @@ table.dataTable tbody tr:hover td {
                                     <div class="modal-header">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
                                         </button>
-                                        <h4 class="modal-title" id="myModalLabel2">Tambah Catatan</h4>
+                                        <h4 class="modal-title" id="myModalLabel2">Tambah Kontak</h4>
                                     </div>
                                     <div class="modal-body">
                                         <div>
-                                            <input name="title" type="text" class="form-control" placeholder="Judul" required="" />
+                                            <input name="name" type="text" class="form-control" placeholder="Nama" required="" />
                                         </div>
                                         <div>
-                                            <textarea name="content" class="form-control" placeholder="Isi" required="" ></textarea>
+                                            <textarea name="address" class="form-control" placeholder="Alamat" required="" ></textarea>
+                                        </div>
+                                        <div>
+                                            <input name="phone" type="text" class="form-control" placeholder="Nomor Telepon" required="" />
+                                        </div>
+                                        <div>
+                                            <input name="email" type="email" class="form-control" placeholder="Email" required="" />
                                         </div>
                                         <div>
                                             Dibagikan
-                                            <select name="sharable" class="form-control">
-                                                <option value="1">Ya</option>
-                                                <option value="0">Tidak</option>
+                                            <select name="status" class="form-control">
+                                                <option value="1">Aktif</option>
+                                                <option value="2">Non Aktif</option>
                                             </select>
                                         </div>
                                     </div>
@@ -97,30 +103,32 @@ table.dataTable tbody tr:hover td {
                                 <thead>
                                     <tr>
                                         <th width="5px"></th>
-                                        <th>Judul</th>
-                                        <th>Pembuat</th>
-                                        <th class="desktop col-md-3">Isi</th>
-                                        <th class="desktop tablet-l tablet-p">Waktu</th>
-                                        <th class="desktop tablet-l tablet-p">Dibagikan</th>
+                                        <th>Nama</th>
+                                        <th>Ditambahkan Oleh</th>
+                                        <th class="desktop col-md-3">Alamat</th>
+                                        <th class="desktop tablet-l tablet-p">Telepon</th>
+                                        <th class="desktop tablet-l tablet-p">Email</th>
+                                        <th class="desktop">Status</th>
                                         <th class="desktop">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for n in note %}
+                                    {% for c in contact %}
                                     <tr>
                                         <td></td>
-                                        <td>{{ n.title }}</td>
-                                        <td>{{ n.user.user.first_name }} {{ n.user.user.last_name }}</td>
-                                        <td>{{ n.content }}</td>
-                                        <td>{{ n.modified|date:"d/m/Y H:i" }}</td>
-                                        <td>{{ n.get_sharable_display }}</td>
+                                        <td>{{ c.name }}</td>
+                                        <td>{{ c.added_by.user.first_name }} {{ c.added_by.user.last_name }}</td>
+                                        <td>{{ c.address }}</td>
+                                        <td>{{ c.phone }}</td>
+                                        <td>{{ c.email }}</td>
+                                        <td>{{ c.get_status_display }}</td>
                                         <td>
-                                            <a href="{% url 'dt_note' n.id %}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
+                                            <a href="{% url 'dt_contact' c.id %}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
                                             </a>
-                                            {% if n.user == user.member %}
-                                            <a href="{% url 'edit_note' n.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
+                                            {% if c.added_by == user.member %}
+                                            <a href="{% url 'edit_contact' c.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
                                             </a>
-                                            <a href="{% url 'del_note' n.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
+                                            <a href="{% url 'del_contact' c.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
                                             </a>
                                             {% endif %}
                                         </td>
@@ -159,7 +167,7 @@ table.dataTable tbody tr:hover td {
                 targets:   0
             }, {
                 orderable: false,
-                targets: 6
+                targets: 7
             }],
             'iDisplayLength': 12,
             "sPaginationType": "full_numbers",

@@ -28,15 +28,17 @@
                             </div>
                             <div class="col-md-12">
                                 <div class="col-md-4 text-right">Dibagikan :</div>
-                                <div class="col-md-8">{{ medis.get_sharable_display|title }}</div>
+                                <div class="col-md-8">{{ note.get_sharable_display|title }}</div>
                             </div>
                             <div class="clearfix"></div>
                             <div class="ln_solid"></div>
                             <div class="col-md-12">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <a href="{% url 'treatment' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
-                                    <a href="{% url 'edit_treatment' medis.id %}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
-                                    <a href="{% url 'del_treatment' medis.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                    <a href="{% url 'note' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
+                                    {% if note.user == request.user.member %}
+                                    <a href="{% url 'edit_note' note.id %}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="{% url 'del_note' note.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
