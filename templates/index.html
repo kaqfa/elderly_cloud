@@ -36,29 +36,29 @@
                         </div>
                         <div class="x_content">
                             <ul class="list-unstyled timeline">
+                                {% for i in info %}
                                 <li>
                                     <div class="block">
                                         <div class="tags">
                                             <a href="" class="tag">
-                                                <span>Tips</span>
+                                                <span>{{ i.category|title }}</span>
                                             </a>
                                         </div>
                                         <div class="block_content">
                                             <h2 class="title">
-                                                <a>Who Needs Sundance When You’ve Got&nbsp;Crowdfunding?</a>
+                                                <a>{{ i.title }}</a>
                                             </h2>
 
                                             <div class="byline">
-                                                <span>13 hours ago</span> by <a>Jane Smith</a>
+                                                by <a>{{ i.owner.first_name}} {{ i.owner.last_name }}</a>
                                             </div>
-                                            <p class="excerpt">Film festivals used to be do-or-die moments for movie
-                                                makers. They were where you met the producers that could fund your
-                                                project, and if the buyers liked your flick, they’d pay to Fast-forward
-                                                and… <a>Read&nbsp;More</a>
+                                            <p class="excerpt">{{ i.content|safe|truncatechars_html:200}} 
+                                            {% ifnotequal post.body|truncatewords_html:200|length post.body|truncatewords_html:201|length %}<a>Read&nbsp;More</a>{% endifnotequal %}
                                             </p>
                                         </div>
                                     </div>
                                 </li>
+                                {% endfor %}
                                 <li>
                                     <div class="block">
                                         <div class="tags">

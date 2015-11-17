@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from member.models import CareGiver, Elder
 from base.forms import LoginForm
 from member.forms import CareGiverForm, UserForm
+from info.models import Posting
 from datetime import datetime, date, time
 from datetime import timedelta
 
@@ -66,6 +67,7 @@ class Index(View):
     def get(self, request, page=None, error=None):
         if request.user.is_authenticated():
             cek_session(request)
+            posting=Posting.get_latest_post()
             if None == page:
                 if request.session['active_elder']!=0:
                     elder=Elder.objects.get(pk=request.session.get('active_elder'))
@@ -77,11 +79,11 @@ class Index(View):
                     heartrate=tracker.filter(type="hr")
                     daily_condition=tracker.filter(type="cd")
                     elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                    return render(request, 'index.html', {'active_elder':elder, 'elders':elders, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
+                    return render(request, 'index.html', {'active_elder':elder, 'elders':elders, 'info':posting, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
                 else:
                     caregiver=CareGiver.objects.get(user=request.user)
                     elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                    return render(request, 'index.html', {'caregiver':caregiver, 'elders':elders})
+                    return render(request, 'index.html', {'caregiver':caregiver, 'elders':elders, 'info':posting})
             else:
                 return render(request, page + '.html')
         return render(request, 'login.html')

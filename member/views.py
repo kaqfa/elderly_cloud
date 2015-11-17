@@ -186,3 +186,32 @@ def set_active_elder(request, id):
     if Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user)).filter(id=id):
         request.session['active_elder']=id
     return HttpResponseRedirect(request.GET.get('next', '/'))
+    
+class UpdateProfile(View):
+    
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(UpdateProfile, cls).as_view(**initkwargs)
+        return login_required(view, redirect_field_name=None)
+
+    def get(self, request):
+        cek_session(request)
+        active=None
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            active=Elder.objects.get(pk=request.session.get('active_elder'))
+        return render(request, 'parents_edit.html', {'elders':elders, 'active_elder':active})
+    
+    def post(self, request):
+        cek_session(request)
+        active=None
+        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
+            active=Elder.objects.get(pk=request.session.get('active_elder'))
+        userform = UserForm(request.POST, instance=request.user)
+        cgform = CareGiverForm(request.POST, request.FILES, instance=CareGiver.objects.get(user=request.user))
+        if userform.is_valid() and elderform.is_valid():
+            user = userform.save()
+            elder = cgform.save()
+            return render(request, 'parents_edit.html', {'elders':elders, 'success': "Data tersimpan", 'active_elder':active})
+        else:
+            userform.errors.update(cgform.errors)            
+            return render(request, 'parents_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active})

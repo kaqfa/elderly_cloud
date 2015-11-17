@@ -13,7 +13,7 @@ from django.views.generic import TemplateView
 from contact.views import contacts, ContactTable, ContactDetail, ContactEdit, ContactDelete
 from elder_profile.views import Diseases, MedicalTreatments, MTTable, MTDetail, MTEdit, MTDelete, DHTable, DHDetail, DHEdit, DHDelete, NoteTable, NoteDetail, NoteEdit, NoteDelete
 from tracker.views import Trackers, KondisiHarian, DetakJantung, GulaDarah
-from info.views import infos
+from info.views import infos, InfoAll, TipsAll, PostDetail
 from member.views import Elders, Signup, Parents, UpdateElder, DeleteElder, set_active_elder
 
 
@@ -63,6 +63,9 @@ urlpatterns = [
     url(r'^history/daily/$', KondisiHarian.as_view(), name='kondisi_harian'),
     url(r'^history/heartrate/$', DetakJantung.as_view(), name='detak_jantung'),
     url(r'^history/glucose/$', GulaDarah.as_view(), name='gula_darah'),
+    url(r'^info/$', InfoAll.as_view(), name='info'),
+    url(r'^tips/$', TipsAll.as_view(), name='tips'),
+    url(r'^(?P<type>info|tips)/(?P<id>[0-9]*)/$', PostDetail.as_view(), name='post'),
     url(r'^activate/(?P<id>[0-9]*)/', set_active_elder, name='set_elder'),
     url(r'^(?P<page>[\w]*)/$', Index.as_view(), name='load'),
     url(r'^summernote/', include('django_summernote.urls')),

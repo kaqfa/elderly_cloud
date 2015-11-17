@@ -14,7 +14,7 @@ class Posting(models.Model):
 
     @staticmethod
     def get_latest_post():
-        return Posting.objects.order_by('-id')[:10]
+        return Posting.objects.all().order_by('-id')[:5]
 
 
 class Comment(models.Model):
