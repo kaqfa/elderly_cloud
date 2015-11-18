@@ -15,6 +15,11 @@ class UserForm(forms.ModelForm):
         model=User
         fields=['username','first_name','last_name','email','password']
         
+class CGUserForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields=['first_name','last_name','email']
+        
 class ElderForm(forms.ModelForm):
     birthday = forms.DateField(input_formats=['%d/%m/%Y'])
     photo = forms.ImageField(required=False)
