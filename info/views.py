@@ -34,7 +34,7 @@ class InfoAll(View):
         info=Posting.objects.filter(category__iexact='info').order_by('-id')
         p=Paginator(info,10)
         info=p.page(page)
-        return render(request, 'notif_read.html', {'elders':elders, 'active_elder':elder, 'info':info, 'current':page})
+        return render(request, 'post.html', {'elders':elders, 'active_elder':elder, 'tag':'info', 'title':'Info', 'info':info, 'current':page})
     def post(self, request, page=1):
         return self.get(request, page)
 
@@ -53,7 +53,7 @@ class TipsAll(View):
         info=Posting.objects.filter(category__iexact='tips').order_by('-id')
         p=Paginator(info,10)
         info=p.page(page)
-        return render(request, 'notif_read.html', {'elders':elders, 'active_elder':elder, 'info':info, 'current':page})
+        return render(request, 'post.html', {'elders':elders, 'active_elder':elder, 'tag':'tips', 'title':'Tips dan Trik', 'info':info, 'current':page})
     def post(self, request, page=1):
         return self.get(request, page)
         
@@ -71,7 +71,7 @@ class PostDetail(View):
         elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
         info=Posting.objects.filter(category=type, id=id)
         if info:
-            return render(request, 'notif_read.html', {'elders':elders, 'active_elder':elder, 'info':info[0]})
+            return render(request, 'post_view.html', {'elders':elders, 'tag':type, 'active_elder':elder, 'info':info[0]})
         return HttpResponseRedirect(reverse(type))
     def post(self, request, type, id):
         cek_session(request)
@@ -87,6 +87,6 @@ class PostDetail(View):
                 comment.owner=request.user
                 comment.posting=info[0]
                 comment.save()
-                return render(request, 'notif_read.html', {'elders':elders, 'active_elder':elder, 'success':'Komentar berhasil ditambahkan', 'info':info[0]})
-            return render(request, 'notif_read.html', {'elders':elders, 'active_elder':elder, 'error':form.errors, 'info':info[0]})
+                return render(request, 'post_view.html', {'elders':elders, 'tag':type, 'active_elder':elder, 'success':'Komentar berhasil ditambahkan', 'info':info[0]})
+            return render(request, 'post_view.html', {'elders':elders, 'tag':type, 'active_elder':elder, 'error':form.errors, 'info':info[0]})
         return HttpResponseRedirect(reverse(type))

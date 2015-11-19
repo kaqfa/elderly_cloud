@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Detail Feedback{% endblock 'title' %}
+{% block 'title' %}Elder Caring | {{ info.title|title }}{% endblock 'title' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -10,31 +10,17 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Detail Feedback</h2>
+                            <h2>{{ info.title|title }}</h2>
                             <div class="clearfix"></div>
                         </div>
                         <div class="x_content">
                             <div class="col-xs-12">
-                                <div class="col-sm-2"><strong>Judul</strong></div>
-                                <div class="col-sm-10">{{ feedback.title }}</div>
-                            </div>
-                            <br>
-                            <div class="col-xs-12">
-                                <div class="col-sm-2"><strong>Tanggal</strong></div>
-                                <div class="col-sm-10">{{ feedback.created|date:"d/m/Y H:i" }}</div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class="col-sm-2"><strong>Status</strong></div>
-                                <div class="col-sm-10">{{ feedback.get_status_display|title }}</div>
-                            </div>
-                            <div class="col-xs-12">
-                                <div class="col-sm-2"><strong>Isi</strong></div>
-                                <div class="col-sm-10">{{ feedback.content }}</div>
+                                {{ info.content|safe }}
                             </div>
                             <div class="clearfix"></div>
                             <div class="ln_solid"></div>
                             <div class="col-xs-12 text-center">
-                                    <a href="{% url 'note' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
+                                    <a href="{% url tag %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
                             </div>
                         </div>
                     </div>
@@ -72,7 +58,7 @@
                                 {% endfor %}
                             {% endif %}
                             <ul class="list-unstyled timeline">
-                                {% for r in feedback.getResponse %}
+                                {% for c in info.comment_set.all %}
                                 <li>
                                     <div class="block">
                                         <div class="tags">
@@ -82,10 +68,10 @@
                                         </div>
                                         <div class="block_content">
                                             <h2 class="title">
-                                                <a>{{ r.owner.first_name }} {{ r.owner.last_name }}</a>
+                                                <a>{{ c.owner.first_name }} {{ c.owner.last_name }}</a>
                                             </h2>
                                             <p class="excerpt">
-                                            {{ r.content }}
+                                            {{ c.content }}
                                             </p>
                                         </div>
                                     </div>
