@@ -1,7 +1,11 @@
-Django==1.8.4
-django-filter==0.11.0
-django-pipeline==1.5.3
-djangorestframework==3.2.2
-futures==3.0.3
-django-wpadmin
+Django
+django-filter
+django-model-utils
+django-pipeline
+django-polymorphic
+django-suit
 django-summernote
+django-wpadmin
+djangorestframework
+futures
+Pillow
