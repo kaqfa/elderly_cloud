@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | {{ info.title|title }}{% endblock 'title' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>{{ info.title|title }}</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="col-xs-12">
+                                {{ info.content|safe }}
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="ln_solid"></div>
+                            <div class="col-xs-12 text-center">
+                                    <a href="{% url tag %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Respon</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                <ul>
+                                {% for name, errors in error.items %}
+                                    {% for e in errors %}
+                                    <li>{{ name }}: {{ e }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                            {% elif success %}
+                                <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                    </button>
+                                    {{ success }}
+                                </div>
+                            {% elif messages %}
+                                {% for message in messages %}
+                                <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade in text-left" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                    </button>
+                                    {{ message }}
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            <ul class="list-unstyled timeline">
+                                {% for c in info.comment_set.all %}
+                                <li>
+                                    <div class="block">
+                                        <div class="tags">
+                                            <p href="" class="tag">
+                                                <span>#{{ forloop.counter }}</span>
+                                            </p>
+                                        </div>
+                                        <div class="block_content">
+                                            <h2 class="title">
+                                                <a>{{ c.owner.first_name }} {{ c.owner.last_name }}</a>
+                                            </h2>
+                                            <p class="excerpt">
+                                            {{ c.content }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <form method="post" action="">
+                            {% csrf_token %}
+                            <textarea class="form-control" cols="80" name="content" rows="3" required=""></textarea>
+                            <div class="ln_solid"></div>
+                            <div class="col-xs-12 text-center">
+                                    <input type="submit" class="btn btn-success" value="Respon"/>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}

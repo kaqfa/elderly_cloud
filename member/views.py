@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from member.forms import ElderForm, ElderUserForm, JoinForm
+from member.forms import ElderForm, ElderUserForm, JoinForm, CGUserForm, CareGiverForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -199,19 +199,21 @@ class UpdateProfile(View):
         active=None
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             active=Elder.objects.get(pk=request.session.get('active_elder'))
-        return render(request, 'parents_edit.html', {'elders':elders, 'active_elder':active})
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        return render(request, 'profile_edit.html', {'elders':elders, 'active_elder':active})
     
     def post(self, request):
         cek_session(request)
         active=None
         if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
             active=Elder.objects.get(pk=request.session.get('active_elder'))
-        userform = UserForm(request.POST, instance=request.user)
+        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+        userform = CGUserForm(request.POST, instance=request.user)
         cgform = CareGiverForm(request.POST, request.FILES, instance=CareGiver.objects.get(user=request.user))
-        if userform.is_valid() and elderform.is_valid():
+        if userform.is_valid() and cgform.is_valid():
             user = userform.save()
             elder = cgform.save()
-            return render(request, 'parents_edit.html', {'elders':elders, 'success': "Data tersimpan", 'active_elder':active})
+            return render(request, 'profile_edit.html', {'elders':elders, 'success': "Data tersimpan", 'active_elder':active})
         else:
             userform.errors.update(cgform.errors)            
-            return render(request, 'parents_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active})
+            return render(request, 'profile_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active})

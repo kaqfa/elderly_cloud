@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | {{ edit.user.first_name }} {{ edit.user.last_name }}{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Edit Profile{%endblock 'title' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -10,7 +10,7 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Edit {{ edit.user.first_name }} {{ edit.user.last_name }}</h2>
+                            <h2>Edit Profile</h2>
                             <div class="clearfix"></div>
                         </div>
                         
@@ -46,21 +46,21 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">Nama Depan
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="first_name" id="first_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.user.first_name }}" required="" />
+                                <input name="first_name" id="first_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.first_name }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="last_name">Nama Belakang
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="last_name" id="last_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.user.last_name }}" required="" />
+                                <input name="last_name" id="last_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.last_name }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="birthday">Tanggal Lahir
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="birthday" name="birthday" type="text" class="date-picker form-control col-md-7 col-xs-12" value="{{ edit.birthday|date:'d/m/Y' }}" placeholder="(mm/dd/yyyy, contoh: 12/31/1980)" required="" />
+                                <input id="birthday" name="birthday" type="text" class="date-picker form-control col-md-7 col-xs-12" value="{{ user.member.birthday|date:'d/m/Y' }}" placeholder="(mm/dd/yyyy, contoh: 12/31/1980)" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
@@ -68,11 +68,11 @@
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
                                     <div class="btn-group" data-toggle="buttons">
-                                        <label class="btn btn-default{% if edit.gender == 'l' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                            <input type="radio" name="gender" value="l" {% if edit.gender == 'l' %}checked=""{% endif %}> &nbsp; Male &nbsp;
+                                        <label class="btn btn-default{% if user.member.gender == 'l' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="gender" value="l" {% if user.member.gender == 'l' %}checked=""{% endif %}> &nbsp; Male &nbsp;
                                         </label>
-                                        <label class="btn btn-default{% if edit.gender == 'p' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                                            <input type="radio" name="gender" value="p" {% if edit.gender == 'p' %}checked=""{% endif %}> Female
+                                        <label class="btn btn-default{% if user.member.gender == 'p' %} active{% endif %}" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="gender" value="p" {% if user.member.gender == 'p' %}checked=""{% endif %}> Female
                                         </label>
                                     </div>
                                 </div>
@@ -81,14 +81,21 @@
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Alamat
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="address" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.address }}" required="" />
+                                <input name="address" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.member.address }}" required="" />
                                 </div>
                             </div>
                              <div class="form-group">
                                 <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nomor Telepon
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="phone" type="text" class="form-control col-md-7 col-xs-12" value="{{ edit.phone }}" required="" />
+                                <input name="phone" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.member.phone }}" required="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Email
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="email" type="email" class="form-control col-md-7 col-xs-12" value="{{ user.email }}" required="" />
                                 </div>
                             </div>
                             <div class="form-group">
@@ -101,7 +108,6 @@
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                                    <a href="{% url 'parents' %}" class="btn btn-primary">Kembali</a>
                                     <input type="submit" name="add" class="btn btn-success" value="Simpan"/>
                                 </div>
                             </div>

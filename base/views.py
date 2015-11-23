@@ -105,7 +105,8 @@ class Index(View):
                         blood=tracker.filter(type="bg")
                         heartrate=tracker.filter(type="hr")
                         daily_condition=tracker.filter(type="cd")
-                        return render(request, 'index.html', {'active_elder':elders[0], 'elders':elders, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
+                        posting=Posting.get_latest_post()
+                        return render(request, 'index.html', {'active_elder':elders[0], 'info':posting, 'elders':elders, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
                     else:
                         request.session['active_elder']=0
                         return render(request, 'index.html', {'caregiver':caregiver,'elders':elders})

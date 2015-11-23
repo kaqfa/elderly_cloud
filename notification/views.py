@@ -178,6 +178,9 @@ class NotifikasiCG(View):
         notif3=request.user.notif_receiver.filter(status='r').order_by('-invoked_on', '-modified')
         notif=list(chain(notif, notif3))
         return render(request, 'notif.html', {'elders':elders, 'active_elder':elder, 'notifs':notif, 'untuk':2})
+
+    def post(self, request):
+        return self.get(request)
         
 class DetailNotifikasiCG(View):
     @classmethod

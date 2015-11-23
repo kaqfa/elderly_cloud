@@ -13,6 +13,9 @@ class Feedback(TimeStampedModel, StatusModel):
     class Meta:
         verbose_name = 'Umpan Balik'
         verbose_name_plural = 'Data Umpan Balik'
+        
+    def getResponse(self):
+        return self.response_set.all()
 
 
 class Response(models.Model):
