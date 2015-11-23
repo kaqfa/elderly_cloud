@@ -10,7 +10,7 @@ class Tracker(TimeStampedModel):
 
     elder = models.ForeignKey(Elder, verbose_name='Orang Tua')
     condition = models.SmallIntegerField('Kondisi', choices=CONDITION_CHOICES, default=3)
-    photo = models.ImageField('Gambar', null=True)
+    photo = models.ImageField('Gambar', null=True, blank=True)
     type = models.CharField('Jenis Penelusuran', max_length=2, choices=TYPE_CHOICES, default='cd')
     value = models.SmallIntegerField('Nilai', default=0)
 

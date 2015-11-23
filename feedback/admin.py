@@ -16,7 +16,7 @@ class FeedbackAdmin(SummernoteModelAdmin):
     fields = ('title', 'content', 'status')
 
     def has_change_permission(self, request, obj=None):
-        return False
+        return True
 
 
 admin.site.register(Feedback, FeedbackAdmin)
