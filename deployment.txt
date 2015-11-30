@@ -7,7 +7,7 @@ su - elder
 sudo apt-get install postgresql postgresql-contrib
 sudo apt-get install libpq-dev python-dev
 sudo pip install psycopg2
-sudo apt-get gunicorn
+sudo apt-get install gunicorn
 
 
 [nginx configuration]
@@ -18,7 +18,7 @@ server {
     server_name devel.inovasiku.biz;
     
     location /static {
-        alias /home/elder/sites/static;
+        alias /home/elder/prod/staticfiles;
     }
 
     location / {
@@ -30,15 +30,15 @@ sudo ln -s ../sites-available/devel-server.conf /etc/nginx/sites-enabled/devel-s
 
 
 [bash start]
-``` ../devel-server.bash
+``` ../prod-server
 #!/bin/bash
 
 NAME="development_server"             # Name of the application
-DJANGODIR=/home/elder/sites/devel     # Django project directory
+DJANGODIR=/home/elder/prod            # Django project directory
 USER=elder                            # the user to run as
 NUM_WORKERS=3                         # how many worker processes should Gunicorn spawn
-DJANGO_SETTINGS_MODULE=km.settings    # which settings file should Django use
-DJANGO_WSGI_MODULE=km.wsgi            # WSGI module name
+DJANGO_SETTINGS_MODULE=elderly_cloud.settings    # which settings file should Django use
+DJANGO_WSGI_MODULE=elderly_cloud.wsgi            # WSGI module name
 
 echo "Starting $NAME as `whoami`"
 
@@ -54,7 +54,7 @@ exec gunicorn ${DJANGO_WSGI_MODULE}:application \
   --log-file=-
 ```
 
-sudo chmod u+x bin/devel-server.bash
+sudo chmod u+x ../prod-server
 pip install setproctitle
 
 
@@ -64,9 +64,9 @@ sudo apt-get install supervisor
 
 ``` /etc/supervisor/conf.d/devel-server.conf
 [program:development-server]
-command = /home/elder/sites/devel-server.bash                   ; Command to start app
+command = /home/elder/prod-server                   ; Command to start app
 user = elder                                                    ; User to run as
-stdout_logfile = /home/elder/devel-logs/gunicorn_supervisor.log ; Where to write log messages
+stdout_logfile = /home/elder/logs/gunicorn_supervisor.log ; Where to write log messages
 redirect_stderr = true                                          ; Save stderr in the same log
 environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8                 ; Set UTF-8 as default encoding
 ```
