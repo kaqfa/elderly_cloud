@@ -1,5 +1,6 @@
 # Media directory
 media/
+staticfiles/
 
 # SQLite database
 *.sqlite3
