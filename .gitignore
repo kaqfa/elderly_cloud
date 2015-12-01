@@ -8,6 +8,8 @@ staticfiles/
 # google drive metadata or some viruses
 *.ini
 
+local_settings.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

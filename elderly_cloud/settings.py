@@ -157,3 +157,8 @@ WPADMIN = {
         'custom_style': STATIC_URL + 'wpadmin/css/themes/ocean.css',
     }
 }
+
+try:
+    from local_settings import *
+except ImportError:
+    pass
