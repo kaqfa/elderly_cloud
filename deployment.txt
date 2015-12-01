@@ -9,6 +9,35 @@ sudo apt-get install libpq-dev python-dev
 sudo pip install psycopg2
 sudo apt-get install gunicorn
 
+[local setting and database]
+``` settings.py
+try:
+    from local_settings import *
+except ImportError:
+    pass
+```
+
+sudo su - postgres
+createuser --interactive -P
+createdb --owner elder elderly
+logout
+
+``` local_settings.py
+
+SECRET_KEY = '4wl%q*7o14kvqoq6-c!&49vkqmcxokq#_*g6+-jy+%fx$r(u9+'
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'elderly',
+        'USER': 'elder',
+        'PASSWORD': 'elder123',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
+}
+
+```
 
 [nginx configuration]
 
