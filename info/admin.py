@@ -14,7 +14,6 @@ class CommentInline(admin.StackedInline, SummernoteInlineModelAdmin):
         obj.save()
 
 
-
 class PostingAdmin(SummernoteModelAdmin):
     list_display = ['owner', 'title', 'category']
     inlines = [CommentInline]
