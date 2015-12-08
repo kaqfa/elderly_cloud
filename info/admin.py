@@ -9,15 +9,15 @@ class CommentInline(admin.StackedInline, SummernoteInlineModelAdmin):
     model = Comment
     extra = 1
 
-    def save_model(self, request, obj, form, change):
-        obj.owner = request.user
-        obj.save()
-
 
 class PostingAdmin(SummernoteModelAdmin):
     list_display = ['owner', 'title', 'category']
     inlines = [CommentInline]
     fields = ('title', 'content', 'category')
+
+    def save_model(self, request, obj, form, change):
+        obj.owner = request.user
+        obj.save()
 
 
 class POIAdmin(admin.ModelAdmin):

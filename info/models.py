@@ -4,7 +4,7 @@ from location_field.models.plain import PlainLocationField
 
 
 class Posting(models.Model):
-    owner = models.ForeignKey(User, verbose_name='Penulis', null=True, blank=True)
+    owner = models.ForeignKey(User, verbose_name='Penulis', default=1)
     title = models.CharField('Judul Posting', max_length=45)
     content = models.TextField('Isi Posting')
     category = models.CharField('Kategori', max_length=45)
