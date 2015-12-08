@@ -1,5 +1,6 @@
 from django.db import models
 from model_utils.models import TimeStampedModel
+from location_field.models.plain import PlainLocationField
 
 from member.models import Elder
 
@@ -13,6 +14,7 @@ class Tracker(TimeStampedModel):
     photo = models.ImageField('Gambar', null=True, blank=True)
     type = models.CharField('Jenis Penelusuran', max_length=2, choices=TYPE_CHOICES, default='cd')
     value = models.SmallIntegerField('Nilai', default=0)
+    location = PlainLocationField(based_fields=[elder], zoom=7, default='-6.889836,109.674592')
 
     class Meta:
         verbose_name = 'Penelusuran'

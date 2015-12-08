@@ -22,7 +22,7 @@ class PostingAdmin(SummernoteModelAdmin):
 
 
 class POIAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'latitude', 'longitude']
+    list_display = ['name', 'category', 'location']
 
 
 admin.site.register(Posting, PostingAdmin)
