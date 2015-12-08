@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | Daftar Lokasi{% endblock 'title' %}
+{% block 'extra_header' %}
+<link href="{% static 'css/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/datatables/css/responsive.dataTables.min.css' %}" rel="stylesheet">
+<style>
+table.dataTable tbody tr.selected {
+    background: rgba(38, 185, 154, 0.16);
+}
+table.dataTable tbody tr:hover td {
+    background: rgba(38, 185, 154, 0.07);
+    border-top: 1px solid rgba(38, 185, 154, 0.11);
+    border-bottom: 1px solid rgba(38, 185, 154, 0.11);
+}
+table.dataTable tbody tr td a{
+    color: #004ce6;
+}
+table.dataTable tbody tr td a:hover{
+    color: #0044cc;
+}
+</style>
+{% endblock 'extra_header' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Daftar Lokasi</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <div class="x_content">
+                            <table class="table table-striped" id="notif-table">
+                                <thead>
+                                    <tr>
+                                        <th>Nama</th>
+                                        <th>Kategori</th>
+                                        <th>Alamat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for l in location %}
+                                    <tr>
+                                        <td><a href="http://www.google.com/maps/place/{{ l.location }}" target="_blank">{{ l.name }}</a></td>
+                                        <td>{{ l.category }}</td>
+                                        <td>{{ l.address }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script src="{% static 'js/datatables/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/datatables/js/dataTables.responsive.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var oTable = $('#notif-table').dataTable({
+            "oLanguage": {
+                "sSearch": "Cari:",
+                "sLengthMenu": "Tampilkan _MENU_ data",
+                "sZeroRecords": "Belum ada lokasi yang tersedia"
+            },
+            "autoWidth":false,
+            "aaSorting": [],
+            'iDisplayLength': 12,
+            "sPaginationType": "full_numbers",
+        });
+    });
+</script>
+{% endblock 'extra_footer' %}

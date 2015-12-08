@@ -154,8 +154,8 @@
                                             </a>
                                             <a href="{% url 'parents_del' elder.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
                                             </a>
-                                            <button class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Cari Lokasi"><i class="glyphicon glyphicon-search"></i>
-                                            </button>
+                                            {% with activity=elder.get_last_activity %}{% if activity %}<a href="http://www.google.com/maps/place/{{ activity.location }}" target="_blank" class="btn btn-info" type="button" data-toggle="tooltip" data-placement="top" data-original-title="Cari Lokasi"><i class="glyphicon glyphicon-search"></i>{% endif %}
+                                            </a>{% endwith %}
                                         </h3>
                                         <div>{{ elder.address }}</div>
                                         <div>No. Telp: {{ elder.phone }}</div>

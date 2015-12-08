@@ -13,7 +13,7 @@ from django.views.generic import TemplateView
 from contact.views import contacts, ContactTable, ContactDetail, ContactEdit, ContactDelete
 from elder_profile.views import Diseases, MedicalTreatments, MTTable, MTDetail, MTEdit, MTDelete, DHTable, DHDetail, DHEdit, DHDelete, NoteTable, NoteDetail, NoteEdit, NoteDelete
 from tracker.views import Trackers, KondisiHarian, DetakJantung, GulaDarah
-from info.views import infos, InfoAll, TipsAll, PostDetail
+from info.views import infos, InfoAll, TipsAll, PostDetail, POIList
 from member.views import Elders, Signup, Parents, UpdateElder, DeleteElder, set_active_elder, UpdateProfile
 from feedback.views import FeedbackList, FeedbackDetail
 
@@ -66,6 +66,7 @@ urlpatterns = [
     url(r'^history/glucose/$', GulaDarah.as_view(), name='gula_darah'),
     url(r'^info/$', InfoAll.as_view(), name='info'),
     url(r'^tips/$', TipsAll.as_view(), name='tips'),
+    url(r'^location/$', POIList.as_view(), name='location'),
     url(r'^(?P<type>info|tips)/(?P<id>[0-9]*)/$', PostDetail.as_view(), name='post'),
     url(r'^feedback/$', FeedbackList.as_view(), name='feedback'),
     url(r'^feedback/(?P<id>[0-9]*)/$', FeedbackDetail.as_view(), name='feedback_detail'),
