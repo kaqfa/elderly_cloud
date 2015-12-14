@@ -1,3 +1,24 @@
+# Yang dilakukan 3rd Party
+
+## Rumah Sakit
+- input profile
+- input info pelayanan
+- input data kamar
+- input data kamar terisi
+- input data kamar kosong
+
+## Panti Jompo
+- input profile
+- input data kamar
+- input data kamar terisi
+- input data kamar kosong
+
+## Komunitas
+- input profile
+- input agenda kegiatan
+
+
+
 # Profil Aplikasi
 - Nama Aplikasi
 - Icon Aplikasi
