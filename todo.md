@@ -4,8 +4,8 @@
 - input profile
 - input info pelayanan
 - input data kamar
-- input data kamar terisi
-- input data kamar kosong
+- cek kamar terisi
+- cek kamar kosong
 
 ## Panti Jompo
 - input profile
