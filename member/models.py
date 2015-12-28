@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from polymorphic import PolymorphicModel
 from model_utils.models import TimeStampedModel, StatusModel
 from model_utils import Choices
+from location_field.models.plain import PlainLocationField
 
 def get_unread_notif(self):
     return self.notif_receiver.filter(status='s').order_by('-invoked_on', '-modified')
@@ -38,10 +39,9 @@ class CareGiver(Member):
 
 class Partner(Member):
     TYPE_CHOICES = (('rs', 'Rumah Sakit'), ('pj', 'Panti Jompo'),
-                    ('km', 'Kelompok Minat'))
+                    ('km', 'Komunitas'))
 
-    latitude = models.FloatField(null=True, blank=True)
-    longitude = models.FloatField(null=True, blank=True)
+    location = PlainLocationField(zoom=7, default='-6.889836,109.674592')
     description = models.TextField('Deskripsi', null=True, blank=True)
     type = models.CharField('Golongan Institusi', max_length=2, choices=TYPE_CHOICES, default='pj')
 
