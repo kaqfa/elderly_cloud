@@ -65,29 +65,29 @@ class Elder(Member):
         else:
             return None
 
-        # def get_kondisi(self):
-        # return self.dailycondition_set
-        #
-        # def get_kondisi_terakhir(self):
-        #     return self.dailycondition_set.latest('id')
-        #
-        # def count_perawat(self):
-        #     return self.cared_by.count()
-        #
-        # def get_riwayat_penyakit(self):
-        #     return self.diseasehist_set
-        #
-        # def get_perawatan_medis(self):
-        #     return self.medicaltreatmenthist_set
-        #
-        # def get_note(self):
-        #     return self.note_set
-        #
-        # def __unicode__(self):
-        #     return self.user.username
-        #
-        # def __str__(self):  # __unicode__ on Python 2
-        #     return self.user.username
+    # def get_kondisi(self):
+    #     return self.dailycondition_set
+    #
+    # def get_kondisi_terakhir(self):
+    #     return self.dailycondition_set.latest('id')
+    #
+    # def count_perawat(self):
+    #     return self.cared_by.count()
+    #
+    # def get_riwayat_penyakit(self):
+    #     return self.diseasehist_set
+    #
+    # def get_perawatan_medis(self):
+    #     return self.medicaltreatmenthist_set
+    #
+    # def get_note(self):
+    #     return self.note_set
+    #
+    # def __unicode__(self):
+    #     return self.user.username
+    #
+    # def __str__(self):  # __unicode__ on Python 2
+    #     return self.user.username
 
 
 class CareGiving(TimeStampedModel):
