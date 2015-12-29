@@ -48,7 +48,7 @@ INSTALLED_APPS = (
     'info',
     'tracker',
     'rest_framework',
-	'rest_framework.authtoken',
+    'rest_framework.authtoken',
     'django_filters',
     'django_summernote',
     'location_field',

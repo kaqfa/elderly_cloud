@@ -1,15 +1,13 @@
-Django
-django-filter
-django-model-utils
-django-pipeline
-django-polymorphic
-django-suit
-django-summernote
-django-wpadmin
-djangorestframework
-futures
-# sudo apt-get build-dep python-imaging
-# sudo apt-get install libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev
-Pillow
-# psycopg2
-django-location-field
+Django==1.8.4
+django-filter==0.11.0
+django-location-field==1.6.1
+django-model-utils==2.3.1
+django-pipeline==1.5.3
+django-polymorphic==0.7.1
+django-suit==0.2.14
+django-summernote==0.6.16
+django-wpadmin==1.7.4
+djangorestframework==3.2.2
+futures==3.0.3
+Pillow==2.9.0
+six==1.10.0
