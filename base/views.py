@@ -21,6 +21,9 @@ from info.models import Posting
 from datetime import datetime, date, time
 from datetime import timedelta
 
+def frontend(request):
+    return render(request, 'frontend/index.html')
+
 def cek_session(request):
     if 'active_elder' not in request.session:
         elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
