@@ -4,6 +4,7 @@ from polymorphic import PolymorphicModel
 from model_utils.models import TimeStampedModel, StatusModel
 from model_utils import Choices
 from location_field.models.plain import PlainLocationField
+from django.core.exceptions import ObjectDoesNotExist
 
 def get_unread_notif(self):
     return self.notif_receiver.filter(status='s').order_by('-invoked_on', '-modified')
@@ -44,6 +45,13 @@ class Partner(Member):
     location = PlainLocationField(zoom=7, default='-6.889836,109.674592')
     description = models.TextField('Deskripsi', null=True, blank=True)
     type = models.CharField('Golongan Institusi', max_length=2, choices=TYPE_CHOICES, default='pj')
+
+    #buat panti jompo
+    def get_availability(self):
+        try:
+            return self.availability.num
+        except ObjectDoesNotExist:
+            return 0
 
 
 class Elder(Member):

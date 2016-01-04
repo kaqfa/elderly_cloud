@@ -24,6 +24,12 @@ from datetime import timedelta
 def frontend(request):
     return render(request, 'frontend/index.html')
 
+def is_caregiver(user):
+    if CareGiver.objects.filter(user=user):
+        return True
+    else:
+        return False
+
 def cek_session(request):
     if 'active_elder' not in request.session:
         elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
@@ -67,29 +73,15 @@ Authentication End
 
 class Index(View):
 
-    def get(self, request, page=None, error=None):
+    def get(self, request, page=None):
         if request.user.is_authenticated():
-            cek_session(request)
-            posting=Posting.get_latest_post()
-            if None == page:
-                if request.session['active_elder']!=0:
-                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
-                    caregiver=CareGiver.objects.get(user=request.user)
-                    today=datetime.combine(date.today(), time.min)
-                    lastweek=today-timedelta(days=7)
-                    tracker=elder.tracker_set.filter(created__gte=lastweek)
-                    blood=tracker.filter(type="bg")
-                    heartrate=tracker.filter(type="hr")
-                    daily_condition=tracker.filter(type="cd")
-                    elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                    return render(request, 'index.html', {'active_elder':elder, 'elders':elders, 'info':posting, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
-                else:
-                    caregiver=CareGiver.objects.get(user=request.user)
-                    elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                    return render(request, 'index.html', {'caregiver':caregiver, 'elders':elders, 'info':posting})
+            if is_caregiver(request.user):
+                cek_session(request)
+                return self.caregiver(request)
             else:
-                return render(request, page + '.html')
-        return render(request, 'login.html')
+                return self.partner(request)
+        else:
+            return render(request, 'login.html')
     
     def post(self, request):
         if('login' in request.POST):
@@ -98,21 +90,16 @@ class Index(View):
                 user = form.login(request)
                 if user:
                     login(request, user)
-                    caregiver=CareGiver.objects.get(user=user)
-                    elders=Elder.get_cared_elder(caregiver)
-                    if elders:
-                        request.session['active_elder']=elders[0].id
-                        today=datetime.combine(date.today(), time.min)
-                        lastweek=today-timedelta(days=7)
-                        tracker=elders[0].tracker_set.filter(created__gte=lastweek)
-                        blood=tracker.filter(type="bg")
-                        heartrate=tracker.filter(type="hr")
-                        daily_condition=tracker.filter(type="cd")
-                        posting=Posting.get_latest_post()
-                        return render(request, 'index.html', {'active_elder':elders[0], 'info':posting, 'elders':elders, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
+                    if is_caregiver(user):
+                        caregiver=CareGiver.objects.get(user=user)
+                        elders=Elder.get_cared_elder(caregiver)
+                        if elders:
+                            request.session['active_elder']=elders[0].id
+                        else:
+                            request.session['active_elder']=0
+                        return self.caregiver(request)
                     else:
-                        request.session['active_elder']=0
-                        return render(request, 'index.html', {'caregiver':caregiver,'elders':elders})
+                        return self.partner(request)
             else:
                 return render(request, 'login.html', {'error_login':form.errors})
         elif('signup' in request.POST):
@@ -133,6 +120,29 @@ class Index(View):
                 return render(request, 'login.html', {'error_signup':userform.errors})
         else:
             return render(request, 'login.html')
+
+    def caregiver(self, request):
+        posting=Posting.get_latest_post()
+        if request.session['active_elder']!=0:
+            elder=Elder.objects.get(pk=request.session.get('active_elder'))
+            caregiver=CareGiver.objects.get(user=request.user)
+            today=datetime.combine(date.today(), time.min)
+            lastweek=today-timedelta(days=7)
+            tracker=elder.tracker_set.filter(created__gte=lastweek)
+            blood=tracker.filter(type="bg")
+            heartrate=tracker.filter(type="hr")
+            daily_condition=tracker.filter(type="cd")
+            elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+            return render(request, 'index.html', {'active_elder':elder, 'elders':elders, 'info':posting, 'caregiver':caregiver, 'blood':blood, 'heartrate':heartrate, 'daily_condition':daily_condition})
+        else:
+            caregiver=CareGiver.objects.get(user=request.user)
+            elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+            return render(request, 'index.html', {'caregiver':caregiver, 'elders':elders, 'info':posting})
+
+
+    def partner(self, request):
+        posting=Posting.get_latest_post()
+        return render(request, 'partnerindex.html', {'info':posting})
 
 def user_logout(request):
     logout(request)

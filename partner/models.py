@@ -11,7 +11,7 @@ class RoomClass(TimeStampedModel):
     owner = models.ForeignKey(Partner)
 
 
-# room hanya untuk partner yang RS & panti
+# room hanya untuk partner yang RS
 class Room(TimeStampedModel, StatusModel):
     STATUS = (('k','Kosong'), ('t','Terpakai'), ('r','Rusak'), ('m','Maintenance'))
 
@@ -21,6 +21,14 @@ class Room(TimeStampedModel, StatusModel):
     description = models.TextField('Deskripsi', blank=True, null=True)
     owner = models.ForeignKey(Partner)
 
+# availability untuk panti
+class Availability(models.Model):
+    owner = models.OneToOneField(
+        Partner,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    num = models.PositiveIntegerField('Jumlah Ketersediaan Ruangan')
 
 # Agenda hanya untuk partner komunitas
 class Agenda(TimeStampedModel, StatusModel):
