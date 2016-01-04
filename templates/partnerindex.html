@@ -1,0 +1,113 @@
+{% extends 'partnerbase.html' %}
+{% block 'title' %}Elder Caring | Dashboard{%endblock 'title' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-8">
+                    {% if user.member.type == 'pj' %}
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Ketersediaan</h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                        <p>{{ user.member.get_availability }} Ruangan tersedia</p>
+                        <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="input-group">
+                          <input id="num" type="text" placeholder="Ubah Ketersediaan" class="form-control">
+                          <span class="input-group-btn">
+                            <input type="submit" class="btn btn-success" value="Simpan" />
+                          </span>
+                        </div>
+                        </form>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Tips dan Info</h2>
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <ul class="list-unstyled timeline">
+                                {% for i in info %}
+                                <li>
+                                    <div class="block">
+                                        <div class="tags">
+                                            <a href="" class="tag">
+                                                <span>{{ i.category|title }}</span>
+                                            </a>
+                                        </div>
+                                        <div class="block_content">
+                                            <h2 class="title">
+                                                <a>{{ i.title }}</a>
+                                            </h2>
+
+                                            <div class="byline">
+                                                by <a>{{ i.owner.first_name}} {{ i.owner.last_name }}</a>
+                                            </div>
+                                            <p class="excerpt">{{ i.content|safe|truncatechars_html:200}} 
+                                            {% ifnotequal post.body|truncatewords_html:200|length post.body|truncatewords_html:201|length %}<a>Read&nbsp;More</a>{% endifnotequal %}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                {% empty %}
+                                <li>
+                                    Maaf, belum tersedia info.
+                                </li>
+                                {% endfor %}
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+                {% if user.member.type != 'pj' %}
+                <div class="col-md-4">
+                    <div class="x_panel">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div>
+                                <div class="x_title">
+                                    <h2>Statistik Pengguna</h2>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                                {% if user.member.type == 'rs' %}
+                                <div class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="tile-stats">
+                                        <div class="icon"><i class="fa fa-caret-square-o-right"></i>
+                                        </div>
+                                        <div class="count">{{ user.member.room_set.count }}</div>
+                                        <h3>Kamar</h3>
+
+                                    </div>
+                                    
+                                </div>
+                                {% elif user.member.type == 'km' %}
+                                <div class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="tile-stats">
+                                        <div class="icon"><i class="fa fa-caret-square-o-right"></i>
+                                        </div>
+                                        <div class="count">{{ user.member.agenda_set.count }}</div>
+                                        <h3>Agenda</h3>
+
+                                    </div>
+                                    
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}

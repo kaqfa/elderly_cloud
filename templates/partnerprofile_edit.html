@@ -1,0 +1,118 @@
+{% extends 'partnerbase.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | Edit Profile{%endblock 'title' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Edit Profile</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <div class="x_content">
+                        <form method="post" action="" enctype="multipart/form-data" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+                            {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                <ul>
+                                {% for name, errors in error.items %}
+                                    {% if name == 'birthday' %}
+                                    {% for e in errors %}
+                                    <li>Tanggal Lahir: {{ e }}</li>
+                                    {% endfor %}
+                                    {% else %}
+                                    {% for e in errors %}
+                                    <li>{{ name }}: {{ e }}</li>
+                                    {% endfor %}
+                                    {% endif %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% elif success %}
+                            <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                {{ success }}
+                            </div>
+                        {% endif %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">Nama
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="first_name" id="first_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.first_name }}" required="" />
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Alamat
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="address" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.member.address }}" required="" />
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Nomor Telepon
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="phone" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.member.phone }}" required="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Email
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="email" type="email" class="form-control col-md-7 col-xs-12" value="{{ user.email }}" required="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="photo">Foto Profil Baru
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input id="photo" name="photo" style="border:none" type="file" class="date-picker form-control col-md-7 col-xs-12"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Status
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input type="text" class="form-control col-md-7 col-xs-12" value="{{ user.member.get_type_display }}" disabled />
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <input type="submit" name="add" class="btn btn-success" value="Simpan"/>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#birthday').daterangepicker({
+            singleDatePicker: true,
+            calender_style: "picker_4",
+            locale: {
+                format: 'DD/MM/YYYY'
+            }
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+    });
+</script>
+{% endblock 'extra_footer' %}
