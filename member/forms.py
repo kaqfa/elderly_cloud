@@ -32,6 +32,17 @@ class ElderUserForm(forms.ModelForm):
         model=User
         fields=['first_name','last_name']
         
+class PartnerForm(forms.ModelForm):
+    class Meta:
+        model=CareGiver
+        fields=['address','phone','photo']
+        
+class PartnerUserForm(forms.ModelForm):
+    email=forms.EmailField(required=True)
+    class Meta:
+        model=User
+        fields=['first_name','email']
+        
 class JoinForm(forms.Form):
     kode = forms.CharField(label='Kode', required=True)
     

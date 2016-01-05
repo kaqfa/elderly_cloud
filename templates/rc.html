@@ -1,0 +1,159 @@
+{% extends 'partnerbase.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | Kelas{% endblock 'title' %}
+{% block 'extra_header' %}
+<link href="{% static 'css/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/datatables/css/responsive.dataTables.min.css' %}" rel="stylesheet">
+<style>
+table.dataTable tbody tr.selected {
+    background: rgba(38, 185, 154, 0.16);
+}
+table.dataTable tbody tr:hover td {
+    background: rgba(38, 185, 154, 0.07);
+    border-top: 1px solid rgba(38, 185, 154, 0.11);
+    border-bottom: 1px solid rgba(38, 185, 154, 0.11);
+}
+</style>
+ <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+{% endblock 'extra_header' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2> Kelas</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addform">
+                            <span class="fa fa-plus"></span> Tambah Kelas
+                        </button>
+                        
+                        <form method="post" action="" class="modal fade" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
+                        {% csrf_token %}
+                            <div class="modal-dialog modal-md">
+                                <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabel2">Tambah Kelas</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <input name="name" type="text" class="form-control" placeholder="Nama Kelas" required="" />
+                                        </div>
+                                        <div>
+                                            <textarea name="description" class="form-control" placeholder="Deskripsi kelas..." required="" ></textarea>
+                                        </div>
+                                        <br/>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+                                        <input type="submit" name="add" class="btn btn-primary" value="Tambahkan"/>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                         
+                        {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                <ul>
+                                {% for name, errors in error.items %}
+                                    {% for e in errors %}
+                                    <li>{{ name }}: {{ e }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% elif success %}
+                            <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                {{ success }}
+                            </div>
+                        {% elif messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="x_content">
+                            <table class="table table-striped" id="notif-table">
+                                <thead>
+                                    <tr>
+                                        <th width="5px"></th>
+                                        <th>Nama</th>
+                                        <th class="desktop tablet-l tablet-p">Deskripsi</th>
+                                        <th class="desktop">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in rc %}
+                                    <tr>
+                                        <td></td>
+                                        <td>{{ r.name }}</td>
+                                        <td>{{ r.description }}</td>
+                                        <td>
+                                            <a href="{% url 'dt_rclass' r.id %}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
+                                            </a>
+                                            <a href="{% url 'edit_rclass' r.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
+                                            </a>
+                                            <a href="{% url 'del_rclass' r.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'js/datatables/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'js/datatables/js/dataTables.responsive.min.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var oTable = $('#notif-table').dataTable({
+            "oLanguage": {
+                "sSearch": "Cari:",
+                "sLengthMenu": "Tampilkan _MENU_ data",
+                "sZeroRecords": "Anda belum mempunyai Kelas"
+            },
+            "responsive":{
+                details: {
+                    type: 'column'
+                }
+            },
+            "autoWidth":false,
+            "aaSorting": [],
+            columnDefs: [ {
+                className: 'control',
+                orderable: false,
+                targets:   0
+            }, {
+                orderable: false,
+                targets: 3
+            }],
+            'iDisplayLength': 12,
+            "sPaginationType": "full_numbers",
+        });
+    });
+</script>
+{% endblock 'extra_footer' %}

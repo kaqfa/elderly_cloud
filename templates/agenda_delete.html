@@ -1,0 +1,50 @@
+{% extends 'partnerbase.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | Hapus Data "{{ agenda.name }}"{%endblock 'title' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Hapus Data "{{ agenda.name }}"</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <div class="x_content">
+                        <form method="post" action="" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+                            Apakah anda yakin menghapus data "{{ agenda.name }}"?
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="{% url 'agenda' %}" class="btn btn-primary">Tidak</a>
+                                    <input type="submit" name="add" class="btn btn-danger" value="Ya"/>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#birthday').daterangepicker({
+            singleDatePicker: true,
+            calender_style: "picker_4"
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+    });
+</script>
+{% endblock 'extra_footer' %}

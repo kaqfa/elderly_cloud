@@ -1,0 +1,75 @@
+{% extends 'partnerbase.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | Edit "{{ rc.name }}"{%endblock 'title' %}
+{% block 'extra_header' %}
+ <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+{% endblock 'extra_header' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Edit "{{ rc.name }}"</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        
+                        <div class="x_content">
+                        <form method="post" action="" enctype="multipart/form-data" class="form-horizontal form-label-left">
+                        {% csrf_token %}
+                            {% if error %}
+                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                <ul>
+                                {% for name, errors in error.items %}
+                                    {% for e in errors %}
+                                    <li>{{ name }}: {{ e }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% elif success %}
+                            <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                                </button>
+                                {{ success }}
+                            </div>
+                        {% endif %}
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <input name="name" id="name" type="text" class="form-control col-md-7 col-xs-12" value="{{ rc.name }}" required="" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Deskripsi
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                <textarea name="description" id="description" class="form-control col-md-7 col-xs-12" required="" >{{ rc.description }}</textarea>
+                                </div>
+                            </div>
+                            <div class="ln_solid"></div>
+                            <div class="form-group">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="{% url 'rclass' %}" class="btn btn-primary">Kembali</a>
+                                    <input type="submit" name="add" class="btn btn-success" value="Simpan"/>
+                                </div>
+                            </div>
+                            
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
+{% endblock 'extra_footer' %}

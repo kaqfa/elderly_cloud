@@ -16,6 +16,7 @@ from tracker.views import Trackers, KondisiHarian, DetakJantung, GulaDarah
 from info.views import infos, InfoAll, TipsAll, PostDetail, POIList
 from member.views import Elders, Signup, Parents, UpdateElder, DeleteElder, set_active_elder, UpdateProfile
 from feedback.views import FeedbackList, FeedbackDetail
+from partner.views import UpdateAvailability, AgendaTable, AgendaEdit, AgendaDetail, AgendaDelete, RoomTable, RoomEdit, RoomDetail, RoomDelete, RoomClassTable, RoomClassEdit, RoomClassDetail, RoomClassDelete
 
 urlpatterns = [
     url(r'^$', Index.as_view(), name='index'),
@@ -58,5 +59,18 @@ urlpatterns = [
     url(r'^feedback/(?P<id>[0-9]*)/$', FeedbackDetail.as_view(), name='feedback_detail'),
     url(r'^profile/$', UpdateProfile.as_view(), name='profile'),
     url(r'^activate/(?P<id>[0-9]*)/', set_active_elder, name='set_elder'),
+    url(r'^availability/$', UpdateAvailability.as_view(), name='availability'),
+    url(r'^agenda/$', AgendaTable.as_view(), name='agenda'),
+    url(r'^agenda/(?P<id>[0-9]*)/$', AgendaDetail.as_view(), name='dt_agenda'),
+    url(r'^agenda/(?P<id>[0-9]*)/edit/$', AgendaEdit.as_view(), name='edit_agenda'),
+    url(r'^agenda/(?P<id>[0-9]*)/delete/$', AgendaDelete.as_view(), name='del_agenda'),
+    url(r'^room/class/$', RoomClassTable.as_view(), name='rclass'),
+    url(r'^room/class/(?P<id>[0-9]*)/$', RoomClassDetail.as_view(), name='dt_rclass'),
+    url(r'^room/class/(?P<id>[0-9]*)/edit/$', RoomClassEdit.as_view(), name='edit_rclass'),
+    url(r'^room/class/(?P<id>[0-9]*)/delete/$', RoomClassDelete.as_view(), name='del_rclass'),
+    url(r'^room/$', RoomTable.as_view(), name='room'),
+    url(r'^room/(?P<id>[0-9]*)/$', RoomDetail.as_view(), name='dt_room'),
+    url(r'^room/(?P<id>[0-9]*)/edit/$', RoomEdit.as_view(), name='edit_room'),
+    url(r'^room/(?P<id>[0-9]*)/delete/$', RoomDelete.as_view(), name='del_room'),
     url(r'^(?P<page>[\w]*)/$', Index.as_view(), name='load'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

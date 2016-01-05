@@ -1,6 +1,9 @@
 {% extends 'partnerbase.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Edit Profile{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Edit "{{ room.name }}"{%endblock 'title' %}
+{% block 'extra_header' %}
+ <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
+{% endblock 'extra_header' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -10,10 +13,10 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Edit Profile</h2>
+                            <h2>Edit "{{ room.name }}"</h2>
                             <div class="clearfix"></div>
                         </div>
-
+                        
                         <div class="x_content">
                         <form method="post" action="" enctype="multipart/form-data" class="form-horizontal form-label-left">
                         {% csrf_token %}
@@ -23,15 +26,9 @@
                                 </button>
                                 <ul>
                                 {% for name, errors in error.items %}
-                                    {% if name == 'birthday' %}
-                                    {% for e in errors %}
-                                    <li>Tanggal Lahir: {{ e }}</li>
-                                    {% endfor %}
-                                    {% else %}
                                     {% for e in errors %}
                                     <li>{{ name }}: {{ e }}</li>
                                     {% endfor %}
-                                    {% endif %}
                                 {% endfor %}
                                 </ul>
                             </div>
@@ -43,54 +40,46 @@
                             </div>
                         {% endif %}
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first_name">Nama
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="code">Kode
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="first_name" id="first_name" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.first_name }}" required="" />
-                                </div>
-                            </div>
-                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="address">Alamat
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                <textarea name="address" id="address" class="form-control col-md-7 col-xs-12" required="" >{{ user.member.address }}</textarea>
-                                </div>
-                            </div>
-                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="phone">Nomor Telepon
-                                </label>
-                                <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="phone" id="phone" type="text" class="form-control col-md-7 col-xs-12" value="{{ user.member.phone }}" required="" />
+                                <input name="code" id="code" type="text" class="form-control col-md-7 col-xs-12" value="{{ room.code }}" required="" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input name="email" id="email" type="email" class="form-control col-md-7 col-xs-12" value="{{ user.email }}" required="" />
+                                <input name="name" id="name" type="text" class="form-control col-md-7 col-xs-12" value="{{ room.name }}" required="" />
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="photo">Foto Profil Baru
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="roomclass">Kelas
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input id="photo" name="photo" style="border:none" type="file" class="date-picker form-control col-md-7 col-xs-12"/>
+                                    <select id="roomclass" name="roomclass" type="text" class="form-control" placeholder="Kelas Kamar" required >
+                                        <option value="">{% if rc %}Pilih Kelas{% else %}Anda belum memiliki kelas kamar{% endif %}</option>
+                                        {% for c in rc %}
+                                        <option value="{{ c.id }}">{{ c.name }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="first-name">Status
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="description">Deskripsi
                                 </label>
                                 <div class="col-md-6 col-sm-6 col-xs-12">
-                                <input type="text" class="form-control col-md-7 col-xs-12" value="{{ user.member.get_type_display }}" disabled />
+                                <textarea name="description" id="description" class="form-control col-md-7 col-xs-12" required="" >{{ room.description }}</textarea>
                                 </div>
                             </div>
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="{% url 'room' %}" class="btn btn-primary">Kembali</a>
                                     <input type="submit" name="add" class="btn btn-success" value="Simpan"/>
                                 </div>
                             </div>
-
+                            
                         </form>
                         </div>
                     </div>
@@ -101,18 +90,8 @@
 {% endblock 'maincontent' %}
 {% block 'extra_footer' %}
 <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#birthday').daterangepicker({
-            singleDatePicker: true,
-            calender_style: "picker_4",
-            locale: {
-                format: 'DD/MM/YYYY'
-            }
-        }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
-        });
-    });
+    $("#roomclass").val("{{ room.roomclass.id }}");
 </script>
 {% endblock 'extra_footer' %}

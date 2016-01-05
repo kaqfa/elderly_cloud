@@ -5,12 +5,12 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from member.forms import ElderForm, ElderUserForm, JoinForm, CGUserForm, CareGiverForm
+from member.forms import ElderForm, ElderUserForm, JoinForm, CGUserForm, CareGiverForm, PartnerForm, PartnerUserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 
-from member.models import Elder, CareGiver, Member, CareGiving
+from member.models import Elder, CareGiver, Member, CareGiving, Partner
 from django.contrib.auth.models import Group
 from django.utils.crypto import get_random_string
 from member.serializers import ElderSerializer, SignupSerializer, CareGiverSerializer
@@ -228,4 +228,12 @@ class UpdateProfile(View):
                 userform.errors.update(cgform.errors)
                 return render(request, 'profile_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active})
         else:
-            return render(request, 'partnerprofile_edit.html')
+            userform = PartnerUserForm(request.POST, instance=request.user)
+            partnerform = PartnerForm(request.POST, request.FILES, instance=Partner.objects.get(user=request.user))
+            if userform.is_valid() and partnerform.is_valid():
+                user = userform.save()
+                elder = partnerform.save()
+                return render(request, 'partnerprofile_edit.html', {'success': "Data tersimpan"})
+            else:
+                userform.errors.update(partnerform.errors)
+                return render(request, 'partnerprofile_edit.html', {'error':userform.errors})

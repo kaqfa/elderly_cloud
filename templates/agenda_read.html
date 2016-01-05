@@ -1,0 +1,44 @@
+{% extends 'partnerbase.html' %}
+{% load staticfiles %}
+{% block 'title' %}Elder Caring | Agenda "{{ agenda.name }}"{% endblock 'title' %}
+{% block 'maincontent' %}
+    <div class="right_col" role="main">
+        <br/>
+
+        <div class="">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="x_panel">
+                        <div class="x_title">
+                            <h2>Data Agenda "{{ agenda.name }}"</h2>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="x_content">
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Nama :</div>
+                                <div class="col-md-8">{{ agenda.name }}</div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Deskripsi :</div>
+                                <div class="col-md-8">{{ agenda.description }}</div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="col-md-4 text-right">Tanggal :</div>
+                                <div class="col-md-8">{{ agenda.duedate|date:"d/m/Y" }}</div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="ln_solid"></div>
+                            <div class="col-md-12">
+                                <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
+                                    <a href="{% url 'agenda' %}" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Kembali</a>
+                                    <a href="{% url 'edit_agenda' agenda.id %}" class="btn btn-warning"><i class="fa fa-edit"></i> Edit</a>
+                                    <a href="{% url 'del_agenda' agenda.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> Hapus</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock 'maincontent' %}
