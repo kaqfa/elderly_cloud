@@ -1,0 +1,8 @@
+- download & install python
+- buka folder project di command prompt
+- jalankan perintah "pip install -r requirements.txt"
+- jalankan perintah "pip install Pillow"
+- jalankan perintah "python manage.py migrate"
+- jalankan perintah "python manage.py createsuperuser"
+- jalankan perintah "python manage.py runserver 8080"
+- buka browser "localhost:8080"
