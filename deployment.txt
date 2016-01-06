@@ -1,13 +1,21 @@
+ederroot123
 [preparation]
 useradd -m -s /bin/bash elder
 usermod -a -G sudo elder
 passwd elder
 su - elder
 
-sudo apt-get install postgresql postgresql-contrib
-sudo apt-get install libpq-dev python-dev
+sudo apt-get install postgresql postgresql-contrib git nginx
+sudo apt-get install libpq-dev python-dev python-pip
 sudo pip install psycopg2
 sudo apt-get install gunicorn
+
+sudo su - postgres
+createuser --interactive -P
+createdb --owner elder elderly
+logout
+
+git clone https://github.com/kaqfa/elderly_cloud.git
 
 [local setting and database]
 ``` settings.py
@@ -16,11 +24,6 @@ try:
 except ImportError:
     pass
 ```
-
-sudo su - postgres
-createuser --interactive -P
-createdb --owner elder elderly
-logout
 
 ``` local_settings.py
 
@@ -44,10 +47,10 @@ DATABASES = {
 ``` /etc/nginx/sites-available/devel-server.conf
 server {
     listen 80;
-    server_name devel.inovasiku.biz;
+    server_name 128.199.172.43;
     
     location /static {
-        alias /home/elder/prod/staticfiles;
+        alias /home/elder/webapp/staticfiles;
     }
 
     location / {
@@ -59,11 +62,11 @@ sudo ln -s ../sites-available/devel-server.conf /etc/nginx/sites-enabled/devel-s
 
 
 [bash start]
-``` ../prod-server
+``` ../dev-server
 #!/bin/bash
 
 NAME="development_server"             # Name of the application
-DJANGODIR=/home/elder/prod            # Django project directory
+DJANGODIR=/home/elder/webapp/dev      # Django project directory
 USER=elder                            # the user to run as
 NUM_WORKERS=3                         # how many worker processes should Gunicorn spawn
 DJANGO_SETTINGS_MODULE=elderly_cloud.settings    # which settings file should Django use
@@ -93,11 +96,11 @@ sudo apt-get install supervisor
 
 ``` /etc/supervisor/conf.d/devel-server.conf
 [program:development-server]
-command = /home/elder/prod-server                   ; Command to start app
-user = elder                                                    ; User to run as
+command = /home/elder/webapp/dev-server                   ; Command to start app
+user = elder                                              ; User to run as
 stdout_logfile = /home/elder/logs/gunicorn_supervisor.log ; Where to write log messages
-redirect_stderr = true                                          ; Save stderr in the same log
-environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8                 ; Set UTF-8 as default encoding
+redirect_stderr = true                                    ; Save stderr in the same log
+environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8           ; Set UTF-8 as default encoding
 ```
 
 sudo supervisorctl reread
