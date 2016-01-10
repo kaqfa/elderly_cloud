@@ -5,6 +5,9 @@
   <meta charset="utf-8">
   <title>Elderly Applications</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{% static 'favicon/favicon-96x96.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'front/css/normal.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'front/css/style.css' %}">
   <link rel="stylesheet" href="{% static 'front/css/animation.css' %}">
@@ -12,7 +15,6 @@
   <script>
     if (/mobile/i.test(navigator.userAgent)) document.documentElement.className += ' w-mobile';
   </script>
-  <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
   <!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
 </head>
 <body>
@@ -31,7 +33,8 @@
 
 
         <div class="w-col w-col-3 logo">
-          <a href="#"><img class="logo" src="{% static 'front/images/logo.png' %}" alt="Elegance"></a>
+          <a href="#"><img class="logo" src="{% static 'images/logo_elderly_apps.png' %}"
+          style="margin-top:18px;" alt="Elegance" ></a>
         </div>
 
         <!--///////////////////////////////////////////////////////
