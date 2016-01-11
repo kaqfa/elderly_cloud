@@ -52,7 +52,7 @@
                                             <div class="byline">
                                                 by <a>{{ i.owner.first_name}} {{ i.owner.last_name }}</a>
                                             </div>
-                                            <p class="excerpt">{{ i.content|safe|truncatechars_html:200}} 
+                                            <p class="excerpt">{{ i.content|safe|truncatechars_html:200}}
                                             {% ifnotequal i.content|safe|truncatechars_html:200|length i.content|safe|truncatechars_html:201|length %}<a>Read&nbsp;More</a>{% endifnotequal %}
                                             </p>
                                         </div>
@@ -108,7 +108,7 @@
                                         <div class="count">{{ caregiver.by_user.count }}</div>
                                         <h3>Catatan</h3>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                             {% if elders %}
@@ -147,15 +147,7 @@
                     </div>
                 </div>
             </div>
-
-            <footer>
-                <div class="">
-                    <p class="pull-right">Gentelella Alela! a Bootstrap 3 template by <a>Kimlabs</a>. |
-                        <span class="lead"> <i class="fa fa-paw"></i> Gentelella Alela!</span>
-                    </p>
-                </div>
-                <div class="clearfix"></div>
-            </footer>
+            
         </div>
     </div>
 {% endblock 'maincontent' %}

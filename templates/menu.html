@@ -5,8 +5,9 @@
     <div class="left_col scroll-view">
 
         <div class="navbar nav_title" style="border: 0;">
-            <a href="{% url 'index' %}" class="site_title"><i class="fa fa-paw"></i>
-                <span>Elder Caring</span></a>
+            <a href="{% url 'index' %}" class="site_title">
+              <img src="{% static 'images/logo_elderly_apps.png' %}" alt="Logo Elderly" width="90%" />
+            </a>
         </div>
         <div class="clearfix"></div>
         {% if active_elder %}
@@ -88,7 +89,7 @@
             <a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="top" title="Logout">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
-        </div>
+        </div>        
     </div>
 </div>
 
