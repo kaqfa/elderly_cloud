@@ -5744,7 +5744,7 @@ a.hiddenanchor {
 #register,
 #login {
     position: absolute;
-    top: 0px;
+    top: 80px;
     width: 100%;
 }
 
