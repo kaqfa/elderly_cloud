@@ -1,209 +1,216 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% block 'title' %}Elder Caring | Notifikasi untuk {% if untuk == 1 %}Orang Tua{% elif untuk == 2 %}Anda{% endif%}{% endblock 'title' %}
-{% block 'extra_header' %}
+{% extends 'base.html' %} {% load staticfiles %} {% block 'title' %}Elder Caring | Notifikasi untuk {% if untuk == 1 %}Orang Tua{% elif untuk == 2 %}Anda{% endif%}{% endblock 'title' %} {% block 'extra_header' %}
 <link href="{% static 'css/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/datatables/css/responsive.dataTables.min.css' %}" rel="stylesheet">
 <style>
-table.dataTable tbody tr.selected {
+  table.dataTable tbody tr.selected {
     background: rgba(38, 185, 154, 0.16);
-}
-table.dataTable tbody tr:hover td {
+  }
+
+  table.dataTable tbody tr:hover td {
     background: rgba(38, 185, 154, 0.07);
     border-top: 1px solid rgba(38, 185, 154, 0.11);
     border-bottom: 1px solid rgba(38, 185, 154, 0.11);
-}
+  }
 </style>
- <link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet">
-{% endblock 'extra_header' %}
-{% block 'maincontent' %}
-    <div class="right_col" role="main">
-        <br/>
+<link href="{% static 'css/bootstrap-datetimepicker.css' %}" rel="stylesheet"> {% endblock 'extra_header' %} {% block 'maincontent' %}
+<div class="right_col" role="main">
+  <br/>
 
-        <div class="">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2>Notifikasi untuk {% if untuk == 1 %}Orang Tua{% elif untuk == 2 %}Anda{% endif%}</h2>
-                            <div class="clearfix"></div>
-                        </div>
-                        {% if untuk == 1 %}
-                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addform">
-                            <span class="fa fa-plus"></span> Tambah Notifikasi Orang Tua
-                        </button>
-                        
-                        <form method="post" action="" class="modal fade" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
-                        {% csrf_token %}
-                            <div class="modal-dialog modal-md">
-                                <div class="modal-content">
+  <div class="">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Notifikasi untuk {% if untuk == 1 %}Orang Tua{% elif untuk == 2 %}Anda{% endif%}</h2>
+            <div class="clearfix"></div>
+          </div>
+          {% if untuk == 1 %}
+          <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addform">
+            <span class="fa fa-plus"></span> Tambah Notifikasi Orang Tua
+          </button>
 
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                        </button>
-                                        <h4 class="modal-title" id="myModalLabel2">Tambah Notifikasi</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div>
-                                            <input name="title" type="text" class="form-control" placeholder="Judul" required="" />
-                                        </div>
-                                        <div class='input-group date' id='datetimepicker1'>
-                                            <input type='text' class="form-control" id="invoked_on" name="invoked_on" type="text" placeholder="Dijalankan pada" required=""/>
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <textarea name="content" type="text" class="form-control" placeholder="Pesan" required="" /></textarea>
-                                        </div>
-                                        <br/>
-                                        <div>Diulang Setiap:
-                                            <select class="form-control" name="recurring" required="">
-                                                <option value="1">Sekali</option>
-                                                <option value="2">Harian</option>
-                                                <option value="3">Mingguan</option>
-                                                <option value="4">Bulanan</option>
-                                                <option value="5">Weekday</option>
-                                                <option value="6">Weekend</option>
-                                            </select>
-                                        </div>
-                                        <br/>
-                                        <div>Tingkat Kepentingan:
-                                            <select class="form-control" name="level" required="">
-                                                <option value="1">Info</option>
-                                                <option value="2">Warning</option>
-                                                <option value="3">Emergency</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                                        <input type="submit" name="add" class="btn btn-primary" value="Tambahkan"/>
-                                    </div>
+          <form method="post" action="" class="modal fade form-horizontal form-label-left" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
+            {% csrf_token %}
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
 
-                                </div>
-                            </div>
-                        </form>
-                        {% endif %}
-                         
-                        {% if error %}
-                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                <ul>
-                                {% for name, errors in error.items %}
-                                    {% if name == 'birthday' %}
-                                    {% for e in errors %}
-                                    <li>Tanggal Lahir: {{ e }}</li>
-                                    {% endfor %}
-                                    {% else %}
-                                    {% for e in errors %}
-                                    <li>{{ name }}: {{ e }}</li>
-                                    {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                                </ul>
-                            </div>
-                        {% elif success %}
-                            <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                {{ success }}
-                            </div>
-                        {% elif messages %}
-                            {% for message in messages %}
-                            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade in text-left" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                {{ message }}
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                        <div class="x_content">
-                            <table class="table table-striped" id="notif-table">
-                                <thead>
-                                    <tr>
-                                        <th width="5px"></th>
-                                        <th>Judul</th>
-                                        <th class="desktop tablet-l tablet-p">Pengirim</th>
-                                        <th class="desktop">Aksi</th>
-                                        <th>Tanggal Dikirimkan</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for notif in notifs %}
-                                    <tr class="{% if notif.status == 's' and untuk == 2 %}selected{% endif %}">
-                                        <td></td>
-                                        <td>{{ notif.title }}</td>
-                                        <td>{{ notif.sender.first_name }} {{ notif.sender.last_name }}</td>
-                                        <td>
-                                        {% if notif.receiver.id == user.id %}
-                                            <a href="{% url 'dt_notif_cg' notif.id %}?prev={{ untuk }}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
-                                            </a>
-                                        {% if notif.status == 's' %}
-                                            <a href="{% url 'respon_notif' notif.id %}" class="btn btn-success" data-toggle="tooltip" data-placement="top" data-original-title="Respon"><i class="fa fa-check"></i>
-                                            </a>
-                                        {% endif %}
-                                        {% else %}
-                                            <a href="{% url 'dt_notif_elder' notif.id %}{% if request.path %}?prev={{ untuk }}{% endif %}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
-                                            </a>
-                                            <a href="{% url 'edit_notif_elder' notif.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="{% url 'del_notif_elder' notif.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
-                                            </a>
-                                        {% endif %}
-                                        </td>
-                                        <td>{{ notif.invoked_on|date:'d/m/Y H:i' }}</td>
-                                        <td>{{ notif.get_status_display|title }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Tambah Notifikasi</h4>
                 </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Judul</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input class="form-control" placeholder="Judul" type="text" name="title">
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Dijalankan pada</label>
+                    <div class="col-md-7 col-sm-7 col-xs-12 input-group date" id='datetimepicker1'>
+                      <input class="form-control" id="invoked_on" name="invoked_on" placeholder="Dijalankan pada"
+                        type="text" name="title">
+                      <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Alamat<span class="required">*</span>
+                      </label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                          <textarea class="form-control" name="content" rows="3" placeholder="Pesan" required=""></textarea>
+                      </div>
+                  </div>
+
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Diulang Setiap</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="form-control" name="recurring" required="">
+                              <option value="1">Sekali</option>
+                              <option value="2">Harian</option>
+                              <option value="3">Mingguan</option>
+                              <option value="4">Bulanan</option>
+                              <option value="5">Weekday</option>
+                              <option value="6">Weekend</option>
+                          </select>
+                      </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Kepentingan</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select class="form-control" name="level" required="">
+                            <option value="1">Info</option>
+                            <option value="2">Warning</option>
+                            <option value="3">Emergency</option>
+                          </select>
+                      </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button type="button" class="btn btn-primary" data-dismiss="modal">Batal</button>
+                          <input type="submit" name="add" class="btn btn-success" value="Tambahkan" />
+                      </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
+          </form>
+          {% endif %} {% if error %}
+          <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            <ul>
+              {% for name, errors in error.items %} {% if name == 'birthday' %} {% for e in errors %}
+              <li>Tanggal Lahir: {{ e }}</li>
+              {% endfor %} {% else %} {% for e in errors %}
+              <li>{{ name }}: {{ e }}</li>
+              {% endfor %} {% endif %} {% endfor %}
+            </ul>
+          </div>
+          {% elif success %}
+          <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            {{ success }}
+          </div>
+          {% elif messages %} {% for message in messages %}
+          <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade in text-left" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+            {{ message }}
+          </div>
+          {% endfor %} {% endif %}
+          <div class="x_content">
+            <table class="table table-striped" id="notif-table">
+              <thead>
+                <tr>
+                  <th width="5px"></th>
+                  <th>Judul</th>
+                  <th class="desktop tablet-l tablet-p">Pengirim</th>
+                  <th class="desktop">Aksi</th>
+                  <th>Tanggal Dikirimkan</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for notif in notifs %}
+                <tr class="{% if notif.status == 's' and untuk == 2 %}selected{% endif %}">
+                  <td></td>
+                  <td>{{ notif.title }}</td>
+                  <td>{{ notif.sender.first_name }} {{ notif.sender.last_name }}</td>
+                  <td>
+                    {% if notif.receiver.id == user.id %}
+                    <a href="{% url 'dt_notif_cg' notif.id %}?prev={{ untuk }}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
+                                            </a> {% if notif.status == 's' %}
+                    <a href="{% url 'respon_notif' notif.id %}" class="btn btn-success" data-toggle="tooltip" data-placement="top" data-original-title="Respon"><i class="fa fa-check"></i>
+                                            </a> {% endif %} {% else %}
+                    <a href="{% url 'dt_notif_elder' notif.id %}{% if request.path %}?prev={{ untuk }}{% endif %}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
+                                            </a>
+                    <a href="{% url 'edit_notif_elder' notif.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
+                                            </a>
+                    <a href="{% url 'del_notif_elder' notif.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
+                                            </a> {% endif %}
+                  </td>
+                  <td>{{ notif.invoked_on|date:'d/m/Y H:i' }}</td>
+                  <td>{{ notif.get_status_display|title }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
-{% endblock 'maincontent' %}
-{% block 'extra_footer' %}
+  </div>
+</div>
+{% endblock 'maincontent' %} {% block 'extra_footer' %}
 <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/datepicker/bootstrap-datetimepicker.min.js' %}"></script>
 <script src="{% static 'js/datatables/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'js/datatables/js/dataTables.responsive.min.js' %}"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        var oTable = $('#notif-table').dataTable({
-            "oLanguage": {
-                "sSearch": "Cari:",
-                "sLengthMenu": "Tampilkan _MENU_ notifikasi",
-                "sZeroRecords": "Elder tidak mempunyai notifikasi"
-            },
-            "responsive":{
-                details: {
-                    type: 'column'
-                }
-            },
-            "autoWidth":false,
-            "aaSorting": [],
-            columnDefs: [ {
-                className: 'control',
-                orderable: false,
-                targets:   0
-            }, {
-                orderable: false,
-                targets: 3
-            }, {
-                className: 'none',
-                targets: [4, 5]
-            }],
-            'iDisplayLength': 12,
-            "sPaginationType": "full_numbers",
-        });
-        $('#datetimepicker1').datetimepicker({
-            format: "DD/MM/YYYY HH:mm"
-        });
+  $(document).ready(function() {
+    var oTable = $('#notif-table').dataTable({
+      "oLanguage": {
+        "sSearch": "Cari:",
+        "sLengthMenu": "Tampilkan _MENU_ notifikasi",
+        "sZeroRecords": "Elder tidak mempunyai notifikasi"
+      },
+      "responsive": {
+        details: {
+          type: 'column'
+        }
+      },
+      "autoWidth": false,
+      "aaSorting": [],
+      columnDefs: [{
+        className: 'control',
+        orderable: false,
+        targets: 0
+      }, {
+        orderable: false,
+        targets: 3
+      }, {
+        className: 'none',
+        targets: [4, 5]
+      }],
+      'iDisplayLength': 12,
+      "sPaginationType": "full_numbers",
     });
+    $('#datetimepicker1').datetimepicker({
+      format: "DD/MM/YYYY HH:mm"
+    });
+  });
 </script>
 {% endblock 'extra_footer' %}
