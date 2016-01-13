@@ -4,21 +4,45 @@ from django.contrib.auth.models import User
 from member.models import CareGiver, Elder, CareGiving
 
 class CareGiverForm(forms.ModelForm):
-    birthday = forms.DateField(input_formats=['%d/%m/%Y'])
+    birthday = forms.DateField(input_formats=['%d/%m/%Y'], required=False)
     class Meta:
         model=CareGiver
         exclude=['user']
         
 class UserForm(forms.ModelForm):
     email=forms.EmailField(required=True)
+    name=forms.CharField(required=True)
     class Meta:
         model=User
-        fields=['username','first_name','last_name','email','password']
+        fields=['username','email','password']
+        
+    def save(self, commit=True):
+        obj = super(UserForm, self).save(commit=False)
+        names=self.cleaned_data['name'].split(' ', 1)
+        obj.first_name = names[0]
+        if len(names)>1:
+            obj.last_name = names[1]
+        if commit:
+            obj.save()
+        return obj
         
 class CGUserForm(forms.ModelForm):
+    name=forms.CharField(required=True)
     class Meta:
         model=User
-        fields=['first_name','last_name','email']
+        fields=['email']
+    
+    def save(self, commit=True):
+        obj = super(CGUserForm, self).save(commit=False)
+        names=self.cleaned_data['name'].split(' ', 1)
+        obj.first_name = names[0]
+        if len(names)>1:
+            obj.last_name = names[1]
+        else:
+            obj.last_name = ''
+        if commit:
+            obj.save()
+        return obj
         
 class ElderForm(forms.ModelForm):
     birthday = forms.DateField(input_formats=['%d/%m/%Y'])
@@ -28,9 +52,22 @@ class ElderForm(forms.ModelForm):
         exclude=['user','code','cared_by']
         
 class ElderUserForm(forms.ModelForm):
+    name=forms.CharField(required=True)
     class Meta:
         model=User
-        fields=['first_name','last_name']
+        fields=[]
+        
+    def save(self, commit=True):
+        obj = super(ElderUserForm, self).save(commit=False)
+        names=self.cleaned_data['name'].split(' ', 1)
+        obj.first_name = names[0]
+        if len(names)>1:
+            obj.last_name = names[1]
+        else:
+            obj.last_name = ''
+        if commit:
+            obj.save()
+        return obj
         
 class PartnerForm(forms.ModelForm):
     class Meta:
@@ -39,9 +76,22 @@ class PartnerForm(forms.ModelForm):
         
 class PartnerUserForm(forms.ModelForm):
     email=forms.EmailField(required=True)
+    name=forms.CharField(required=True)
     class Meta:
         model=User
-        fields=['first_name','email']
+        fields=['email']
+        
+    def save(self, commit=True):
+        obj = super(PartnerUserForm, self).save(commit=False)
+        names=self.cleaned_data['name'].split(' ', 1)
+        obj.first_name = names[0]
+        if len(names)>1:
+            obj.last_name = names[1]
+        else:
+            obj.last_name = ''
+        if commit:
+            obj.save()
+        return obj
         
 class JoinForm(forms.Form):
     kode = forms.CharField(label='Kode', required=True)

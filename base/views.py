@@ -75,7 +75,9 @@ class Index(View):
 
     def get(self, request, page=None):
         if request.user.is_authenticated():
-            if is_caregiver(request.user):
+            if request.user.is_superuser:
+                return HttpResponseRedirect(reverse('admin:index'))
+            elif is_caregiver(request.user):
                 cek_session(request)
                 return self.caregiver(request)
             else:
@@ -105,6 +107,7 @@ class Index(View):
         elif('signup' in request.POST):
             userform = UserForm(request.POST)
             caregiverform = CareGiverForm(request.POST)
+            #return reverse(request.POST['gender'])
             if userform.is_valid() and caregiverform.is_valid():
                 user = userform.save(commit=False)
                 user.set_password(userform.cleaned_data.get('password'))
@@ -117,7 +120,7 @@ class Index(View):
                 return render(request, 'login.html', {'success': "Pendaftaran Berhasil, silahkan login"})
             else:
                 userform.errors.update(caregiverform.errors)
-                return render(request, 'login.html', {'error_signup':userform.errors})
+                return render(request, 'login.html', {'error_signup':userform.errors, 'values':request.POST})
         else:
             return render(request, 'login.html')
 

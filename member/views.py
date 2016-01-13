@@ -93,15 +93,21 @@ class Parents(View):
                 CareGiving.objects.create(caregiver=caregiver, elder=elder)
                 g = Group.objects.get(name='Elder')
                 g.user_set.add(user)
-                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
                 elders=Elder.get_cared_elder(user=caregiver)
+                if request.session['active_elder']==0:
+                    if elders:
+                        request.session['active_elder']=elders[0].id
+                    else:
+                        request.session['active_elder']=0
+                elder=Elder.objects.get(pk=request.session.get('active_elder'))
                 return render(request, 'parents.html', {'elders':elders, 'success': "Orang tua berhasil ditambahkan", 'active_elder':elder})
             else:
                 userform.errors.update(elderform.errors)
                 elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
                 if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
                     elder=Elder.objects.get(pk=request.session.get('active_elder'))
+                else:
+                    elder=None
                 return render(request, 'parents.html', {'elders':elders, 'error':userform.errors, 'active_elder':elder})
         else:
             return self.get(request)
@@ -168,9 +174,6 @@ class DeleteElder(View):
     
     def post(self, request, id):
         cek_session(request)
-        active=None
-        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-            active=Elder.objects.get(pk=request.session.get('active_elder'))
         elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
         elder=elders.filter(id=id)
         if elder:
@@ -180,9 +183,12 @@ class DeleteElder(View):
                 elder.delete()
             else:
                 CareGiving.objects.filter(elder=elder, caregiver=CareGiver.objects.get(user=request.user)).delete()
-            if id==request.session.get('active_elder'):
+            if int(id)==request.session.get('active_elder'):
                 elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                request.session['active_elder']=elders[0].id
+                if elders:
+                    request.session['active_elder']=elders[0].id
+                else:
+                    request.session['active_elder']=0
             messages.success(request, name+' berhasil dihapus dari daftar anda.')
         return HttpResponseRedirect(reverse('parents'))
                 
@@ -190,7 +196,7 @@ class DeleteElder(View):
 @login_required(redirect_field_name=None)
 def set_active_elder(request, id):
     if Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user)).filter(id=id):
-        request.session['active_elder']=id
+        request.session['active_elder']=int(id)
     return HttpResponseRedirect(request.GET.get('next', '/'))
     
 class UpdateProfile(View):
