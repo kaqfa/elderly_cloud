@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block 'title' %}Elder Caring | Hapus Data "{{ disease.treatment }}"{%endblock 'title' %}
+{% block 'title' %}Elder Caring | Hapus Data "{{ disease.name }}"{%endblock 'title' %}
 {% block 'maincontent' %}
     <div class="right_col" role="main">
         <br/>
@@ -10,14 +10,14 @@
                 <div class="col-md-12">
                     <div class="x_panel">
                         <div class="x_title">
-                            <h2>Hapus Data "{{ disease.treatment }}"</h2>
+                            <h2>Hapus Data "{{ disease.name }}"</h2>
                             <div class="clearfix"></div>
                         </div>
                         
                         <div class="x_content">
                         <form method="post" action="" class="form-horizontal form-label-left">
                         {% csrf_token %}
-                            Apakah anda yakin menghapus data "{{ disease.treatment }}"?
+                            Apakah anda yakin menghapus data "{{ disease.name }}"?
                             <div class="ln_solid"></div>
                             <div class="form-group">
                                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
