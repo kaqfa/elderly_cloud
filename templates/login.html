@@ -28,8 +28,6 @@
 
     <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
 
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-
 
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -167,7 +165,7 @@
                                 </label>
                             </div>
                         </div>
-                        <div>&nbsp
+                        <div>&nbsp;
                         </div>
                         <div>
                             <input name="phone" type="text" class="form-control" placeholder="Nomor Telepon" {% if error_signup and values.phone %}value="{{ values.phone }}"{% endif%} required="" />
@@ -196,22 +194,26 @@
     </div>
 
 </body>
+<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.css' %}"/ >
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
+
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 <!-- daterangepicker -->
 <script type="text/javascript" src="{% static 'js/moment.min2.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/datepicker/daterangepicker.js' %}"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#birthday').daterangepicker({
-            singleDatePicker: true,
-            calender_style: "picker_4",
-            locale: {
-                format: 'DD/MM/YYYY'
-            }
-        }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
-        });
-        $('#birthday').val("")
+        // $('#birthday').daterangepicker({
+        //     singleDatePicker: true,
+        //     calender_style: "picker_4",
+        //     locale: {
+        //         format: 'DD/MM/YYYY'
+        //     }
+        // }, function (start, end, label) {
+        //     console.log(start.toISOString(), end.toISOString(), label);
+        // });
+        // $('#birthday').val("")
         {% if success %}
         $('#success').modal('show');
         window.location.hash='tologin';
