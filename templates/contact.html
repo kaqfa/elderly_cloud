@@ -1,177 +1,180 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% block 'title' %}Elder Caring | Kontak Penting{% endblock 'title' %}
-{% block 'extra_header' %}
+{% extends 'base.html' %} {% load staticfiles %} {% block 'title' %}Elder Caring | Kontak Penting{% endblock 'title' %} {% block 'extra_header' %}
 <link href="{% static 'css/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/datatables/css/responsive.dataTables.min.css' %}" rel="stylesheet">
 <style>
-table.dataTable tbody tr.selected {
+  table.dataTable tbody tr.selected {
     background: rgba(38, 185, 154, 0.16);
-}
-table.dataTable tbody tr:hover td {
+  }
+
+  table.dataTable tbody tr:hover td {
     background: rgba(38, 185, 154, 0.07);
     border-top: 1px solid rgba(38, 185, 154, 0.11);
     border-bottom: 1px solid rgba(38, 185, 154, 0.11);
-}
+  }
 </style>
-{% endblock 'extra_header' %}
-{% block 'maincontent' %}
-    <div class="right_col" role="main">
-        <br/>
+{% endblock 'extra_header' %} {% block 'maincontent' %}
+<div class="right_col" role="main">
+  <br/>
 
-        <div class="">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2>Kontak Penting</h2>
-                            <div class="clearfix"></div>
-                        </div>
-                        <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addform">
-                            <span class="fa fa-plus"></span> Tambah Kontak
-                        </button>
-                        
-                        <form method="post" action="" class="modal fade" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
-                        {% csrf_token %}
-                            <div class="modal-dialog modal-md">
-                                <div class="modal-content">
+  <div class="">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Kontak Penting</h2>
+            <div class="clearfix"></div>
+          </div>
+          <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addform">
+            <span class="fa fa-plus"></span> Tambah Kontak
+          </button>
 
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
-                                        </button>
-                                        <h4 class="modal-title" id="myModalLabel2">Tambah Kontak</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div>
-                                            <input name="name" type="text" class="form-control" placeholder="Nama" required="" />
-                                        </div>
-                                        <div>
-                                            <textarea name="address" class="form-control" placeholder="Alamat" required="" ></textarea>
-                                        </div>
-                                        <div>
-                                            <input name="phone" type="text" class="form-control" placeholder="Nomor Telepon" required="" />
-                                        </div>
-                                        <div>
-                                            <input name="email" type="email" class="form-control" placeholder="Email" required="" />
-                                        </div>
-                                        <div>
-                                            Dibagikan
-                                            <select name="status" class="form-control">
-                                                <option value="1">Aktif</option>
-                                                <option value="2">Non Aktif</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
-                                        <input type="submit" name="add" class="btn btn-primary" value="Tambahkan"/>
-                                    </div>
+          <form method="post" action="" class="modal fade form-horizontal form-label-left" id="addform" tabindex="-1" role="dialog" aria-hidden="true">
+            {% csrf_token %}
+            <div class="modal-dialog modal-md">
+              <div class="modal-content">
 
-                                </div>
-                            </div>
-                        </form>
-                         
-                        {% if error %}
-                            <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                <ul>
-                                {% for name, errors in error.items %}
-                                    {% for e in errors %}
-                                    <li>{{ name }}: {{ e }}</li>
-                                    {% endfor %}
-                                {% endfor %}
-                                </ul>
-                            </div>
-                        {% elif success %}
-                            <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                {{ success }}
-                            </div>
-                        {% elif messages %}
-                            {% for message in messages %}
-                            <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade in text-left" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                                </button>
-                                {{ message }}
-                            </div>
-                            {% endfor %}
-                        {% endif %}
-                        <div class="x_content">
-                            <table class="table table-striped" id="notif-table">
-                                <thead>
-                                    <tr>
-                                        <th width="5px"></th>
-                                        <th>Nama</th>
-                                        <th>Ditambahkan Oleh</th>
-                                        <th class="desktop col-md-3">Alamat</th>
-                                        <th class="desktop tablet-l tablet-p">Telepon</th>
-                                        <th class="desktop tablet-l tablet-p">Email</th>
-                                        <th class="desktop">Status</th>
-                                        <th class="desktop">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for c in contact %}
-                                    <tr>
-                                        <td></td>
-                                        <td>{{ c.name }}</td>
-                                        <td>{{ c.added_by.user.first_name }} {{ c.added_by.user.last_name }}</td>
-                                        <td>{{ c.address }}</td>
-                                        <td>{{ c.phone }}</td>
-                                        <td>{{ c.email }}</td>
-                                        <td>{{ c.get_status_display }}</td>
-                                        <td>
-                                            <a href="{% url 'dt_contact' c.id %}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
-                                            </a>
-                                            {% if c.added_by == user.member %}
-                                            <a href="{% url 'edit_contact' c.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="{% url 'del_contact' c.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
-                                            </a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel2">Tambah Kontak</h4>
                 </div>
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Nama</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input name="name" class="form-control" placeholder="Nama" required="" type="text">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Alamat</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <textarea name="address" class="form-control" rows="3" placeholder="Alamat" required=""></textarea>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Nomor Telepon</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input name="phone" class="form-control" placeholder="08123456789" required="" type="text">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Email</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                      <input name="email" class="form-control" placeholder="email@example.com" required="" type="email">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">Dibagikan</label>
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                          <select name="status" class="form-control">
+                            <option value="1">Aktif</option>
+                            <option value="2">Non Aktif</option>
+                          </select>
+                      </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary" data-dismiss="modal">Batal</button>
+                  <input type="submit" name="add" class="btn btn-success" value="Tambahkan" />
+                </div>
+              </div>
             </div>
+          </form>
+
+          {% if error %}
+          <div class="alert alert-danger alert-dismissible fade in text-left" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            <ul>
+              {% for name, errors in error.items %} {% for e in errors %}
+              <li>{{ name }}: {{ e }}</li>
+              {% endfor %} {% endfor %}
+            </ul>
+          </div>
+          {% elif success %}
+          <div class="alert alert-success alert-dismissible fade in text-left" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            {{ success }}
+          </div>
+          {% elif messages %} {% for message in messages %}
+          <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade in text-left" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+            </button>
+            {{ message }}
+          </div>
+          {% endfor %} {% endif %}
+          <div class="x_content">
+            <table class="table table-striped" id="notif-table">
+              <thead>
+                <tr>
+                  <th width="5px"></th>
+                  <th>Nama</th>
+                  <th>Ditambahkan Oleh</th>
+                  <th class="desktop col-md-3">Alamat</th>
+                  <th class="desktop tablet-l tablet-p">Telepon</th>
+                  <th class="desktop tablet-l tablet-p">Email</th>
+                  <th class="desktop">Status</th>
+                  <th class="desktop">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for c in contact %}
+                <tr>
+                  <td></td>
+                  <td>{{ c.name }}</td>
+                  <td>{{ c.added_by.user.first_name }} {{ c.added_by.user.last_name }}</td>
+                  <td>{{ c.address }}</td>
+                  <td>{{ c.phone }}</td>
+                  <td>{{ c.email }}</td>
+                  <td>{{ c.get_status_display }}</td>
+                  <td>
+                    <a href="{% url 'dt_contact' c.id %}" class="btn btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Lihat"><i class="fa fa-toggle-right"></i>
+                                            </a> {% if c.added_by == user.member %}
+                    <a href="{% url 'edit_contact' c.id %}" class="btn btn-warning" data-toggle="tooltip" data-placement="top" data-original-title="Edit"><i class="fa fa-edit"></i>
+                                            </a>
+                    <a href="{% url 'del_contact' c.id %}" class="btn btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Hapus"><i class="fa fa-trash"></i>
+                                            </a> {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
+      </div>
     </div>
-{% endblock 'maincontent' %}
-{% block 'extra_footer' %}
+  </div>
+</div>
+{% endblock 'maincontent' %} {% block 'extra_footer' %}
 <script src="{% static 'js/datatables/js/jquery.dataTables.min.js' %}"></script>
 <script src="{% static 'js/datatables/js/dataTables.responsive.min.js' %}"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        var oTable = $('#notif-table').dataTable({
-            "oLanguage": {
-                "sSearch": "Cari:",
-                "sLengthMenu": "Tampilkan _MENU_ data",
-                "sZeroRecords": "Elder tidak mempunyai catatan kondisi"
-            },
-            "responsive":{
-                details: {
-                    type: 'column'
-                }
-            },
-            "autoWidth":false,
-            "aaSorting": [],
-            columnDefs: [ {
-                className: 'control',
-                orderable: false,
-                targets:   0
-            }, {
-                orderable: false,
-                targets: 7
-            }],
-            'iDisplayLength': 12,
-            "sPaginationType": "full_numbers",
-        });
+  $(document).ready(function() {
+    var oTable = $('#notif-table').dataTable({
+      "oLanguage": {
+        "sSearch": "Cari:",
+        "sLengthMenu": "Tampilkan _MENU_ data",
+        "sZeroRecords": "Elder tidak mempunyai catatan kondisi"
+      },
+      "responsive": {
+        details: {
+          type: 'column'
+        }
+      },
+      "autoWidth": false,
+      "aaSorting": [],
+      columnDefs: [{
+        className: 'control',
+        orderable: false,
+        targets: 0
+      }, {
+        orderable: false,
+        targets: 7
+      }],
+      'iDisplayLength': 12,
+      "sPaginationType": "full_numbers",
     });
+  });
 </script>
 {% endblock 'extra_footer' %}

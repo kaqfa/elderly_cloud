@@ -2,13 +2,14 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+# from django.http import HttpResponse
 
 from rest_framework.routers import DefaultRouter
-from django.views.generic import TemplateView
+# from django.views.generic import TemplateView
 
 from base.views import Login
 from notification.views import Hello
-from base.views import Index, status, user_logout
+# from base.views import Index, status, user_logout
 from notification.views import Notifs
 from contact.views import contacts
 from elder_profile.views import Diseases, MedicalTreatments
@@ -35,4 +36,7 @@ urlpatterns = [
 
     url(r'^webapp/', include('base.urls')),
     url(r'^$', 'base.views.frontend', name='frontend'),
+    # in case of development uncomment below lines and http import
+    # url(r'^robots.txt$', lambda r: HttpResponse(
+    #     "User-agent: *\nDisallow: /", mimetype="text/plain")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
