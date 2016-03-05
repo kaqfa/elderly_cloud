@@ -1,4 +1,3 @@
-ederroot123
 [preparation]
 useradd -m -s /bin/bash elder
 usermod -a -G sudo elder

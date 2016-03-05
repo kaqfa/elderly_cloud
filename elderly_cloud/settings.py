@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.contrib.messages import constants as message_constants
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,7 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
-    'wpadmin',
+    # 'wpadmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -39,19 +40,19 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base',
-    'elder_profile',
-    'feedback',
+    # 'elder_profile',
+    # 'feedback',
     'member',
-    'notification',
-    'contact',
-    'partner',
-    'info',
+    # 'notification',
+    # 'contact',
+    # 'partner',
+    # 'info',
     'tracker',
     'rest_framework',
     'rest_framework.authtoken',
-    'django_filters',
-    'django_summernote',
-    'location_field',
+    # 'django_filters',
+    # 'django_summernote',
+    # 'location_field',
 )
 
 REST_FRAMEWORK = {
@@ -159,12 +160,11 @@ WPADMIN = {
     }
 }
 
-from django.contrib.messages import constants as message_constants
 MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.INFO: 'info',
                 message_constants.SUCCESS: 'success',
                 message_constants.WARNING: 'warning',
-                message_constants.ERROR: 'danger',}
+                message_constants.ERROR: 'danger'}
 
 try:
     from local_settings import *

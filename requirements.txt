@@ -9,5 +9,5 @@ django-summernote==0.6.16
 django-wpadmin==1.7.4
 djangorestframework==3.2.2
 futures==3.0.3
-Pillow==2.9.0
+Pillow
 six==1.10.0

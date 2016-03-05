@@ -7,7 +7,7 @@ from member.models import Elder, CareGiver
 from django.views.generic import View
 from datetime import datetime, date, time
 from datetime import timedelta
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from base.views import cek_session
@@ -52,7 +52,7 @@ class KondisiHarian(View):
         return HttpResponseRedirect(reverse('index'))
     def post(self, request):
         return self.get(request, id)
-        
+
 class DetakJantung(View):
     @classmethod
     def as_view(cls, **initkwargs):
@@ -73,7 +73,7 @@ class DetakJantung(View):
         return HttpResponseRedirect(reverse('index'))
     def post(self, request):
         return self.get(request, id)
-        
+
 class GulaDarah(View):
     @classmethod
     def as_view(cls, **initkwargs):

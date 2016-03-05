@@ -5,7 +5,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
-from member.forms import ElderForm, ElderUserForm, JoinForm, CGUserForm, CareGiverForm, PartnerForm, PartnerUserForm
+from member.forms import ElderForm, ElderUserForm, JoinForm, CGUserForm
+from member.forms import CareGiverForm, PartnerForm, PartnerUserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -13,7 +14,8 @@ from django.contrib import messages
 from member.models import Elder, CareGiver, Member, CareGiving, Partner
 from django.contrib.auth.models import Group
 from django.utils.crypto import get_random_string
-from member.serializers import ElderSerializer, SignupSerializer, CareGiverSerializer
+from member.serializers import ElderSerializer
+from member.serializers import SignupSerializer, CareGiverSerializer
 from base.views import cek_session, is_caregiver
 
 
@@ -40,8 +42,9 @@ class Signup(viewsets.GenericViewSet):
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
+
 class Parents(View):
-    
+
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(Parents, cls).as_view(**initkwargs)
@@ -49,71 +52,103 @@ class Parents(View):
 
     def get(self, request):
         cek_session(request)
-        elder=None
-        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-            elder=Elder.objects.get(pk=request.session.get('active_elder'))
-        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-        return render(request, 'parents.html', {'elders':elders, 'active_elder':elder})
-    
+        elder = None
+        if (request.session.get('active_elder') is not None and
+                request.session['active_elder'] != 0):
+            elder = Elder.objects.get(pk=request.session.get('active_elder'))
+        elders = Elder.get_cared_elder(
+            user=CareGiver.objects.get(user=request.user))
+        return render(request, 'parents.html',
+                      {'elders': elders, 'active_elder': elder})
+
     def post(self, request):
         cek_session(request)
-        elder=None
+        elder = None
         if('join' in request.POST):
             form = JoinForm(request.POST, request=request)
             if form.is_valid():
-                kode=form.cleaned_data.get('kode')
-                elder=Elder.objects.get(code=kode)
+                kode = form.cleaned_data.get('kode')
+                elder = Elder.objects.get(code=kode)
                 caregiver = CareGiver.objects.get(user=request.user)
-                elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+                elders = Elder.get_cared_elder(
+                    user=CareGiver.objects.get(user=request.user))
                 CareGiving.objects.create(caregiver=caregiver, elder=elder)
-                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
-                return render(request, 'parents.html', {'elders':elders, 'success': "Orang tua berhasil ditambahkan", 'active_elder':elder})
+                if (request.session.get('active_elder') is not None and
+                        request.session['active_elder'] != 0):
+                    elder = Elder.objects.get(
+                        pk=request.session.get('active_elder'))
+                return render(
+                        request,
+                        'parents.html',
+                        {'elders': elders,
+                            'success': "Orang tua berhasil ditambahkan",
+                            'active_elder': elder})
             else:
-                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
-                elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                return render(request, 'parents.html', {'error_join':form.errors, 'active_elder':elder, 'elders': elders})
+                if (request.session.get('active_elder') is not None and
+                        request.session['active_elder'] != 0):
+                    elder = Elder.objects.get(
+                        pk=request.session.get('active_elder'))
+                elders = Elder.get_cared_elder(
+                    user=CareGiver.objects.get(user=request.user))
+                return render(
+                        request, 'parents.html',
+                        {'error_join': form.errors, 'active_elder': elder,
+                            'elders': elders})
         elif('add' in request.POST):
             userform = ElderUserForm(request.POST)
             elderform = ElderForm(request.POST, request.FILES)
+            alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
             if userform.is_valid() and elderform.is_valid():
-                code = get_random_string(length=8, allowed_chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+                code = get_random_string(length=8, allowed_chars=alphabet)
                 while Elder.objects.filter(code=code):
                     code = get_random_string(length=8)
                 user = userform.save(commit=False)
-                user.username=code
+                user.username = code
                 user.set_password('asdfg4321')
                 user.save()
                 elder = elderform.save(commit=False)
-                elder.user=user
-                elder.code=code
+                elder.user = user
+                elder.code = code
                 elder.save()
                 caregiver = CareGiver.objects.get(user=request.user)
                 CareGiving.objects.create(caregiver=caregiver, elder=elder)
                 g = Group.objects.get(name='Elder')
                 g.user_set.add(user)
-                elders=Elder.get_cared_elder(user=caregiver)
-                if request.session['active_elder']==0:
+                elders = Elder.get_cared_elder(user=caregiver)
+                if request.session['active_elder'] == 0:
                     if elders:
-                        request.session['active_elder']=elders[0].id
+                        request.session['active_elder'] = elders[0].id
                     else:
-                        request.session['active_elder']=0
-                elder=Elder.objects.get(pk=request.session.get('active_elder'))
-                return render(request, 'parents.html', {'elders':elders, 'success': "Orang tua berhasil ditambahkan", 'active_elder':elder})
+                        request.session['active_elder'] = 0
+                elder = Elder.objects.get(
+                    pk=request.session.get('active_elder'))
+                return render(
+                        request,
+                        'parents.html',
+                        {'elders': elders,
+                            'success': "Orang tua berhasil ditambahkan",
+                            'active_elder': elder})
             else:
                 userform.errors.update(elderform.errors)
-                elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-                if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                    elder=Elder.objects.get(pk=request.session.get('active_elder'))
+                elders = Elder.get_cared_elder(
+                    user=CareGiver.objects.get(user=request.user))
+                if (request.session.get('active_elder') is not None and
+                        request.session['active_elder'] != 0):
+                    elder = Elder.objects.get(
+                        pk=request.session.get('active_elder'))
                 else:
-                    elder=None
-                return render(request, 'parents.html', {'elders':elders, 'error':userform.errors, 'active_elder':elder})
+                    elder = None
+                return render(
+                        request,
+                        'parents.html',
+                        {'elders': elders, 'error': userform.errors,
+                            'active_elder': elder})
         else:
             return self.get(request)
-            
+
+
 class UpdateElder(View):
-    
+
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(UpdateElder, cls).as_view(**initkwargs)
@@ -122,40 +157,52 @@ class UpdateElder(View):
     def get(self, request, id):
         if is_caregiver(request.user):
             cek_session(request)
-            active=None
-            if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                active=Elder.objects.get(pk=request.session.get('active_elder'))
-            elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-            elder=elders.filter(id=id)
+            active = None
+            if (request.session.get('active_elder') is not None and
+                    request.session['active_elder'] != 0):
+                active = Elder.objects.get(
+                    pk=request.session.get('active_elder'))
+            elders = Elder.get_cared_elder(
+                user=CareGiver.objects.get(user=request.user))
+            elder = elders.filter(id=id)
             if elder:
-                return render(request, 'parents_edit.html', {'elders':elders, 'active_elder':active, 'edit':elder[0]})
+                return render(
+                        request,
+                        'parents_edit.html',
+                        {'elders': elders, 'active_elder': active,
+                            'edit': elder[0]})
             return HttpResponseRedirect(reverse('parents'))
         else:
             return HttpResponseRedirect(reverse('index'))
-    
+
     def post(self, request, id):
         if is_caregiver(request.user):
             cek_session(request)
-            active=None
-            if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                active=Elder.objects.get(pk=request.session.get('active_elder'))
-            elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-            elder=elders.filter(id=id)
+            active = None
+            if request.session.get('active_elder') is not None and request.session['active_elder'] != 0:
+                active = Elder.objects.get(
+                    pk=request.session.get('active_elder'))
+            elders = Elder.get_cared_elder(
+                user=CareGiver.objects.get(user=request.user))
+            elder = elders.filter(id=id)
             if elder:
                 userform = ElderUserForm(request.POST, instance=elder[0].user)
-                elderform = ElderForm(request.POST, request.FILES, instance=elder[0])
+                elderform = ElderForm(
+                    request.POST, request.FILES, instance=elder[0])
                 if userform.is_valid() and elderform.is_valid():
                     user = userform.save()
                     elder = elderform.save()
-                    return render(request, 'parents_edit.html', {'elders':elders, 'success': "Data tersimpan", 'active_elder':active, 'edit':elder})
+                    return render(request, 'parents_edit.html', {'elders': elders, 'success': "Data tersimpan", 'active_elder': active, 'edit': elder})
                 else:
                     userform.errors.update(elderform.errors)
-                    return render(request, 'parents_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active, 'edit':elder[0]})
+                    return render(request, 'parents_edit.html', {'elders': elders, 'error': userform.errors, 'active_elder': active, 'edit': elder[0]})
             return HttpResponseRedirect(reverse('parents'))
         else:
             return HttpResponseRedirect(reverse('index'))
-            
+
+
 class DeleteElder(View):
+
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(DeleteElder, cls).as_view(**initkwargs)
@@ -163,44 +210,50 @@ class DeleteElder(View):
 
     def get(self, request, id):
         cek_session(request)
-        active=None
-        if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-            active=Elder.objects.get(pk=request.session.get('active_elder'))
-        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-        elder=elders.filter(id=id)
+        active = None
+        if request.session.get('active_elder') is not None and request.session['active_elder'] != 0:
+            active = Elder.objects.get(pk=request.session.get('active_elder'))
+        elders = Elder.get_cared_elder(
+            user=CareGiver.objects.get(user=request.user))
+        elder = elders.filter(id=id)
         if elder:
-            return render(request, 'parents_delete.html', {'elders':elders, 'active_elder':active, 'delete':elder[0]})
+            return render(request, 'parents_delete.html', {'elders': elders, 'active_elder': active, 'delete': elder[0]})
         return HttpResponseRedirect(reverse('parents'))
-    
+
     def post(self, request, id):
         cek_session(request)
-        elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-        elder=elders.filter(id=id)
+        elders = Elder.get_cared_elder(
+            user=CareGiver.objects.get(user=request.user))
+        elder = elders.filter(id=id)
         if elder:
-            elder=elder[0]
-            name=elder.user.first_name+" "+elder.user.last_name
-            if elder.cared_by.count()==1:
+            elder = elder[0]
+            name = elder.user.first_name + " " + elder.user.last_name
+            if elder.cared_by.count() == 1:
                 elder.delete()
             else:
-                CareGiving.objects.filter(elder=elder, caregiver=CareGiver.objects.get(user=request.user)).delete()
-            if int(id)==request.session.get('active_elder'):
-                elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+                CareGiving.objects.filter(
+                    elder=elder, caregiver=CareGiver.objects.get(user=request.user)).delete()
+            if int(id) == request.session.get('active_elder'):
+                elders = Elder.get_cared_elder(
+                    user=CareGiver.objects.get(user=request.user))
                 if elders:
-                    request.session['active_elder']=elders[0].id
+                    request.session['active_elder'] = elders[0].id
                 else:
-                    request.session['active_elder']=0
-            messages.success(request, name+' berhasil dihapus dari daftar anda.')
+                    request.session['active_elder'] = 0
+            messages.success(
+                request, name + ' berhasil dihapus dari daftar anda.')
         return HttpResponseRedirect(reverse('parents'))
-                
-        
+
+
 @login_required(redirect_field_name=None)
 def set_active_elder(request, id):
     if Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user)).filter(id=id):
-        request.session['active_elder']=int(id)
+        request.session['active_elder'] = int(id)
     return HttpResponseRedirect(request.GET.get('next', '/'))
-    
+
+
 class UpdateProfile(View):
-    
+
     @classmethod
     def as_view(cls, **initkwargs):
         view = super(UpdateProfile, cls).as_view(**initkwargs)
@@ -209,37 +262,43 @@ class UpdateProfile(View):
     def get(self, request):
         if is_caregiver(request.user):
             cek_session(request)
-            active=None
-            if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                active=Elder.objects.get(pk=request.session.get('active_elder'))
-            elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
-            return render(request, 'profile_edit.html', {'elders':elders, 'active_elder':active})
+            active = None
+            if request.session.get('active_elder') is not None and request.session['active_elder'] != 0:
+                active = Elder.objects.get(
+                    pk=request.session.get('active_elder'))
+            elders = Elder.get_cared_elder(
+                user=CareGiver.objects.get(user=request.user))
+            return render(request, 'profile_edit.html', {'elders': elders, 'active_elder': active})
         else:
             return render(request, 'partnerprofile_edit.html')
-    
+
     def post(self, request):
         if is_caregiver(request.user):
             cek_session(request)
-            active=None
-            if request.session.get('active_elder') is not None and request.session['active_elder']!=0:
-                active=Elder.objects.get(pk=request.session.get('active_elder'))
-            elders=Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user))
+            active = None
+            if request.session.get('active_elder') is not None and request.session['active_elder'] != 0:
+                active = Elder.objects.get(
+                    pk=request.session.get('active_elder'))
+            elders = Elder.get_cared_elder(
+                user=CareGiver.objects.get(user=request.user))
             userform = CGUserForm(request.POST, instance=request.user)
-            cgform = CareGiverForm(request.POST, request.FILES, instance=CareGiver.objects.get(user=request.user))
+            cgform = CareGiverForm(
+                request.POST, request.FILES, instance=CareGiver.objects.get(user=request.user))
             if userform.is_valid() and cgform.is_valid():
                 user = userform.save()
                 elder = cgform.save()
-                return render(request, 'profile_edit.html', {'elders':elders, 'success': "Data tersimpan", 'active_elder':active})
+                return render(request, 'profile_edit.html', {'elders': elders, 'success': "Data tersimpan", 'active_elder': active})
             else:
                 userform.errors.update(cgform.errors)
-                return render(request, 'profile_edit.html', {'elders':elders, 'error':userform.errors, 'active_elder':active})
+                return render(request, 'profile_edit.html', {'elders': elders, 'error': userform.errors, 'active_elder': active})
         else:
             userform = PartnerUserForm(request.POST, instance=request.user)
-            partnerform = PartnerForm(request.POST, request.FILES, instance=Partner.objects.get(user=request.user))
+            partnerform = PartnerForm(
+                request.POST, request.FILES, instance=Partner.objects.get(user=request.user))
             if userform.is_valid() and partnerform.is_valid():
                 user = userform.save()
                 elder = partnerform.save()
                 return render(request, 'partnerprofile_edit.html', {'success': "Data tersimpan"})
             else:
                 userform.errors.update(partnerform.errors)
-                return render(request, 'partnerprofile_edit.html', {'error':userform.errors})
+                return render(request, 'partnerprofile_edit.html', {'error': userform.errors})
