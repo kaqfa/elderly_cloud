@@ -50,7 +50,7 @@ class MemberService(APITestCase):
         # token.save()
 
     def _require_login(self):
-        self.client.login(username='kaqfa', password=123)
+        self.client.login(username='kaqfa', password='123')
 
     def test_check_url_exist(self):
         resp = self.client.post('/api/members', {}, format="json")
@@ -82,7 +82,7 @@ class MemberService(APITestCase):
 
     def test_elder_input(self):
         data = {"fullname": "Muhsiatun", "phone": "012345678910",
-                "cared_by": "1", "type": "e"}
+                "cared_by": ["1"], "type": "e"}
 
         # without login should be failed
         resp = self.client.post('/api/members/', data, format="json")
@@ -91,7 +91,14 @@ class MemberService(APITestCase):
         # after login it's okay
         self._require_login()
         resp = self.client.post('/api/members/', data, format="json")
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED,
+                         resp.content)
 
     def test_elder_login(self):
-        pass
+        resp = self.client.post('/api/login/elder/', {}, format="json")
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST,
+                         resp.content)
+
+        resp = self.client.post('/api/login/elder/',
+                                {'code': "ABC12"}, format="json")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK, resp.content)

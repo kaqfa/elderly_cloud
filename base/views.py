@@ -61,7 +61,7 @@ class Login(viewsets.GenericViewSet):
     @list_route(methods=['post'])
     def elder(self, request):
         if request.data.get('code') is None or request.data.get('code') == '':
-            return Response({'code': ["This field is required."]})
+            return Response({'code': ["This field is required."]}, status=400)
         else:
             code = request.data.get('code')
             elder = Elder.objects.filter(code=code)

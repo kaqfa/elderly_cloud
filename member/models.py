@@ -8,9 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 
 def get_unread_notif(self):
-    return self.notif_receiver.filter(status='s').order_by(
-                                                            '-invoked_on',
-                                                            '-modified')
+    return self.notif_receiver.filter(status='s').order_by('-invoked_on',
+                                                           '-modified')
 
 User.add_to_class('get_unread_notif', get_unread_notif)
 

@@ -46,9 +46,11 @@ class SignupSerializer(serializers.Serializer):
                 queryset=CareGiver.objects.all(), many=True, required=False)
 
     def validate(self, data):
-        if (data['type'] == 'e' and
-            (data.get('cared_by') is None or
-                len(data['cared_by']) == 0)):
+        user = self.context['request'].user
+        if data['type'] == 'e' and not user.is_authenticated():
+            raise serializers.ValidationError("Harus Login Dulu")
+        elif (data['type'] == 'e' and
+              (data.get('cared_by') is None or len(data['cared_by']) == 0)):
             raise serializers.ValidationError(
                     "Elder harus mempunyai CareGiver")
         elif data['type'] == 'c':
