@@ -41,11 +41,19 @@ class MemberService(APITestCase):
                 username="kaqfa", password="123", email="fahri@dinus.ac.id",
                 first_name="fahri", last_name="firdausillah")
         cg = CareGiver.objects.create(user=self.cguser, phone="0123456789")
+
         self.elduser = User.objects.create_user(
                 username="ABC12", password="pwd", first_name="Ahmad",
                 last_name="Tafrikhan")
-        eld = Elder.objects.create(user=self.elduser)
-        CareGiving.objects.create(elder=eld, caregiver=cg)
+        eldUser2 = User.objects.create_user(
+            username="DEF12", password="pwd", first_name="Muhsiatun",
+            last_name="Muhsiatun")
+
+        eld1 = Elder.objects.create(user=self.elduser)
+        eld2 = Elder.objects.create(user=eldUser2)
+
+        CareGiving.objects.create(elder=eld1, caregiver=cg)
+        CareGiving.objects.create(elder=eld2, caregiver=cg)
         # token = Token.objects.create(user=self.cguser)
         # token.save()
 
@@ -102,3 +110,15 @@ class MemberService(APITestCase):
         resp = self.client.post('/api/login/elder/',
                                 {'code': "ABC12"}, format="json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK, resp.content)
+
+    def test_get_all_elders(self):
+        resp = self.client.get('/api/elders/', format="json")
+        self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self._require_login()
+        resp = self.client.get('/api/elders/', format="json")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK,
+                         resp.content)
+
+    def test_get_all_cgs(self):
+        pass

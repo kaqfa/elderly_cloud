@@ -46,12 +46,12 @@ INSTALLED_APPS = (
     # 'notification',
     # 'contact',
     # 'partner',
-    # 'info',
+    'info',
     'tracker',
     'rest_framework',
     'rest_framework.authtoken',
     # 'django_filters',
-    # 'django_summernote',
+    'django_summernote',
     # 'location_field',
 )
 

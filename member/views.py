@@ -10,7 +10,6 @@ from member.forms import CareGiverForm, PartnerForm, PartnerUserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-
 from member.models import Elder, CareGiver, Member, CareGiving, Partner
 from django.contrib.auth.models import Group
 from django.utils.crypto import get_random_string
@@ -18,10 +17,21 @@ from member.serializers import ElderSerializer
 from member.serializers import SignupSerializer, CareGiverSerializer
 from base.views import cek_session, is_caregiver
 
+from rest_framework.permissions import IsAuthenticated
+
 
 class Elders(viewsets.ReadOnlyModelViewSet):
-    queryset = Elder.objects.all()
+    # queryset = Elder.objects.all()
     serializer_class = ElderSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        caregiver = self.request.user.member
+        caregiving = caregiver.caregiving_set.all()
+        elders = []
+        for data in caregiving:
+            elders.append(data.elder)
+        return elders
 
 
 class Signup(viewsets.GenericViewSet):

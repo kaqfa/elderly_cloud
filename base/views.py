@@ -5,9 +5,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 
-"""
-Authentication Start
-"""
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer

@@ -32,7 +32,8 @@ class PointOfInterest(models.Model):
     name = models.CharField('Nama Lokasi', max_length=45)
     category = models.CharField('Kategori', max_length=45)
     address = models.CharField('Alamat', max_length=45)
-    location = PlainLocationField(based_fields=[address], zoom=7, default='-6.889836,109.674592')
+    location = PlainLocationField(based_fields=[address],
+                                  zoom=7, default='-6.889836,109.674592')
 
     class Meta:
         verbose_name = 'Lokasi Menarik'
