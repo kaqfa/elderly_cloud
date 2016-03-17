@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from polymorphic import PolymorphicModel
+# from polymorphic import PolymorphicModel
 from model_utils.models import TimeStampedModel, StatusModel
 from model_utils import Choices
 from location_field.models.plain import PlainLocationField
@@ -13,19 +13,21 @@ def get_unread_notif(self):
 
 User.add_to_class('get_unread_notif', get_unread_notif)
 
+GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
 
-class Member(PolymorphicModel, TimeStampedModel):
-    GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
+
+class CareGiver(TimeStampedModel):
     user = models.OneToOneField(User, verbose_name='Untuk Pengguna')
     address = models.TextField(null=True, blank=True, verbose_name='Alamat')
     birthday = models.DateField('Tanggal Lahir', null=True, blank=True)
-    gender = models.CharField(
-                                'Kelamin',
-                                max_length=1,
-                                choices=GENDER_CHOICES,
-                                default='l')
-    phone = models.CharField('Telepon', max_length=20)
+    gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES,
+                              default='l')
+    phone = models.CharField('Telepon', max_length=20, default="")
     photo = models.ImageField('Foto Profil', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'Perawat'
+        verbose_name_plural = 'Data Perawat'
 
     def __unicode__(self):
         if '' == self.user.first_name or self.user.first_name is None:
@@ -35,35 +37,19 @@ class Member(PolymorphicModel, TimeStampedModel):
     def __str__(self):  # __unicode__ on Python 2
         return self.__unicode__()
 
-    class Meta:
-        verbose_name = "Anggota"
-        verbose_name_plural = "Data Anggota"
+    @staticmethod
+    def get_all_caregiver(user):
+        return CareGiver.objects.all()
 
 
-class CareGiver(Member):
-    class Meta:
-        verbose_name = 'Perawat'
-        verbose_name_plural = 'Data Perawat'
-
-
-class Partner(Member):
-    TYPE_CHOICES = (('rs', 'Rumah Sakit'), ('pj', 'Panti Jompo'),
-                    ('km', 'Komunitas'))
-
-    location = PlainLocationField(zoom=7, default='-6.889836,109.674592')
-    description = models.TextField('Deskripsi', null=True, blank=True)
-    type = models.CharField(
-            'Golongan Institusi', max_length=2, choices=TYPE_CHOICES,
-            default='pj')
-
-    def get_availability(self):
-        try:
-            return self.availability.num
-        except ObjectDoesNotExist:
-            return 0
-
-
-class Elder(Member):
+class Elder(TimeStampedModel):
+    user = models.OneToOneField(User, verbose_name='Untuk Pengguna')
+    address = models.TextField(null=True, blank=True, verbose_name='Alamat')
+    birthday = models.DateField('Tanggal Lahir', null=True, blank=True)
+    gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES,
+                              default='l')
+    phone = models.CharField('Telepon', max_length=20, null=True, blank=True)
+    photo = models.ImageField('Foto Profil', null=True, blank=True)
     code = models.CharField(
             'Kode Orang Tua', max_length=8, blank=False, null=False)
     cared_by = models.ManyToManyField(
@@ -72,6 +58,14 @@ class Elder(Member):
     class Meta:
         verbose_name = 'Orang Tua'
         verbose_name_plural = 'Data Orang Tua'
+
+    def __unicode__(self):
+        if '' == self.user.first_name or self.user.first_name is None:
+            return self.user.username
+        return self.user.first_name+" "+self.user.last_name
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.__unicode__()
 
     @staticmethod
     def get_cared_elder(user):
@@ -92,6 +86,38 @@ class CareGiving(TimeStampedModel):
     class Meta:
         verbose_name = 'Perawatan'
         verbose_name_plural = 'Data Perawatan'
+
+
+class Partner(TimeStampedModel):
+    TYPE_CHOICES = (('rs', 'Rumah Sakit'), ('pj', 'Panti Jompo'),
+                    ('km', 'Komunitas'))
+
+    user = models.OneToOneField(User, verbose_name='Untuk Pengguna')
+    address = models.TextField(null=True, blank=True, verbose_name='Alamat')
+    birthday = models.DateField('Tanggal Lahir', null=True, blank=True)
+    gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES,
+                              default='l')
+    phone = models.CharField('Telepon', max_length=20, null=True, blank=True)
+    photo = models.ImageField('Foto Profil', null=True, blank=True)
+    location = PlainLocationField(zoom=7, default='-6.889836,109.674592')
+    description = models.TextField('Deskripsi', null=True, blank=True)
+    type = models.CharField(
+            'Golongan Institusi', max_length=2, choices=TYPE_CHOICES,
+            default='pj')
+
+    def __unicode__(self):
+        if '' == self.user.first_name or self.user.first_name is None:
+            return self.user.username
+        return self.user.first_name+" "+self.user.last_name
+
+    def __str__(self):  # __unicode__ on Python 2
+        return self.__unicode__()
+
+    def get_availability(self):
+        try:
+            return self.availability.num
+        except ObjectDoesNotExist:
+            return 0
 
 
 class AdminInvitation(TimeStampedModel, StatusModel):

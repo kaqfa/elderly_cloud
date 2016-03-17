@@ -50,7 +50,7 @@ class Login(viewsets.GenericViewSet):
         user = serializer.validated_data['user']
         if CareGiver.objects.filter(user=user):
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': "token.key"})
+            return Response({'token': token.key})
         else:
             return Response({'non_field_errors':
                              ["username dan password tidak tepat"]})

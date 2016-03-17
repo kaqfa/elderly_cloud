@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Elder, CareGiver, Partner
+from .models import Elder, CareGiver, Partner, CareGiving
 
 
 class CaregiverAdmin(admin.ModelAdmin):
@@ -11,6 +11,10 @@ class ElderAdmin(admin.ModelAdmin):
     list_display = ['user', 'code', 'address', 'birthday', 'phone']
 
 
+class CareGivingAdmin(admin.ModelAdmin):
+    list_display = ['caregiver', 'elder']
+
+
 class PartnerAdmin(admin.ModelAdmin):
     list_display = ['user', 'address', 'phone', 'type']
 
@@ -18,3 +22,4 @@ class PartnerAdmin(admin.ModelAdmin):
 admin.site.register(CareGiver, CaregiverAdmin)
 admin.site.register(Elder, ElderAdmin)
 admin.site.register(Partner, PartnerAdmin)
+admin.site.register(CareGiving, CareGivingAdmin)

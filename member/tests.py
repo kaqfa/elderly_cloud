@@ -36,29 +36,10 @@ class MemberTesting(TestCase):
 
 class MemberService(APITestCase):
 
-    def setUp(self):
-        self.cguser = User.objects.create_user(
-                username="kaqfa", password="123", email="fahri@dinus.ac.id",
-                first_name="fahri", last_name="firdausillah")
-        cg = CareGiver.objects.create(user=self.cguser, phone="0123456789")
-
-        self.elduser = User.objects.create_user(
-                username="ABC12", password="pwd", first_name="Ahmad",
-                last_name="Tafrikhan")
-        eldUser2 = User.objects.create_user(
-            username="DEF12", password="pwd", first_name="Muhsiatun",
-            last_name="Muhsiatun")
-
-        eld1 = Elder.objects.create(user=self.elduser)
-        eld2 = Elder.objects.create(user=eldUser2)
-
-        CareGiving.objects.create(elder=eld1, caregiver=cg)
-        CareGiving.objects.create(elder=eld2, caregiver=cg)
-        # token = Token.objects.create(user=self.cguser)
-        # token.save()
+    fixtures = ['auth.json', 'member.json']
 
     def _require_login(self):
-        self.client.login(username='kaqfa', password='123')
+        return self.client.login(username='kaqfa', password='123')
 
     def test_check_url_exist(self):
         resp = self.client.post('/api/members', {}, format="json")
@@ -68,14 +49,15 @@ class MemberService(APITestCase):
         resp = self.client.post('/api/members/', {}, format="json")
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
-        data = {"username": "ingsun", "password": "firdaus123",
-                "email": "ingsun@gmail.com",
+        data = {"username": "ingsun2", "password": "firdaus123",
+                "email": "ingsun2@gmail.com",
                 "fullname": "Fahri Firdausillah",
                 "phone": "08989987517", "type": "c"}
         resp = self.client.post('/api/members/', data, format="json")
         # self.assertEqual(resp.content, data)
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(CareGiver.objects.count(), 2)
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED,
+                         resp.content)
+        self.assertEqual(CareGiver.objects.count(), 4)
 
     def test_empty_login(self):
         resp = self.client.post('/api/login/', {}, format="json")
@@ -89,8 +71,9 @@ class MemberService(APITestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK, resp.content)
 
     def test_elder_input(self):
+        kaqfa = User.objects.get(username="kaqfa")
         data = {"fullname": "Muhsiatun", "phone": "012345678910",
-                "cared_by": ["1"], "type": "e"}
+                "cared_by": [kaqfa.caregiver.id], "type": "e"}
 
         # without login should be failed
         resp = self.client.post('/api/members/', data, format="json")
@@ -121,4 +104,10 @@ class MemberService(APITestCase):
                          resp.content)
 
     def test_get_all_cgs(self):
-        pass
+        resp = self.client.get('/api/caregivers/', format="json")
+        self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
+
+        self.client.login(username='ABC12', password='pwd')
+        resp = self.client.get('/api/caregivers/', format="json")
+        self.assertEqual(resp.status_code, status.HTTP_200_OK,
+                         resp.content)

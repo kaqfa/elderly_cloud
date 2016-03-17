@@ -1,3 +1,4 @@
+
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
@@ -8,12 +9,15 @@ from rest_framework.routers import DefaultRouter
 # from django.views.generic import TemplateView
 
 from base.views import Login
-from member.views import Elders, Signup
+from member.views import Elders, Signup, CareGivers
+from tracker.views import Trackers
 
 router = DefaultRouter()
-router.register(r'elders', Elders, 'Elders')
 router.register(r'members', Signup, 'Signup')
 router.register(r'login', Login, 'Login')
+router.register(r'elders', Elders, 'Elders')
+router.register(r'caregivers', CareGivers, 'Caregivers')
+router.register(r'trackers', Trackers, 'Trackers')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),

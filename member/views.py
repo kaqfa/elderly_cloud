@@ -10,7 +10,7 @@ from member.forms import CareGiverForm, PartnerForm, PartnerUserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from member.models import Elder, CareGiver, Member, CareGiving, Partner
+from member.models import Elder, CareGiver, CareGiving, Partner
 from django.contrib.auth.models import Group
 from django.utils.crypto import get_random_string
 from member.serializers import ElderSerializer
@@ -26,16 +26,21 @@ class Elders(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        caregiver = self.request.user.member
-        caregiving = caregiver.caregiving_set.all()
-        elders = []
-        for data in caregiving:
-            elders.append(data.elder)
-        return elders
+        caregiver = self.request.user.caregiver
+        return caregiver.elder_set.all()
+
+
+class CareGivers(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CareGiverSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        elders = self.request.user.elder
+        return elders.cared_by.all()
 
 
 class Signup(viewsets.GenericViewSet):
-    queryset = Member.objects.all()
+    queryset = CareGiver.objects.all()
     serializer_class = SignupSerializer
     permission_classes = (AllowAny,)
 
@@ -251,9 +256,9 @@ class DeleteElder(View):
             if elder.cared_by.count() == 1:
                 elder.delete()
             else:
+                cg = CareGiver.objects.get(user=request.user)
                 CareGiving.objects.filter(
-                    elder=elder,
-                    caregiver=CareGiver.objects.get(user=request.user)).delete()
+                    elder=elder, caregiver=cg).delete()
             if int(id) == request.session.get('active_elder'):
                 elders = Elder.get_cared_elder(
                     user=CareGiver.objects.get(user=request.user))
@@ -268,7 +273,9 @@ class DeleteElder(View):
 
 @login_required(redirect_field_name=None)
 def set_active_elder(request, id):
-    if Elder.get_cared_elder(user=CareGiver.objects.get(user=request.user)).filter(id=id):
+    cg = CareGiver.objects.get(user=request.user)
+    cared = Elder.get_cared_elder(user=cg)
+    if cared.filter(id=id):
         request.session['active_elder'] = int(id)
     return HttpResponseRedirect(request.GET.get('next', '/'))
 
@@ -310,8 +317,8 @@ class UpdateProfile(View):
                 request.POST, request.FILES,
                 instance=CareGiver.objects.get(user=request.user))
             if userform.is_valid() and cgform.is_valid():
-                user = userform.save()
-                elder = cgform.save()
+                userform.save()
+                cgform.save()
                 return render(request, 'profile_edit.html',
                               {'elders': elders, 'success': "Data tersimpan",
                                'active_elder': active})
@@ -326,8 +333,8 @@ class UpdateProfile(View):
                 request.POST, request.FILES,
                 instance=Partner.objects.get(user=request.user))
             if userform.is_valid() and partnerform.is_valid():
-                user = userform.save()
-                elder = partnerform.save()
+                userform.save()
+                partnerform.save()
                 return render(request, 'partnerprofile_edit.html',
                               {'success': "Data tersimpan"})
             else:
