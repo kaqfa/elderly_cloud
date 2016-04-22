@@ -11,3 +11,4 @@ djangorestframework==3.2.2
 futures==3.0.3
 Pillow
 six==1.10.0
+django-cors-headers
