@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
-from django.utils.crypto import get_random_string
+# from django.utils.crypto import get_random_string
 # from django.contrib.auth.models import Group
 
 from member.models import Elder, CareGiver, CareGiving
@@ -28,22 +28,26 @@ class CareGiverSerializer(serializers.ModelSerializer):
 
 
 class SignupSerializer(serializers.Serializer):
-    type = serializers.ChoiceField(
-            choices=(('e', 'Elder'), ('c', 'Caregiver')))
+    GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
+    unique_val = [UniqueValidator(queryset=User.objects.all())]
+
+    type = serializers.ChoiceField(choices=(('e', 'Elder'),
+                                            ('c', 'Caregiver')))
     address = serializers.CharField(required=False)
     birthday = serializers.DateField(required=False)
-    gender = serializers.ChoiceField(
-            choices=(('l', 'laki-laki'), ('p', 'perempuan')), default='1')
+
+    gender = serializers.ChoiceField(choices=GENDER_CHOICES,
+                                     default='1')
     phone = serializers.DecimalField(max_digits=12, decimal_places=0)
-    username = serializers.CharField(
-                validators=[UniqueValidator(queryset=User.objects.all())],
-                required=False)
+    username = serializers.CharField(validators=unique_val,
+                                     required=False)
     fullname = serializers.CharField()
     # last_name = serializers.CharField()
     password = serializers.CharField(required=False)
     email = serializers.EmailField(required=False)
     cared_by = serializers.PrimaryKeyRelatedField(
-                queryset=CareGiver.objects.all(), many=True, required=False)
+                        queryset=CareGiver.objects.all(),
+                        many=True, required=False)
 
     def validate(self, data):
         user = self.context['request'].user
@@ -51,8 +55,7 @@ class SignupSerializer(serializers.Serializer):
             raise serializers.ValidationError("Harus Login Dulu")
         elif (data['type'] == 'e' and
               (data.get('cared_by') is None or len(data['cared_by']) == 0)):
-            raise serializers.ValidationError(
-                    "Elder harus mempunyai CareGiver")
+            raise serializers.ValidationError("Elder harus mempunyai CareGiver")
         elif data['type'] == 'c':
             validator = ""
             if (data.get('password') is None or data['password'] == ""):
@@ -72,13 +75,14 @@ class SignupSerializer(serializers.Serializer):
     def create(self, validated_data):
         type = validated_data.get('type')
         if type == 'e' and len(validated_data.get('cared_by')) > 0:
-            alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-            code = get_random_string(length=8, allowed_chars=alphabet)
-            while Elder.objects.filter(code=code):
-                code = get_random_string(length=8)
-            user = User.objects.create_user(
-                    username=code, email=validated_data.get('email'),
-                    password='asdfg4321')
+            # alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+            # code = get_random_string(length=8, allowed_chars=alphabet)
+            # while Elder.objects.filter(code=code):
+            #     code = get_random_string(length=8)
+            phone = validated_data.get('phone')
+            email = validated_data.get('email')
+            user = User.objects.create_user(username=phone, email=email,
+                                            password='asdfg4321')
             fullname = validated_data.get('fullname')
             names = fullname.split(" ")
             if len(names) > 2:
@@ -90,8 +94,8 @@ class SignupSerializer(serializers.Serializer):
                 'address': validated_data.get('address'),
                 'birthday': validated_data.get('birthday'),
                 'gender': validated_data.get('gender'),
-                'phone': validated_data.get('phone'),
-                'code': code,
+                'phone': phone,
+                'code': phone,
             }
             elder = Elder.objects.create(**signupData)
             for caregiver in validated_data.get('cared_by'):
@@ -101,9 +105,10 @@ class SignupSerializer(serializers.Serializer):
             return elder
         else:
             username = validated_data.get('username')
-            user = User.objects.create_user(
-                    username=username, email=validated_data.get('email'),
-                    password=validated_data.get('password'))
+            email = validated_data.get('email')
+            password = validated_data.get('password')
+            user = User.objects.create_user(username=username, email=email,
+                                            password=password)
             fullname = validated_data.get('fullname')
             names = fullname.split(" ")
             if len(names) > 2:
@@ -121,6 +126,3 @@ class SignupSerializer(serializers.Serializer):
             # g = Group.objects.get(name='CareGiver')
             # g.user_set.add(user)
             return caregiver
-
-    def update(self, instance, validated_data):
-        pass

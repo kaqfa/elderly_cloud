@@ -46,7 +46,7 @@ DATABASES = {
 ``` /etc/nginx/sites-available/devel-server.conf
 server {
     listen 80;
-    server_name dev.elderlyapps.net;
+    server_name elderlyapps.net;
 
     location /static {
         alias /home/elder/webapp/staticfiles;

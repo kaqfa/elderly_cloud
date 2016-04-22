@@ -32,7 +32,7 @@ class CareGiver(TimeStampedModel):
     def __unicode__(self):
         if '' == self.user.first_name or self.user.first_name is None:
             return self.user.username
-        return self.user.first_name+" "+self.user.last_name
+        return self.user.first_name + " " + self.user.last_name
 
     def __str__(self):  # __unicode__ on Python 2
         return self.__unicode__()
@@ -48,12 +48,13 @@ class Elder(TimeStampedModel):
     birthday = models.DateField('Tanggal Lahir', null=True, blank=True)
     gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES,
                               default='l')
-    phone = models.CharField('Telepon', max_length=20, null=True, blank=True)
+    phone = models.CharField('Telepon', max_length=20, null=False,
+                             blank=False, default="")
     photo = models.ImageField('Foto Profil', null=True, blank=True)
-    code = models.CharField(
-            'Kode Orang Tua', max_length=8, blank=False, null=False)
-    cared_by = models.ManyToManyField(
-                CareGiver, through='CareGiving', verbose_name='Dirawat oleh')
+    code = models.CharField('Kode Orang Tua', max_length=8,
+                            blank=False, null=False)
+    cared_by = models.ManyToManyField(CareGiver, through='CareGiving',
+                                      verbose_name='Dirawat oleh')
 
     class Meta:
         verbose_name = 'Orang Tua'
@@ -62,7 +63,7 @@ class Elder(TimeStampedModel):
     def __unicode__(self):
         if '' == self.user.first_name or self.user.first_name is None:
             return self.user.username
-        return self.user.first_name+" "+self.user.last_name
+        return self.user.first_name + " " + self.user.last_name
 
     def __str__(self):  # __unicode__ on Python 2
         return self.__unicode__()
@@ -101,14 +102,13 @@ class Partner(TimeStampedModel):
     photo = models.ImageField('Foto Profil', null=True, blank=True)
     location = PlainLocationField(zoom=7, default='-6.889836,109.674592')
     description = models.TextField('Deskripsi', null=True, blank=True)
-    type = models.CharField(
-            'Golongan Institusi', max_length=2, choices=TYPE_CHOICES,
-            default='pj')
+    type = models.CharField('Golongan Institusi', max_length=2,
+                            choices=TYPE_CHOICES, default='pj')
 
     def __unicode__(self):
         if '' == self.user.first_name or self.user.first_name is None:
             return self.user.username
-        return self.user.first_name+" "+self.user.last_name
+        return self.user.first_name + " " + self.user.last_name
 
     def __str__(self):  # __unicode__ on Python 2
         return self.__unicode__()
@@ -123,9 +123,9 @@ class Partner(TimeStampedModel):
 class AdminInvitation(TimeStampedModel, StatusModel):
     STATUS = Choices(('1', 'sent'), ('2', 'accepted'), ('3', 'rejected'))
     user = models.ForeignKey(User, verbose_name='Pemanggil')
-    email_to_invite = models.CharField(
-                    max_length=45,
-                    verbose_name='Email yang akan dipanggil')
+    email_to_invite = models.CharField(max_length=45,
+                                       verbose_name='Email yang akan dipanggil'
+                                       )
 
     class Meta:
         verbose_name = 'Pemanggilan Admin'

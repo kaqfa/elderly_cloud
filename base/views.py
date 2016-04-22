@@ -56,20 +56,19 @@ class Login(viewsets.GenericViewSet):
                              ["username dan password tidak tepat"]})
 
     @list_route(methods=['post'])
-    def elder(self, request):
-        if request.data.get('code') is None or request.data.get('code') == '':
-            return Response({'code': ["This field is required."]}, status=400)
+    def elder(self, req):
+        if req.data.get('phone') is None or req.data.get('phone') == '':
+            return Response({'phone': ["This field is required."]}, status=400)
         else:
-            code = request.data.get('code')
-            elder = Elder.objects.filter(code=code)
+            phone = req.data.get('phone')
+            elder = Elder.objects.filter(phone=phone)
             if elder:
                 elder = elder[0]
                 token, created = Token.objects.get_or_create(user=elder.user)
                 return Response({'token': token.key})
             else:
-                return Response(
-                        {'non_field_errors':
-                            ['username dan password tidak tepat.']})
+                return Response({'non_field_errors':
+                                 ['username dan password tidak tepat.']})
 
 
 class Index(View):

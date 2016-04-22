@@ -11,23 +11,27 @@ from rest_framework import status
 class MemberTesting(TestCase):
 
     def test_create_care_giver(self):
-        user = User.objects.create_user(
-                username="kaqfa", password="123", email="fahri@dinus.ac.id",
-                first_name="fahri", last_name="firdausillah")
+        user = User.objects.create_user(username="kaqfa",
+                                        password="123",
+                                        email="fahri@dinus.ac.id",
+                                        first_name="fahri",
+                                        last_name="firdausillah")
         CareGiver.objects.create(user=user, phone="0123456789")
         self.assertEqual(CareGiver.objects.count(), 1)
         cg = CareGiver.objects.get(pk=1)
         self.assertEqual(cg.user.first_name, "fahri")
 
     def test_create_elder(self):
-        user = User.objects.create_user(
-                username="kaqfa", password="123", email="fahri@dinus.ac.id",
-                first_name="fahri", last_name="firdausillah")
+        user = User.objects.create_user(username="kaqfa",
+                                        password="123",
+                                        email="fahri@dinus.ac.id",
+                                        first_name="fahri",
+                                        last_name="firdausillah")
         cg = CareGiver.objects.create(user=user, phone="0123456789")
-        user2 = User.objects.create_user(
-                username="ABC12", password="pwd", first_name="Ahmad",
-                last_name="Tafrikhan")
-        eld = Elder.objects.create(user=user2)
+        user2 = User.objects.create_user(username="ABC12",
+                                         password="pwd", first_name="Ahmad",
+                                         last_name="Tafrikhan")
+        eld = Elder.objects.create(user=user2, phone="0123456")
         CareGiving.objects.create(elder=eld, caregiver=cg)
         self.assertEqual(Elder.objects.count(), 1)
         self.assertEqual(User.objects.count(), 2)
@@ -91,7 +95,7 @@ class MemberService(APITestCase):
                          resp.content)
 
         resp = self.client.post('/api/login/elder/',
-                                {'code': "ABC12"}, format="json")
+                                {'phone': "0123456"}, format="json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK, resp.content)
 
     def test_get_all_elders(self):
@@ -107,7 +111,7 @@ class MemberService(APITestCase):
         resp = self.client.get('/api/caregivers/', format="json")
         self.assertEqual(resp.status_code, status.HTTP_401_UNAUTHORIZED)
 
-        self.client.login(username='ABC12', password='pwd')
+        self.client.login(username='0123456', password='pwd')
         resp = self.client.get('/api/caregivers/', format="json")
         self.assertEqual(resp.status_code, status.HTTP_200_OK,
                          resp.content)
