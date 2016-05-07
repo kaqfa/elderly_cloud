@@ -67,8 +67,9 @@ class Login(viewsets.GenericViewSet):
                 token, created = Token.objects.get_or_create(user=elder.user)
                 return Response({'token': token.key})
             else:
-                return Response({'non_field_errors':
-                                 ['username dan password tidak tepat.']})
+                return Response(
+                        {'non_field_errors':
+                            ['username dan password tidak tepat.']})
 
 
 class Index(View):

@@ -57,18 +57,19 @@ class Login(viewsets.GenericViewSet):
 
     @list_route(methods=['post'])
     def elder(self, request):
-        if request.data.get('phone') is None or request.data.get('phone') == '':
-            return Response({'phone': ["This field is required."]}, status=400)
+        if request.data.get('code') is None or request.data.get('code') == '':
+            return Response({'code': ["This field is required."]}, status=400)
         else:
-            phone = request.data.get('phone')
-            elder = Elder.objects.filter(phone=phone)
+            code = request.data.get('code')
+            elder = Elder.objects.filter(code=code)
             if elder:
                 elder = elder[0]
                 token, created = Token.objects.get_or_create(user=elder.user)
                 return Response({'token': token.key})
             else:
-                return Response({'non_field_errors':
-                                 ['username dan password tidak tepat.']})
+                return Response(
+                        {'non_field_errors':
+                            ['username dan password tidak tepat.']})
 
 
 class Index(View):

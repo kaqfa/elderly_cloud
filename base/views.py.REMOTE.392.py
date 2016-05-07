@@ -56,11 +56,11 @@ class Login(viewsets.GenericViewSet):
                              ["username dan password tidak tepat"]})
 
     @list_route(methods=['post'])
-    def elder(self, request):
-        if request.data.get('phone') is None or request.data.get('phone') == '':
+    def elder(self, req):
+        if req.data.get('phone') is None or req.data.get('phone') == '':
             return Response({'phone': ["This field is required."]}, status=400)
         else:
-            phone = request.data.get('phone')
+            phone = req.data.get('phone')
             elder = Elder.objects.filter(phone=phone)
             if elder:
                 elder = elder[0]
