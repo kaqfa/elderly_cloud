@@ -48,7 +48,7 @@ class Elder(TimeStampedModel):
     birthday = models.DateField('Tanggal Lahir', null=True, blank=True)
     gender = models.CharField('Kelamin', max_length=1, choices=GENDER_CHOICES,
                               default='l')
-    phone = models.CharField('Telepon', max_length=20, null=True, blank=True)
+    phone = models.CharField('Telepon', max_length=20, null=True, blank=True, unique=True)
     photo = models.ImageField('Foto Profil', null=True, blank=True)
     code = models.CharField(
             'Kode Orang Tua', max_length=8, blank=False, null=False)

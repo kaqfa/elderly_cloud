@@ -34,7 +34,8 @@ class SignupSerializer(serializers.Serializer):
     birthday = serializers.DateField(required=False)
     gender = serializers.ChoiceField(
             choices=(('l', 'laki-laki'), ('p', 'perempuan')), default='1')
-    phone = serializers.DecimalField(max_digits=12, decimal_places=0)
+    phone = serializers.DecimalField(max_digits=12, decimal_places=0,
+                                    validators=[UniqueValidator(queryset=Elder.objects.all())])
     username = serializers.CharField(
                 validators=[UniqueValidator(queryset=User.objects.all())],
                 required=False)
@@ -47,8 +48,12 @@ class SignupSerializer(serializers.Serializer):
 
     def validate(self, data):
         user = self.context['request'].user
-        if data['type'] == 'e' and not user.is_authenticated():
-            raise serializers.ValidationError("Harus Login Dulu")
+        if data['type'] == 'e':
+            if user.is_authenticated():
+                caregiver = CareGiver.objects.get(user=user)
+                data['cared_by']=[caregiver.id]
+            else:
+                raise serializers.ValidationError("Harus Login Dulu")
         elif (data['type'] == 'e' and
               (data.get('cared_by') is None or len(data['cared_by']) == 0)):
             raise serializers.ValidationError(
@@ -71,7 +76,14 @@ class SignupSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         type = validated_data.get('type')
-        if type == 'e' and len(validated_data.get('cared_by')) > 0:
+        user = self.context['request'].user
+        if user.is_authenticated():
+            try:
+                caregiver = CareGiver.objects.get(user=user)
+                cared_by=[caregiver]
+            except:
+                cared_by=validated_data.get('cared_by')
+        if type == 'e' and cared_by is not None and len(cared_by) > 0:
             alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
             code = get_random_string(length=8, allowed_chars=alphabet)
             while Elder.objects.filter(code=code):
@@ -80,9 +92,9 @@ class SignupSerializer(serializers.Serializer):
                     username=code, email=validated_data.get('email'),
                     password='asdfg4321')
             fullname = validated_data.get('fullname')
-            names = fullname.split(" ")
-            if len(names) > 2:
-                user.first_name = names[0]
+            names = fullname.split(' ', 1)
+            user.first_name = names[0]
+            if len(names)>1:
                 user.last_name = names[1]
             user.save()
             signupData = {
@@ -94,7 +106,7 @@ class SignupSerializer(serializers.Serializer):
                 'code': code,
             }
             elder = Elder.objects.create(**signupData)
-            for caregiver in validated_data.get('cared_by'):
+            for caregiver in cared_by:
                 CareGiving.objects.create(caregiver=caregiver, elder=elder)
             # g = Group.objects.get(name='Elder')
             # g.user_set.add(user)

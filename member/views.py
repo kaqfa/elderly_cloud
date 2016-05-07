@@ -37,6 +37,25 @@ class CareGivers(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         elders = self.request.user.elder
         return elders.cared_by.all()
+    
+class Profile(viewsets.ViewSet):
+    #serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def list(self, request):
+        user = self.request.user
+        try:
+            user.caregiver
+        except:
+            try:
+                user.elder
+            except:
+                serializer=UserSerializer(user)
+            else:
+                serializer=ElderSerializer(user.elder)
+        else:
+            serializer=CareGiverSerializer(user.caregiver)
+        return Response(serializer.data)
 
 
 class Signup(viewsets.GenericViewSet):

@@ -3,4 +3,4 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 
 
 class LoginSerializer(AuthTokenSerializer):
-    code = serializers.CharField(required=False)
+    phone = serializers.CharField(required=False)
