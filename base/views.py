@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from member.models import CareGiver, Elder
 from base.forms import LoginForm
 from member.forms import CareGiverForm, UserForm
+from member.serializers import ElderSerializer, CareGiverSerializer
 from info.models import Posting
 from datetime import datetime, date, time
 from datetime import timedelta
@@ -50,7 +51,9 @@ class Login(viewsets.GenericViewSet):
         user = serializer.validated_data['user']
         if CareGiver.objects.filter(user=user):
             token, created = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key})
+            caregiver= CareGiver.objects.get(user=user)
+            serializer=CareGiverSerializer(caregiver)
+            return Response({'token': token.key, 'profile':serializer.data})
         else:
             return Response({'non_field_errors':
                              ["username dan password tidak tepat"]})
@@ -65,7 +68,9 @@ class Login(viewsets.GenericViewSet):
             if elder:
                 elder = elder[0]
                 token, created = Token.objects.get_or_create(user=elder.user)
-                return Response({'token': token.key})
+                elder= Elder.objects.get(user=user)
+                serializer=CareGiverSerializer(elder)
+                return Response({'token': token.key, 'profile':serializer.data})
             else:
                 return Response({'non_field_errors':
                                  ['username dan password tidak tepat.']})
