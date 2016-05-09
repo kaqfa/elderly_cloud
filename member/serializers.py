@@ -122,8 +122,8 @@ class SignupSerializer(serializers.Serializer):
                                             password=password)
             fullname = validated_data.get('fullname')
             names = fullname.split(" ")
-            if len(names) > 2:
-                user.first_name = names[0]
+            user.first_name = names[0]
+            if len(names)>1:
                 user.last_name = names[1]
             user.save()
             signupData = {
