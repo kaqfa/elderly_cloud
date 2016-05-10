@@ -68,7 +68,7 @@ class Login(viewsets.GenericViewSet):
             if elder:
                 elder = elder[0]
                 token, created = Token.objects.get_or_create(user=elder.user)
-                elder= Elder.objects.get(user=user)
+                elder= Elder.objects.get(user=elder.user)
                 serializer=CareGiverSerializer(elder)
                 return Response({'token': token.key, 'profile':serializer.data})
             else:
