@@ -73,7 +73,7 @@ class Login(viewsets.GenericViewSet):
                 return Response({'token': token.key, 'profile':serializer.data})
             else:
                 return Response({'non_field_errors':
-                                 ['username dan password tidak tepat.']})
+                                 ['username dan password tidak tepat.']}, status=400)
 
 
 class Index(View):
