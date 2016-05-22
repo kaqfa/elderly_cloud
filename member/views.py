@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponseRedirect
@@ -20,23 +20,53 @@ from base.views import cek_session, is_caregiver
 from rest_framework.permissions import IsAuthenticated
 
 
-class Elders(viewsets.ReadOnlyModelViewSet):
+class Elders(mixins.ListModelMixin,
+             mixins.RetrieveModelMixin,
+             mixins.UpdateModelMixin,
+             mixins.DestroyModelMixin,
+             viewsets.GenericViewSet):
     # queryset = Elder.objects.all()
     serializer_class = ElderSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        caregiver = self.request.user.caregiver
-        return caregiver.elder_set.all()
+        user = self.request.user
+        try:
+            cg=user.caregiver
+        except:
+            try:
+                elders=user.elder
+            except:
+                retval=[]
+            else:
+                retval=CareGiver.objects.filter(user=user)
+        else:
+            retval=cg.elder_set.all()
+        return retval
 
 
-class CareGivers(viewsets.ReadOnlyModelViewSet):
+class CareGivers(mixins.ListModelMixin,
+             mixins.RetrieveModelMixin,
+             mixins.UpdateModelMixin,
+             mixins.DestroyModelMixin,
+             viewsets.GenericViewSet):
     serializer_class = CareGiverSerializer
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        elders = self.request.user.elder
-        return elders.cared_by.all()
+        user = self.request.user
+        try:
+            cg=user.caregiver
+        except:
+            try:
+                elders=user.elder
+            except:
+                retval=[]
+            else:
+                retval=elders.cared_by.all()
+        else:
+            retval=CareGiver.objects.filter(user=user)
+        return retval
     
 class Profile(viewsets.ViewSet):
     #serializer_class = UserSerializer

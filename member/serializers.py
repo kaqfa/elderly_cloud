@@ -13,18 +13,53 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('username', 'first_name', 'last_name', 'email', 'groups')
 
 
-class ElderSerializer(serializers.ModelSerializer):
-    user = UserSerializer(many=False, read_only=True)
-
-    class Meta:
-        model = Elder
-
-
 class CareGiverSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
+    fullname = serializers.CharField(write_only=True)
+    
+    def update(self, instance, validated_data):
+        user=instance.user
+        fullname=validated_data.get('fullname', "");
+        if(fullname!=""):
+            names = fullname.split(' ', 1)
+            user.first_name = names[0]
+            if len(names)>1:
+                user.last_name = names[1]
+            else:
+                user.last_name = ""
+            user.save()
+        for (key, value) in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+        return instance
 
     class Meta:
         model = CareGiver
+
+class ElderSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+    cared_by = CareGiverSerializer(many=True, read_only=True)
+    fullname = serializers.CharField(write_only=True)
+    
+    def update(self, instance, validated_data):
+        user=instance.user
+        fullname=validated_data.get('fullname', "");
+        if(fullname!=""):
+            names = fullname.split(' ', 1)
+            user.first_name = names[0]
+            if len(names)>1:
+                user.last_name = names[1]
+            else:
+                user.last_name = ""
+            user.save()
+        for (key, value) in validated_data.items():
+            setattr(instance, key, value)
+        instance.save()
+        return instance
+
+    class Meta:
+        model = Elder
+        extra_kwargs = {'fullname': {'write_only': True}}
 
 
 class SignupSerializer(serializers.Serializer):
