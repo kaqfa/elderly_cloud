@@ -14,6 +14,8 @@ class Tracker(TimeStampedModel):
                          ('sl', 'sakit leher'),
                          ('sdl', 'sakit dada kiri'),
                          ('sdr', 'sakit dada kanan'),
+                         ('sal', 'sakit lengan atas kiri'),
+                         ('sar', 'sakit lengan atas kanan'),
                          ('sll', 'sakit lengan kiri'),
                          ('slr', 'sakit lengan kanan'),
                          ('sp', 'sakit perut'),
