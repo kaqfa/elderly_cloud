@@ -43,12 +43,26 @@ class Elders(mixins.ListModelMixin,
         else:
             retval=cg.elder_set.all()
         return retval
+    
+    def perform_destroy(self, instance):
+        elder = instance
+        name = elder.user.first_name + " " + elder.user.last_name
+        if elder.cared_by.count() == 1:
+            elder.delete()
+        else:
+            try:
+                cg = CareGiver.objects.get(user=self.request.user)
+            except CareGiver.DoesNotExist:
+                cg = None
+            
+            if cg:
+                CareGiving.objects.filter(
+                    elder=elder, caregiver=cg).delete()
 
 
 class CareGivers(mixins.ListModelMixin,
              mixins.RetrieveModelMixin,
              mixins.UpdateModelMixin,
-             mixins.DestroyModelMixin,
              viewsets.GenericViewSet):
     serializer_class = CareGiverSerializer
     permission_classes = (IsAuthenticated,)
