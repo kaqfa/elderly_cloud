@@ -61,6 +61,21 @@ class Elders(mixins.ListModelMixin,
             if cg:
                 CareGiving.objects.filter(
                     elder=elder, caregiver=cg).delete()
+                
+    @list_route(methods=['POST'])
+    def join(self, request, *args, **kwargs):
+        if 'phone' in request.data:
+            phone = request.data['phone']
+            user = self.request.user
+            try:
+                user.caregiver
+            except:
+                return Response(status=HTTP_400_BAD_REQUEST)
+            else:
+                elder = Elder.objects.get(phone=phone)
+                CareGiving.objects.create(caregiver=user.caregiver, elder=elder)
+                serializer=ElderSerializer(elder)
+            return Response(serializer.data)
 
 
 class CareGivers(mixins.ListModelMixin,
