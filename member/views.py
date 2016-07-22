@@ -73,8 +73,13 @@ class Elders(mixins.ListModelMixin,
                 return Response(status=HTTP_400_BAD_REQUEST)
             else:
                 elder = Elder.objects.get(phone=phone)
-                CareGiving.objects.create(caregiver=user.caregiver, elder=elder)
-                serializer=ElderSerializer(elder)
+                exist = CareGiving.objects.filter(caregiver=user.caregiver, elder=elder)
+                if exist:
+                    data={}
+                    data['phone']="Nomor Telepon tidak terdaftar"
+                    return Response(json.dumps(response_data), content_type="application/json" ,status=HTTP_400_BAD_REQUEST)
+                else:
+                    serializer=ElderSerializer(elder)
             return Response(serializer.data)
 
 
