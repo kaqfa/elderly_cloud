@@ -42,7 +42,7 @@ class Elders(mixins.ListModelMixin,
             except:
                 retval=[]
             else:
-                retval=CareGiver.objects.filter(user=user)
+                retval=elders
         else:
             retval=cg.elder_set.all()
         return retval
