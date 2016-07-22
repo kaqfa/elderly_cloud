@@ -1,3 +1,4 @@
+import json
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -72,14 +73,18 @@ class Elders(mixins.ListModelMixin,
             except:
                 return Response(status=HTTP_400_BAD_REQUEST)
             else:
-                elder = Elder.objects.get(phone=phone)
-                exist = CareGiving.objects.filter(caregiver=user.caregiver, elder=elder)
-                if exist:
-                    data={}
-                    data['phone']="Nomor Telepon tidak terdaftar"
-                    return Response(json.dumps(response_data), content_type="application/json" ,status=HTTP_400_BAD_REQUEST)
+                elder = Elder.objects.filter(phone=phone)
+                if elder:
+                    response_data={}
+                    exist = CareGiving.objects.filter(caregiver=user.caregiver, elder=elder)
+                    if exist:
+                        response_data['duplicate']="Orang tua sudah terdaftar"
+                        return Response(json.dumps(response_data), content_type="application/json" ,status=HTTP_400_BAD_REQUEST)
+                    else:
+                        serializer=ElderSerializer(elder)
                 else:
-                    serializer=ElderSerializer(elder)
+                    response_data['phone']="Nomor telepon tidak terdaftar"
+                    return Response(json.dumps(response_data), content_type="application/json" ,status=HTTP_400_BAD_REQUEST)
             return Response(serializer.data)
 
 
