@@ -74,8 +74,8 @@ class Elders(mixins.ListModelMixin,
                 return Response(status=HTTP_400_BAD_REQUEST)
             else:
                 elder = Elder.objects.filter(phone=phone)
+                response_data={}
                 if elder:
-                    response_data={}
                     exist = CareGiving.objects.filter(caregiver=user.caregiver, elder=elder)
                     if exist:
                         response_data['duplicate']="Orang tua sudah terdaftar"
