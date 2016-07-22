@@ -1,6 +1,9 @@
 from rest_framework import viewsets, mixins
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from rest_framework.decorators import list_route, parser_classes
+from rest_framework.parsers import FormParser, MultiPartParser
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 from django.http import HttpResponseRedirect
 from django.views.generic import View
 from django.shortcuts import render
@@ -100,6 +103,32 @@ class Profile(viewsets.ViewSet):
         else:
             serializer=CareGiverSerializer(user.caregiver)
         return Response(serializer.data)
+    
+    @list_route(methods=['POST'])
+    @parser_classes((FormParser, MultiPartParser))
+    def image(self, request, *args, **kwargs):
+        if 'upload' in request.data:
+            upload=request.data['upload']
+            user = self.request.user
+            try:
+                user.caregiver
+            except:
+                try:
+                    user.elder
+                except:
+                    return Response(status=HTTP_400_BAD_REQUEST)
+                else:
+                    user.elder.photo.delete()
+                    user.elder.photo.save(upload.name, upload)
+                    serializer=ElderSerializer(user.elder)
+            else:
+                user.caregiver.photo.delete()
+                user.caregiver.photo.save(upload.name, upload)
+                serializer=CareGiverSerializer(user.caregiver)
+
+            return Response(serializer.data, status=HTTP_201_CREATED)
+        else:
+            return Response(status=HTTP_400_BAD_REQUEST)
 
 
 class Signup(viewsets.GenericViewSet):

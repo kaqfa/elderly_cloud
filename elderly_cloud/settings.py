@@ -46,8 +46,10 @@ INSTALLED_APPS = (
     # 'notification',
     # 'contact',
     # 'partner',
+    'article',
     'info',
     'tracker',
+    'hospital',
     'rest_framework',
     'rest_framework.authtoken',
     # 'django_filters',
@@ -55,6 +57,8 @@ INSTALLED_APPS = (
     'location_field',
     'corsheaders',
 )
+
+GOOGLE_MAPS_V3_APIKEY = 'AIzaSyArVrzYHjRmxyYMhZti0v-tPLV6qVIpZEM'
 
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('rest_framework.filters.DjangoFilterBackend',),

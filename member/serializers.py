@@ -16,6 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CareGiverSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     fullname = serializers.CharField(write_only=True)
+    birthday = serializers.DateField(input_formats=['%d/%m/%Y'], required=False)
     
     def update(self, instance, validated_data):
         user=instance.user
@@ -40,6 +41,7 @@ class ElderSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     cared_by = CareGiverSerializer(many=True, read_only=True)
     fullname = serializers.CharField(write_only=True)
+    birthday = serializers.DateField(input_formats=['%d/%m/%Y'], required=False)
     
     def update(self, instance, validated_data):
         user=instance.user
@@ -69,7 +71,7 @@ class SignupSerializer(serializers.Serializer):
     type = serializers.ChoiceField(choices=(('e', 'Elder'),
                                             ('c', 'Caregiver')))
     address = serializers.CharField(required=False)
-    birthday = serializers.DateField(required=False)
+    birthday = serializers.DateField(input_formats=['%d/%m/%Y'], required=False)
     gender = serializers.ChoiceField(choices=GENDER_CHOICES,
                                      default='1')
     phone = serializers.DecimalField(max_digits=12, decimal_places=0,

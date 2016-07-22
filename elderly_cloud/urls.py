@@ -10,6 +10,8 @@ from rest_framework.routers import DefaultRouter
 
 from base.views import Login
 from member.views import Elders, Signup, CareGivers, Profile
+from article.views import Articles
+from hospital.views import Hospitals
 from tracker.views import Trackers
 
 router = DefaultRouter()
@@ -19,6 +21,7 @@ router.register(r'elders', Elders, 'Elders')
 router.register(r'caregivers', CareGivers, 'Caregivers')
 router.register(r'trackers', Trackers, 'Trackers')
 router.register(r'profile', Profile, 'Profile')
+router.register(r'hospital', Hospitals, 'Hospitals')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
