@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 class CareGiverSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     fullname = serializers.CharField(write_only=True)
-    birthday = serializers.DateField(input_formats=['%d/%m/%Y'], required=False)
+    birthday = serializers.DateField(format=['%d/%m/%Y'], input_formats=['%d/%m/%Y'], required=False)
     
     def update(self, instance, validated_data):
         user=instance.user
@@ -41,7 +41,7 @@ class ElderSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     cared_by = CareGiverSerializer(many=True, read_only=True)
     fullname = serializers.CharField(write_only=True)
-    birthday = serializers.DateField(input_formats=['%d/%m/%Y'], required=False)
+    birthday = serializers.DateField(format=['%d/%m/%Y'], input_formats=['%d/%m/%Y'], required=False)
     
     def update(self, instance, validated_data):
         user=instance.user
