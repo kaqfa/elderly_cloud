@@ -53,6 +53,7 @@ server {
     }
 
     location / {
+        sub_filter_types text/plain application/json;
         sub_filter "localhost:8000" "$server_name";
         sub_filter_once off;
         proxy_pass http://localhost:8000;
