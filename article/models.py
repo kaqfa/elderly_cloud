@@ -24,7 +24,7 @@ class Article(TimeStampedModel, StatusModel):
     category = models.ManyToManyField(Category, verbose_name="Kategori")
     content = models.TextField('Berita')
     photo = models.ImageField('Foto', null=True, blank=True)
-    author = models.OneToOneField(User, verbose_name='Ditulis Oleh')
+    author = models.ForeignKey(User, verbose_name='Ditulis Oleh')
     
     class Meta:
         verbose_name = 'Artikel'

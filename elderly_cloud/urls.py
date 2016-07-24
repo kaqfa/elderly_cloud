@@ -22,6 +22,7 @@ router.register(r'caregivers', CareGivers, 'Caregivers')
 router.register(r'trackers', Trackers, 'Trackers')
 router.register(r'profile', Profile, 'Profile')
 router.register(r'hospital', Hospitals, 'Hospitals')
+router.register(r'article', Articles, 'Articles')
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
