@@ -13,6 +13,7 @@ from member.forms import ElderForm, ElderUserForm, JoinForm, CGUserForm
 from member.forms import CareGiverForm, PartnerForm, PartnerUserForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from PIL import Image
 
 from member.models import Elder, CareGiver, CareGiving, Partner
 from django.contrib.auth.models import Group
@@ -88,6 +89,38 @@ class Elders(mixins.ListModelMixin,
                     response_data['phone']="Nomor telepon tidak terdaftar"
                     return Response(response_data, status=HTTP_400_BAD_REQUEST)
             return Response(serializer.data)
+        
+    @list_route(methods=['POST'])
+    @parser_classes((FormParser, MultiPartParser))
+    def photo(self, request, *args, **kwargs):
+        if 'upload' in request.data:
+            upload=request.data['upload']
+            user = self.request.user
+            try:
+                user.caregiver
+                trial_image = Image.open(upload)
+                trial_image.verify()
+            except:
+                try:
+                    user.elder
+                    trial_image = Image.open(upload)
+                    trial_image.verify()
+                except:
+                    return Response(status=HTTP_400_BAD_REQUEST)
+                else:
+                    user.elder.photo.delete()
+                    user.elder.photo.save(upload.name, upload)
+                    serializer=ElderSerializer(user.elder)
+            else:
+                if 'elder' in request.data and user.caregiver.elder_set.filter(id=request.data['elder']):
+                    elder=Elder.objects.get(id=request.data['elder'])
+                    elder.photo.delete()
+                    elder.photo.save(upload.name, upload)
+                    return Response({'status':'success'})
+                else:
+                    return Response(status=HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=HTTP_400_BAD_REQUEST)
 
 
 class CareGivers(mixins.ListModelMixin,
@@ -133,15 +166,19 @@ class Profile(viewsets.ViewSet):
     
     @list_route(methods=['POST'])
     @parser_classes((FormParser, MultiPartParser))
-    def image(self, request, *args, **kwargs):
+    def photo(self, request, *args, **kwargs):
         if 'upload' in request.data:
             upload=request.data['upload']
             user = self.request.user
             try:
                 user.caregiver
+                trial_image = Image.open(upload)
+                trial_image.verify()
             except:
                 try:
                     user.elder
+                    trial_image = Image.open(upload)
+                    trial_image.verify()
                 except:
                     return Response(status=HTTP_400_BAD_REQUEST)
                 else:
