@@ -8,13 +8,18 @@ sudo apt-get install postgresql postgresql-contrib git nginx
 sudo apt-get install libpq-dev python-dev python-pip
 sudo pip install psycopg2
 sudo apt-get install gunicorn
+sudo apt-get install libtiff5-dev libjpeg8-dev zlib1g-dev 
+sudo apt-get install libfreetype6-dev liblcms2-dev libwebp-dev 
+sudo apt-get install tcl8.6-dev tk8.6-dev python-tk
 
 sudo su - postgres
 createuser --interactive -P
 createdb --owner elder elderly
-logout
+exit
 
 git clone https://github.com/kaqfa/elderly_cloud.git
+cd elderly_coud
+sudo pip install -r requirements.txt
 
 [local setting and database]
 ``` settings.py
@@ -40,6 +45,9 @@ DATABASES = {
 }
 
 ```
+
+python manage.py migrate
+python manage.py createsuperuser
 
 [nginx configuration]
 
