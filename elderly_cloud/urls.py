@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^api/', include(router.urls)),
 
     url(r'^webapp/', include('base.urls')),
-    url(r'^$', include(admin.site.urls)),
+    url(r'^', include(admin.site.urls)),
     # url(r'^$', 'base.views.frontend', name='frontend'),
     # in case of development uncomment below lines and http import
     # url(r'^robots.txt$', lambda r: HttpResponse(
