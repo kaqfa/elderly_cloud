@@ -94,6 +94,11 @@ class Elders(mixins.ListModelMixin,
     @parser_classes((FormParser, MultiPartParser))
     def photo(self, request, *args, **kwargs):
         if 'upload' in request.data:
+            context={
+                'request': self.request,
+                'format': self.format_kwarg,
+                'view': self
+            }
             upload=request.data['upload']
             user = self.request.user
             try:
@@ -110,13 +115,13 @@ class Elders(mixins.ListModelMixin,
                 else:
                     user.elder.photo.delete()
                     user.elder.photo.save(upload.name, upload)
-                    serializer=ElderSerializer(user.elder)
+                    serializer=ElderSerializer(user.elder, context=context)
             else:
                 if 'elder' in request.data and user.caregiver.elder_set.filter(id=request.data['elder']):
                     elder=Elder.objects.get(id=request.data['elder'])
                     elder.photo.delete()
                     elder.photo.save(upload.name, upload)
-                    serializer=ElderSerializer(elder)
+                    serializer=ElderSerializer(elder, context=context)
                 else:
                     return Response(status=HTTP_400_BAD_REQUEST)
             return Response(serializer.data)
@@ -152,22 +157,32 @@ class Profile(viewsets.ViewSet):
 
     def list(self, request):
         user = self.request.user
+        context={
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self
+        }
         try:
             user.caregiver
         except:
             try:
                 user.elder
             except:
-                serializer=UserSerializer(user)
+                serializer=UserSerializer(user, context=context)
             else:
-                serializer=ElderSerializer(user.elder)
+                serializer=ElderSerializer(user.elder, context=context)
         else:
-            serializer=CareGiverSerializer(user.caregiver)
+            serializer=CareGiverSerializer(user.caregiver, context=context)
         return Response(serializer.data)
     
     @list_route(methods=['POST'])
     @parser_classes((FormParser, MultiPartParser))
     def photo(self, request, *args, **kwargs):
+        context={
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self
+        }
         if 'upload' in request.data:
             upload=request.data['upload']
             user = self.request.user
@@ -185,11 +200,11 @@ class Profile(viewsets.ViewSet):
                 else:
                     user.elder.photo.delete()
                     user.elder.photo.save(upload.name, upload)
-                    serializer=ElderSerializer(user.elder)
+                    serializer=ElderSerializer(user.elder, context=context)
             else:
                 user.caregiver.photo.delete()
                 user.caregiver.photo.save(upload.name, upload)
-                serializer=CareGiverSerializer(user.caregiver)
+                serializer=CareGiverSerializer(user.caregiver, context=context)
 
             return Response(serializer.data, status=HTTP_201_CREATED)
         else:
