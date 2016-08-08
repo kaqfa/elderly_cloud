@@ -24,13 +24,13 @@ router.register(r'profile', Profile, 'Profile')
 router.register(r'hospital', Hospitals, 'Hospitals')
 router.register(r'article', Articles, 'Articles')
 
-urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)),
+urlpatterns = [    
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^api/', include(router.urls)),
 
     url(r'^webapp/', include('base.urls')),
-    url(r'^$', 'base.views.frontend', name='frontend'),
+    url(r'^', include(admin.site.urls)),
+    # url(r'^$', 'base.views.frontend', name='frontend'),
     # in case of development uncomment below lines and http import
     # url(r'^robots.txt$', lambda r: HttpResponse(
     #     "User-agent: *\nDisallow: /", mimetype="text/plain")),
