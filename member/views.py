@@ -116,9 +116,10 @@ class Elders(mixins.ListModelMixin,
                     elder=Elder.objects.get(id=request.data['elder'])
                     elder.photo.delete()
                     elder.photo.save(upload.name, upload)
-                    return Response({'status':'success'})
+                    serializer=ElderSerializer(elder)
                 else:
                     return Response(status=HTTP_400_BAD_REQUEST)
+            return Response(serializer.data)
         else:
             return Response(status=HTTP_400_BAD_REQUEST)
 
