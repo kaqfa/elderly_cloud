@@ -123,10 +123,10 @@ class Elders(mixins.ListModelMixin,
                     elder.photo.save(upload.name, upload)
                     serializer=ElderSerializer(elder, context=context)
                 else:
-                    return Response(status=HTTP_400_BAD_REQUEST)
+                    return Response({'elder':'no elder found'},status=HTTP_400_BAD_REQUEST)
             return Response(serializer.data)
         else:
-            return Response(status=HTTP_400_BAD_REQUEST)
+            return Response({'file':'no file uploaded'},status=HTTP_400_BAD_REQUEST)
 
 
 class CareGivers(mixins.ListModelMixin,
