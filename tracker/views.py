@@ -13,6 +13,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from base.views import cek_session
 from django.shortcuts import render
+import requests
+import json
 
 
 class Trackers(viewsets.ModelViewSet):
@@ -33,6 +35,21 @@ class Trackers(viewsets.ModelViewSet):
                 elder = Elder.objects.get(user=self.request.user)
                 return Tracker.objects.filter(elder=elder)
         return Tracker.objects.all()
+    
+    def perform_create(self, serializer):
+        tracker=serializer.save()
+        header = {"Content-Type": "application/json",
+            "Authorization": "Basic Njg5MjcxYzgtMDIyOC00MjY1LWE1ZmEtZWMxM2UxMjhjNjAx"}
+
+        payload = {
+            "app_id": "a9b5cfe4-e554-40ab-a804-ee63364a96c9",
+            "contents": {"en": "Lihat kondisi terbaru "+tracker.elder.user.first_name+" "+tracker.elder.user.last_name},
+            "headings": {"en": tracker.elder.user.first_name+" "+tracker.elder.user.last_name},
+            "tags": [{"key":tracker.elder.id,"relation":"=","value":"true"}],
+            "data":{track:serializer.data}
+        }
+
+        req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
 
 
 class KondisiHarian(View):
