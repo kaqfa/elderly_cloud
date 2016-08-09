@@ -46,7 +46,7 @@ class Trackers(viewsets.ModelViewSet):
             "contents": {"en": "Lihat kondisi terbaru "+tracker.elder.user.first_name+" "+tracker.elder.user.last_name},
             "headings": {"en": tracker.elder.user.first_name+" "+tracker.elder.user.last_name},
             "tags": [{"key":tracker.elder.id,"relation":"=","value":"true"}],
-            "data":{track:serializer.data}
+            "data":{"track":serializer.data}
         }
 
         req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
