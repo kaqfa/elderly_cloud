@@ -17,7 +17,6 @@
             </div>
             <div class="profile_info">
                 <span>Data seputar:</span>
-
                 <h2>{{ active_elder.user.first_name }} {{active_elder.user.last_name }}</h2>
             </div>
         </div>
@@ -29,7 +28,7 @@
             <div class="menu_section">
                 <h3>&nbsp;</h3>
                 <ul class="nav side-menu">
-                    <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Beranda</a></li>
+                    <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Dashboard</a></li>
                     <li><a><i class="fa fa-wheelchair"></i> Data Orang Tua
                         <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu" style="display: none">
@@ -86,7 +85,7 @@
             <a href="{% url 'profile' %}" data-toggle="tooltip" data-placement="top" title="Profile">
                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
             </a>
-            <a href="{% url 'logout' %}" data-toggle="tooltip" data-placement="top" title="Logout">
+            <a href="{% url 'status' %}" data-toggle="tooltip" data-placement="top" title="Logout">
                 <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
             </a>
         </div>        
@@ -112,7 +111,7 @@
                     <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
                         <li><a href="{% url 'profile' %}">Profile</a>
                         </li>
-                        <li><a href="{% url 'logout' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                        <li><a href="{% url 'status' %}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
                         </li>
                     </ul>
                 </li>

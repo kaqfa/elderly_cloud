@@ -78,6 +78,7 @@ class Login(viewsets.GenericViewSet):
 class Index(View):
 
     def get(self, request, page=None):
+        print('index')
         if request.user.is_authenticated():
             if request.user.is_superuser:
                 return HttpResponseRedirect(reverse('admin:index'))
@@ -162,17 +163,19 @@ class Index(View):
 
     def partner(self, request):
         posting = Posting.get_latest_post()
-        return render(request, 'partnerindex.html', {'info': posting})
+        return render(request, 'partner/index.html', {'info': posting})
 
 
 def user_logout(request):
+    # pass
     print("logout")
     logout(request)
-    return HttpResponseRedirect(reverse('login'))
+    return HttpResponseRedirect(reverse('index'))
 
 
 def status(request):
-    if request.user.is_authenticated():
+    print ("status")
+    if request.user.is_authenticated():        
         return HttpResponse("Logged in")
     else:
         return HttpResponse("Logged out")

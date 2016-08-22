@@ -472,7 +472,7 @@ class UpdateProfile(View):
             return render(request, 'profile_edit.html',
                           {'elders': elders, 'active_elder': active})
         else:
-            return render(request, 'partnerprofile_edit.html')
+            return render(request, 'partner/profile_edit.html')
 
     def post(self, request):
         if is_caregiver(request.user):
@@ -503,7 +503,7 @@ class UpdateProfile(View):
             userform = PartnerUserForm(request.POST, instance=request.user)
             partnerform = PartnerForm(
                 request.POST, request.FILES,
-                instance=Partner.objects.get(user=request.user))
+                instance = Partner.objects.get(user=request.user))
             if userform.is_valid() and partnerform.is_valid():
                 userform.save()
                 partnerform.save()

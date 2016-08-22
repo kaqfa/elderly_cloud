@@ -4,7 +4,7 @@ from django.conf.urls.static import static
 
 # from notification.views import Hello
 
-from base.views import status, user_logout, Index
+from base import views as base
 # from notification.views import Notifs, NotifikasiElder
 # DetailNotifikasiElder, EditNotifikasiElder, HapusNotifikasiElder
 # NotifikasiCG, DetailNotifikasiCG, ResponNotifikasi
@@ -25,15 +25,14 @@ from member.views import set_active_elder, UpdateProfile
 # RoomDetail, RoomDelete, RoomClassTable, RoomClassEdit, RoomClassDetail
 # from partner.views import RoomClassDelete
 
-urlpatterns = [
-    url(r'^', Index.as_view(), name='index'),
-    url(r'^logout/', user_logout, name='logout'),
-    url(r'^status/', status, name='status'),
+urlpatterns = [    
+    url(r'^logout/', base.user_logout, name='logout'),
+    url(r'^status/', base.status, name='status'),
     url(r'^parents/$', Parents.as_view(), name='parents'),
     url(r'^parents/(?P<id>[0-9]*)/edit/$',
         UpdateElder.as_view(), name='parents_edit'),
     url(r'^parents/(?P<id>[0-9]*)/delete/$',
-        DeleteElder.as_view(), name='parents_del'),
+        DeleteElder.as_view(), name='parents_del'),    
     # url(r'^notification/elder/$',
     # NotifikasiElder.as_view(), name='notif_elder'),
     # url(r'^notification/elder/(?P<id>[0-9]*)/$',
@@ -110,5 +109,6 @@ urlpatterns = [
     # RoomEdit.as_view(), name='edit_room'),
     # url(r'^room/(?P<id>[0-9]*)/delete/$',
     # RoomDelete.as_view(), name='del_room'),
-    url(r'^(?P<page>[\w]*)/$', Index.as_view(), name='load'),
+    url(r'^(?P<page>[\w]*)/$', base.Index.as_view(), name='load'),
+    url(r'^', base.Index.as_view(), name='index'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
