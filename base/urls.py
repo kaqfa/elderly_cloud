@@ -26,7 +26,7 @@ from member.views import set_active_elder, UpdateProfile
 # from partner.views import RoomClassDelete
 
 urlpatterns = [
-    url(r'^$', Index.as_view(), name='index'),
+    url(r'^', Index.as_view(), name='index'),
     url(r'^logout/', user_logout, name='logout'),
     url(r'^status/', status, name='status'),
     url(r'^parents/$', Parents.as_view(), name='parents'),

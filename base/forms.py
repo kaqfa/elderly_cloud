@@ -10,9 +10,13 @@ class LoginForm(forms.Form):
         cleaned_data = super(LoginForm, self).clean()
         username = cleaned_data.get('username')
         password = cleaned_data.get('password')
-        user = authenticate(username=username, password=password)
-        if not user or not user.is_active or not (CareGiver.objects.filter(user=user) or Partner.objects.filter(user=user)):
-            raise forms.ValidationError("Username/password salah, silahkan coba lagi.")
+        user = authenticate(username=username, password=password)        
+        if ( not user or 
+             not user.is_active or                
+             not (CareGiver.objects.filter(user=user) or  
+                  Partner.objects.filter(user=user) or user.is_staff )):                        
+            raise forms.ValidationError("Username/password salah, silahkan coba lagi.")        
+
         return cleaned_data
 
     def login(self, request):

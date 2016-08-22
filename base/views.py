@@ -20,9 +20,8 @@ from datetime import datetime, date, time
 from datetime import timedelta
 
 
-def frontend(request):
-    return render(request, 'frontend/index.html')
-
+def redirect(request):
+    return HttpResponseRedirect(reverse('index'))
 
 def is_caregiver(user):
     if CareGiver.objects.filter(user=user):
@@ -92,11 +91,11 @@ class Index(View):
 
     def post(self, request):
         if('login' in request.POST):
-            form = LoginForm(request.POST)
+            form = LoginForm(request.POST)            
             if form.is_valid():
-                user = form.login(request)
-                if user:
-                    login(request, user)
+                user = form.login(request)                
+                if user:                    
+                    login(request, user)                    
                     if is_caregiver(user):
                         caregiver = CareGiver.objects.get(user=user)
                         elders = Elder.get_cared_elder(caregiver)
@@ -105,9 +104,9 @@ class Index(View):
                         else:
                             request.session['active_elder'] = 0
                         return self.caregiver(request)
-                    else:
+                    else:                        
                         return self.partner(request)
-            else:
+            else:                                
                 return render(request, 'login.html',
                               {'error_login': form.errors})
 
@@ -167,8 +166,9 @@ class Index(View):
 
 
 def user_logout(request):
+    print("logout")
     logout(request)
-    return HttpResponseRedirect(reverse('index'))
+    return HttpResponseRedirect(reverse('login'))
 
 
 def status(request):

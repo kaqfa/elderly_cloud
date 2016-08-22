@@ -1,159 +1,146 @@
-{% extends 'base.html' %}
-{% block 'title' %}Elder Caring | Dashboard{%endblock 'title' %}
-{% block 'maincontent' %}
-    <div class="right_col" role="main">
-        <br/>
+{% extends 'base.html' %} {% block 'title' %}Elder Caring | Dashboard{%endblock 'title' %} {% block 'maincontent' %}
+<div class="right_col" role="main">
+  <br/>
 
-        <div class="">
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2>Grafik Riwayat Kesehatan</h2>
-
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="x_content">
-                            {% if blood or heartrate or daily_condition %}
-                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                <div class="demo-container" style="height:280px">
-                                    <div id="placeholder33x" class="demo-placeholder"></div>
-                                </div>
-                            </div>
-                            {% elif active_elder %}
-                            Orang tua belum mempunyai data riwayat kesehatan dalam 7 hari terakhir.
-                            {% else %}
-                            Silahkan tambahkan orang tua yang dirawat terlebih dahulu.
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="x_panel">
-                        <div class="x_title">
-                            <h2>Tips dan Info Seputar Care Giving</h2>
-
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="x_content">
-                            <ul class="list-unstyled timeline">
-                                {% for i in info %}
-                                <li>
-                                    <div class="block">
-                                        <div class="tags">
-                                            <a href="" class="tag">
-                                                <span>{{ i.category|title }}</span>
-                                            </a>
-                                        </div>
-                                        <div class="block_content">
-                                            <h2 class="title">
-                                                <a>{{ i.title }}</a>
-                                            </h2>
-
-                                            <div class="byline">
-                                                by <a>{{ i.owner.first_name}} {{ i.owner.last_name }}</a>
-                                            </div>
-                                            <p class="excerpt">{{ i.content|safe|truncatechars_html:200}}
-                                            {% ifnotequal i.content|safe|truncatechars_html:200|length i.content|safe|truncatechars_html:201|length %}<a>Read&nbsp;More</a>{% endifnotequal %}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </li>
-                                {% empty %}
-                                <li>
-                                    Maaf, belum tersedia info.
-                                </li>
-                                {% endfor %}
-                            </ul>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="x_panel">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div>
-                                <div class="x_title">
-                                    <h2>Statistik Pengguna</h2>
-
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <div class="tile-stats">
-                                        <div class="icon"><i class="fa fa-caret-square-o-right"></i>
-                                        </div>
-                                        <div class="count">{{ elders.count }}</div>
-                                        <h3>Orang tua</h3>
-
-                                        <p>yang dirawat.</p>
-                                    </div>
-                                    <div class="tile-stats">
-                                        <div class="icon"><i class="fa fa-caret-square-o-right"></i>
-                                        </div>
-                                        <div class="count">{{ user.notif_receiver.count }}</div>
-                                        <h3>Notifikasi</h3>
-
-                                        <p>diterima.</p>
-                                    </div>
-                                    <div class="tile-stats">
-                                        <div class="icon"><i class="fa fa-caret-square-o-right"></i>
-                                        </div>
-                                        <div class="count">{{ user.notif_sender.count }}</div>
-                                        <h3>Notifikasi</h3>
-
-                                        <p>dikirimkan.</p>
-                                    </div>
-                                    <div class="tile-stats">
-                                        <div class="icon"><i class="fa fa-caret-square-o-right"></i>
-                                        </div>
-                                        <div class="count">{{ caregiver.by_user.count }}</div>
-                                        <h3>Catatan</h3>
-                                    </div>
-
-                                </div>
-                            </div>
-                            {% if elders %}
-                            <div>
-                                <div class="x_title">
-                                    <h2>Orang Tua</h2>
-
-                                    <div class="clearfix"></div>
-                                </div>
-                                <ul tabindex="5001" style="overflow: hidden; cursor: grab;"
-                                    class="list-unstyled top_profiles scroll-view">
-                                    {% for elder in elders %}
-                                    <li class="media event">
-                                        <a class="pull-left border-{% cycle 'aero' 'green' as rowcolors %} profile_thumb">
-                                            <i class="fa fa-user {{ rowcolors }}"></i>
-                                        </a>
-
-                                        <div class="media-body">
-                                            <a class="title" href="#">{% if elder.gender == 'l' %}Bapak{% else %}Ibu{% endif %} {{ elder.user.first_name }} {{ elder.user.last_name }}</a>
-                                            {% with activity=elder.get_last_activity %}
-                                            {% if activity %}
-                                            <p><strong>{{ activity.get_type_display }} :</strong> {{ activity.get_condition_display }} </p>
-
-                                            <p>
-                                                <small>{{ activity.value }}</small>
-                                            </p>
-                                            {% endif %}
-                                            {% endwith %}
-                                        </div>
-                                    </li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
+  <div class="">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Grafik Riwayat Kesehatan</h2>
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            {% if blood or heartrate or daily_condition %}
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="demo-container" style="height:280px">
+                <div id="placeholder33x" class="demo-placeholder"></div>
+              </div>
             </div>
-            
+            {% elif active_elder %} Orang tua belum mempunyai data riwayat kesehatan dalam 7 hari terakhir. {% else %} Silahkan tambahkan
+            orang tua yang dirawat terlebih dahulu. {% endif %}
+          </div>
         </div>
-    </div>
-{% endblock 'maincontent' %}
 
-{% block 'extra_footer' %}
-{% if blood or heartrate or daily_condition %}
+        <div class="x_panel">
+          <div class="x_title">
+            <h2>Tips dan Info Seputar Care Giving</h2>
+
+            <div class="clearfix"></div>
+          </div>
+          <div class="x_content">
+            <ul class="list-unstyled timeline">
+              {% for i in info %}
+              <li>
+                <div class="block">
+                  <div class="tags">
+                    <a href="" class="tag">
+                      <span>{{ i.category|title }}</span>
+                    </a>
+                  </div>
+                  <div class="block_content">
+                    <h2 class="title">
+                      <a>{{ i.title }}</a>
+                    </h2>
+
+                    <div class="byline">
+                      by <a>{{ i.owner.first_name}} {{ i.owner.last_name }}</a>
+                    </div>
+                    <p class="excerpt">{{ i.content|safe|truncatechars_html:200}} {% ifnotequal i.content|safe|truncatechars_html:200|length
+                      i.content|safe|truncatechars_html:201|length %}<a>Read&nbsp;More</a>{% endifnotequal %}
+                    </p>
+                  </div>
+                </div>
+              </li>
+              {% empty %}
+              <li>
+                Maaf, belum tersedia info.
+              </li>
+              {% endfor %}
+            </ul>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="x_panel">
+          <div class="col-md-12 col-sm-12 col-xs-12">
+            <div>
+              <div class="x_title">
+                <h2>Statistik Pengguna</h2>
+
+                <div class="clearfix"></div>
+              </div>
+              <div class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-caret-square-o-right"></i>
+                  </div>
+                  <div class="count">{{ elders.count }}</div>
+                  <h3>Orang tua</h3>
+
+                  <p>yang dirawat.</p>
+                </div>
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-caret-square-o-right"></i>
+                  </div>
+                  <div class="count">{{ user.notif_receiver.count }}</div>
+                  <h3>Notifikasi</h3>
+
+                  <p>diterima.</p>
+                </div>
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-caret-square-o-right"></i>
+                  </div>
+                  <div class="count">{{ user.notif_sender.count }}</div>
+                  <h3>Notifikasi</h3>
+
+                  <p>dikirimkan.</p>
+                </div>
+                <div class="tile-stats">
+                  <div class="icon"><i class="fa fa-caret-square-o-right"></i>
+                  </div>
+                  <div class="count">{{ caregiver.by_user.count }}</div>
+                  <h3>Catatan</h3>
+                </div>
+
+              </div>
+            </div>
+            {% if elders %}
+            <div>
+              <div class="x_title">
+                <h2>Orang Tua</h2>
+
+                <div class="clearfix"></div>
+              </div>
+              <ul tabindex="5001" style="overflow: hidden; cursor: grab;" class="list-unstyled top_profiles scroll-view">
+                {% for elder in elders %}
+                <li class="media event">
+                  <a class="pull-left border-{% cycle 'aero' 'green' as rowcolors %} profile_thumb">
+                    <i class="fa fa-user {{ rowcolors }}"></i>
+                  </a>
+
+                  <div class="media-body">
+                    <a class="title" href="#">{% if elder.gender == 'l' %}Bapak{% else %}Ibu{% endif %} {{ elder.user.first_name }} {{ elder.user.last_name }}</a>                    {% with activity=elder.get_last_activity %} {% if activity %}
+                    <p><strong>{{ activity.get_type_display }} :</strong> {{ activity.get_condition_display }} </p>
+
+                    <p>
+                      <small>{{ activity.value }}</small>
+                    </p>
+                    {% endif %} {% endwith %}
+                  </div>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock 'maincontent' %} {% block 'extra_footer' %} {% if blood or heartrate or daily_condition %}
 <script type="text/javascript">
     var chartColours = ['#96CA59', '#3F97EB', '#72c380', '#6f7a8a', '#f7cb38', '#5a8022', '#2c7282'];
     $(function () {
@@ -265,6 +252,4 @@
             }
         }], options);
     });
-</script>
-{% endif %}
-{% endblock 'extra_footer' %}
+</script> {% endif %} {% endblock 'extra_footer' %}

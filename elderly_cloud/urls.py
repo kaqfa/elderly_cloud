@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 # from django.views.generic import TemplateView
 
-from base.views import Login
+from base.views import Login, redirect
 from member.views import Elders, Signup, CareGivers, Profile
 from article.views import Articles
 from hospital.views import Hospitals
@@ -27,9 +27,10 @@ router.register(r'article', Articles, 'Articles')
 urlpatterns = [    
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^api/', include(router.urls)),
+    url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^webapp/', include('base.urls')),
-    url(r'^', include(admin.site.urls)),
+    url(r'^web/', include('base.urls')),
+    url(r'^', redirect),
     # url(r'^$', 'base.views.frontend', name='frontend'),
     # in case of development uncomment below lines and http import
     # url(r'^robots.txt$', lambda r: HttpResponse(

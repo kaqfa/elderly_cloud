@@ -42,7 +42,7 @@ class ElderSerializer(serializers.ModelSerializer):
     cared_by = CareGiverSerializer(many=True, read_only=True)
     fullname = serializers.CharField(write_only=True)
     birthday = serializers.DateField(format='%d/%m/%Y', input_formats=['%d/%m/%Y'], required=False)
-    phone = serializers.RegexField(regex='(([0-9]{10,14})|(0[0-9]{2}[0-9]{8}))$',max_length=12, 
+    phone = serializers.RegexField(regex='(([0-9]{10,14})|(0[0-9]{2}[0-9]{8}))$', max_length=12, 
                                     validators=[UniqueValidator(queryset=Elder.objects.all())])
     
     def update(self, instance, validated_data):
@@ -76,7 +76,7 @@ class SignupSerializer(serializers.Serializer):
     birthday = serializers.DateField(input_formats=['%d/%m/%Y'], required=False)
     gender = serializers.ChoiceField(choices=GENDER_CHOICES,
                                      default='1')
-    phone = serializers.RegexField(regex='(([0-9]{10,14})|(0[0-9]{2}[0-9]{8}))$',max_length=12, 
+    phone = serializers.RegexField(regex='(([0-9]{10,14})|(0[0-9]{2}[0-9]{8}))$', max_length=12, 
                                     validators=[UniqueValidator(queryset=Elder.objects.all())])
     username = serializers.CharField(validators=unique_val,
                                      required=False)
