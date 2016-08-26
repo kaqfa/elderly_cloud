@@ -29,7 +29,10 @@ class Article(TimeStampedModel, StatusModel):
     class Meta:
         verbose_name = 'Artikel'
         verbose_name_plural = 'Artikel'
-        
+
+    def first_category(self):
+        return self.category
+
     def __unicode__(self):
         return self.title
 

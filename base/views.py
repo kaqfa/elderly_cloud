@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth import login, logout
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.generic import View
@@ -18,6 +18,8 @@ from member.serializers import ElderSerializer, CareGiverSerializer
 from info.models import Posting
 from datetime import datetime, date, time
 from datetime import timedelta
+from tracker.models import Tracker
+from article.models import Article
 
 
 def redirect(request):
@@ -162,8 +164,17 @@ class Index(View):
                 'index.html', {'caregiver': caregiver, 'elders': elders})
 
     def partner(self, request):
-        posting = Posting.get_latest_post()
-        return render(request, 'partner/index.html', {'info': posting})
+        today = datetime.now().date()
+        today_start = datetime.combine(today, time())
+        allUsers = User.objects.filter(is_staff = 0, is_active = 1).count()
+        caregivers = CareGiver.objects.all().count()
+        elders = Elder.objects.all().count()
+        todayTrackers = Tracker.objects.filter(created__gte = today_start).values_list('elder_id', flat = True)
+        notToday = Elder.objects.exclude(user_id = todayTrackers)
+        articles = Article.objects.all()
+        return render(request, 'partner/index.html', 
+                      {'all': allUsers, 'caregivers': caregivers, 
+                       'elders': elders, 'notToday': notToday, 'articles': articles})
 
 
 def user_logout(request):

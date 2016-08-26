@@ -5,8 +5,9 @@
     <div class="left_col scroll-view">
 
         <div class="navbar nav_title" style="border: 0;">
-            <a href="{% url 'index' %}" class="site_title"><i class="fa fa-paw"></i>
-                <span>Elder Caring</span></a>
+            <a href="{% url 'index' %}" class="site_title">
+                <img src="{% static 'images/icon.png' %}" style="width: 35px; display: inline-block;" alt="">
+                <img src="{% static 'images/berbakti.png' %}" style="width: 100px; display: inline-block;" alt=""></a>
         </div>
         <div class="clearfix"></div>
         <div class="profile">
@@ -15,7 +16,6 @@
             </div>
             <div class="profile_info">
                 <span>Selamat datang,</span>
-
                 <h2>{{ user.first_name }} {{ user.last_name }}</h2>
             </div>
         </div>
@@ -27,18 +27,24 @@
                 <h3>&nbsp;</h3>
                 <ul class="nav side-menu">
                     <li><a href="{% url 'index' %}"><i class="fa fa-home"></i> Beranda</a></li>
+                    <li><a> <i class="fa fa-cog"></i>Pengguna 
+                        <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="">Semua Pengguna</a></li>
+                            <li><a href="">Orang Tua</a></li>
+                            <li><a href="">Anak</a></li>
+                        </ul>
+                    </li>
+                    <li><a> <i class="fa fa-cog"></i>Aktivitas
+                        <span class="fa fa-chevron-down"></span></a>
+                        <ul class="nav child_menu" style="display: none">
+                            <li><a href="">Daftar Kondisi</a></li>
+                            <li><a href="">Kondisi Panik</a></li>                            
+                        </ul>
+                    </li>
                     <li><a href="{% url 'profile' %}">
                         <i class="fa fa-cog"></i>Profile</a>
                     </li>
-                    {% if user.member.type != 'pj' %}
-                    <li><a><i class="fa fa-newspaper-o"></i> Activity
-                        <span class="fa fa-chevron-down"></span></a>
-                        <ul class="nav child_menu" style="display: none">{% if user.member.type == 'rs' %}
-                            <li><a href="{% url 'room' %}">Daftar Kamar</a></li>{% elif user.member.type == 'km' %}
-                            <li><a href="{% url 'agenda' %}">Agenda</a></li>{% endif %}
-                        </ul>
-                    </li>
-                    {% endif %}
                 </ul>
             </div>
         </div>
