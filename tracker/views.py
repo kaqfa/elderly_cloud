@@ -51,8 +51,8 @@ class Trackers(viewsets.ModelViewSet):
         }
 
         if tracker.condition == 'tb':
-            payload.headings = {"en": "Panggilan panik: "+elder.user.first_name+" "+elder.user.last_name}
-            payload.contents = {"en": elder.user.first_name+" "+elder.user.last_name+" mengirimkan panggilan panik. Harap segera dihubungi."}
+            payload["headings"] = {"en": "Panggilan panik: "+elder.user.first_name+" "+elder.user.last_name}
+            payload["contents"] = {"en": elder.user.first_name+" "+elder.user.last_name+" mengirimkan panggilan panik. Harap segera dihubungi."}
 
         req = requests.post("https://onesignal.com/api/v1/notifications", headers=header, data=json.dumps(payload))
         print (req.text)

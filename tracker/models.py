@@ -9,7 +9,7 @@ class Tracker(TimeStampedModel):
     TYPE_CHOICES = (('dc', 'daily condition'),
                     ('hr', 'heart rate'),
                     ('bg', 'blood glucose'))
-    CONDITION_CHOICES = (('ba', 'baik'), ('bi', 'biasa'), ('tb', 'tidak baik'),
+    CONDITION_CHOICES = (('ba', 'baik'), ('bi', 'kangen'), ('tb', 'tidak baik'),
                          ('sk', 'sakit kepala'),
                          ('sl', 'sakit leher'),
                          ('sdl', 'sakit dada kiri'),
