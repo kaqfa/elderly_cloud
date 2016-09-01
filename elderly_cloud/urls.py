@@ -24,7 +24,7 @@ router.register(r'profile', Profile, 'Profile')
 router.register(r'hospital', Hospitals, 'Hospitals')
 router.register(r'article', Articles, 'Articles')
 
-urlpatterns = [    
+urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [    
     url(r'^summernote/', include('django_summernote.urls')),
     url(r'^api/', include(router.urls)),
     url(r'^admin/', include(admin.site.urls)),
@@ -35,4 +35,4 @@ urlpatterns = [
     # in case of development uncomment below lines and http import
     # url(r'^robots.txt$', lambda r: HttpResponse(
     #     "User-agent: *\nDisallow: /", mimetype="text/plain")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
