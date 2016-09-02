@@ -17,6 +17,7 @@ class CareGiverSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     fullname = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True, required=False)
+    email = serializers.EmailField(required=False)
     birthday = serializers.DateField(format='%d/%m/%Y', input_formats=['%d/%m/%Y'], required=False)
     
     def update(self, instance, validated_data):
@@ -34,6 +35,10 @@ class CareGiverSerializer(serializers.ModelSerializer):
         password=validated_data.get('password', "")
         if password!="":
             user.set_password(password)
+            changed=True
+        email=validated_data.get('email', "")
+        if email!="":
+            user.email=email
             changed=True
         if changed:
             user.save()
