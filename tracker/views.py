@@ -5,7 +5,8 @@ from tracker.models import Tracker
 from tracker.serializers import TrackerSerializer
 from member.models import Elder, CareGiver
 
-from django.views.generic import View
+from django.db.models import Q
+from django.views.generic import View, ListView, DetailView
 from datetime import datetime, date, time
 from datetime import timedelta
 from django.http import HttpResponseRedirect
@@ -15,6 +16,22 @@ from base.views import cek_session
 from django.shortcuts import render
 import requests
 import json
+
+
+class TrackerList(ListView):
+    model = Tracker
+    template_name = "partner/tracker_list.html"
+
+    def get_queryset(self):
+        return Tracker.objects.filter(~Q(condition='tb'))
+
+
+class PanicList(ListView):
+    model = Tracker
+    template_name = "partner/tracker_list.html"
+
+    def get_queryset(self):
+        return Tracker.objects.filter(condition='tb')
 
 
 class Trackers(viewsets.ModelViewSet):

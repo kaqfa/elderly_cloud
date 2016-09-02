@@ -1,0 +1,96 @@
+{% extends 'partner/base.html' %}
+{% load staticfiles %}
+{% block 'title' %}Berbakti | List Kondisi Orang Tua{%endblock 'title' %}
+{% block 'maincontent' %}
+<div class="right_col" role="main">
+    <br/>
+
+    <div class="">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>List Kondisi Orang Tua</h2>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <div class="x_content">
+                        <table id="tbdata" class="table table-striped responsive-utilities jambo_table">
+                            <thead>
+                                <tr class="headings">
+                                    <!-- <th> No </th> -->
+                                    <th> Orang Tua </th>
+                                    <th> Kondisi </th>                                    
+                                    <th> Tgl. Posting </th>
+                                    <th> Posisi </th>                                    
+                                    <th class=" no-link last"><span class="nobr">Aksi</span></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for data in object_list %}
+                                <tr class="even pointer">
+                                    <!-- <td class="a-center "></td> -->
+                                    <td class=" ">{{data.elder.user.first_name}} {{data.elder.user.last_name}}</td>
+                                    <td class=" ">{{data.get_condition_display}}</td>
+                                    <td class="a-right a-right ">{{data.created}}</td>
+                                    <td class=" ">{{data.location}}</td>
+                                    <td class=" last"><a href="{% url 'member-detail' data.id %}">Tampil</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock 'maincontent' %}
+{% block 'extra_footer' %}
+<script src="{% static 'js/datatables/js/jquery.dataTables.js' %}"></script>
+<!-- <script src="{% static 'js/datatables/tools/js/dataTables.tableTools.js' %}"></script> -->
+<script>
+    // $(document).ready(function () {
+    //     $('input.tableflat').iCheck({
+    //         checkboxClass: 'icheckbox_flat-green',
+    //         radioClass: 'iradio_flat-green'
+    //     });
+    // });
+
+    var asInitVals = new Array();
+    $(document).ready(function () {
+        var oTable = $('#tbdata').dataTable({
+            "oLanguage": {
+                "sSearch": "Cari semua kolom:"
+            },
+            "aoColumnDefs": [
+                {
+                    'bSortable': false,
+                    'aTargets': [0]
+                } //disables sorting for column one
+            ],
+            'iDisplayLength': 12,
+            "sPaginationType": "full_numbers"            
+        });
+        $("tfoot input").keyup(function () {
+            /* Filter on the column based on the index of this element's parent <th> */
+            oTable.fnFilter(this.value, $("tfoot th").index($(this).parent()));
+        });
+        $("tfoot input").each(function (i) {
+            asInitVals[i] = this.value;
+        });
+        $("tfoot input").focus(function () {
+            if (this.className == "search_init") {
+                this.className = "";
+                this.value = "";
+            }
+        });
+        $("tfoot input").blur(function (i) {
+            if (this.value == "") {
+                this.className = "search_init";
+                this.value = asInitVals[$("tfoot input").index(this)];
+            }
+        });
+    });
+</script>
+{% endblock 'extra_footer' %}

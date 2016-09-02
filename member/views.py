@@ -6,7 +6,7 @@ from rest_framework.decorators import list_route, parser_classes
 from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_201_CREATED
 from django.http import HttpResponseRedirect
-from django.views.generic import View
+from django.views.generic import View, ListView, DetailView
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from member.forms import ElderForm, ElderUserForm, JoinForm, CGUserForm
@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from PIL import Image
 
-from member.models import Elder, CareGiver, CareGiving, Partner
+from member.models import Elder, CareGiver, CareGiving, Partner, Member
 from django.contrib.auth.models import Group
 from django.utils.crypto import get_random_string
 from member.serializers import ElderSerializer
@@ -23,6 +23,29 @@ from member.serializers import SignupSerializer, CareGiverSerializer
 from base.views import cek_session, is_caregiver
 
 from rest_framework.permissions import IsAuthenticated
+
+
+class MemberList(ListView):
+    model = Member
+    template_name = "partner/member_list.html"
+
+    def get_queryset(self):
+        return Member.objects.filter(is_staff=0, is_superuser=0)
+
+
+class MemberDetail(DetailView):
+    model = Member
+    template_name = "partner/member_detail.html"
+
+
+class CareGiverList(ListView):
+    model = CareGiver
+    template_name = "partner/caregiver_list.html"    
+
+
+class ElderList(ListView):
+    model = Elder
+    template_name = "partner/elder_list.html"
 
 
 class Elders(mixins.ListModelMixin,

@@ -170,7 +170,7 @@ class Index(View):
         caregivers = CareGiver.objects.all().count()
         elders = Elder.objects.all().count()
         todayTrackers = Tracker.objects.filter(created__gte = today_start).values_list('elder_id', flat = True)
-        notToday = Elder.objects.exclude(user_id = todayTrackers)
+        notToday = Elder.objects.exclude(id = todayTrackers)
         articles = Article.objects.all()
         return render(request, 'partner/index.html', 
                       {'all': allUsers, 'caregivers': caregivers, 

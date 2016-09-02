@@ -16,6 +16,35 @@ User.add_to_class('get_unread_notif', get_unread_notif)
 GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
 
 
+class Member(User):
+
+    class Meta:
+        proxy=True
+
+    def member_type(self):
+        if hasattr(self, 'caregiver'):
+            return 'caregiver'
+        elif hasattr(self, 'elder'):
+            return 'elder'
+        else: 
+            return 0 #none
+
+    def fullname(self):
+        return self.first_name+" "+self.last_name
+
+    def member_phone(self):
+        if hasattr(self, 'caregiver'):
+            return self.caregiver.phone
+        elif hasattr(self, 'elder'):
+            return self.elder.phone
+
+    def member_gender(self):
+        if hasattr(self, 'caregiver'):
+            return self.caregiver.get_gender_display()
+        elif hasattr(self, 'elder'):
+            return self.elder.get_gender_display()
+
+
 class CareGiver(TimeStampedModel):
     user = models.OneToOneField(User, verbose_name='Untuk Pengguna')
     address = models.TextField(null=True, blank=True, verbose_name='Alamat')
@@ -78,6 +107,12 @@ class Elder(TimeStampedModel):
             return self.tracker_set.order_by('-id')[0]
         else:
             return None
+
+    def get_last_activity_date(self):
+        if self.get_last_activity != None:
+            return self.get_last_activity().created
+
+        return None
 
 
 class CareGiving(TimeStampedModel):

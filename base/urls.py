@@ -17,8 +17,8 @@ from base import views as base
 # NoteDetail, NoteEdit, NoteDelete
 # from tracker.views import Trackers, KondisiHarian, DetakJantung, GulaDarah
 # from info.views import infos, InfoAll, TipsAll, PostDetail, POIList
-from member.views import Parents, UpdateElder, DeleteElder
-from member.views import set_active_elder, UpdateProfile
+import member.views as member
+import tracker.views as tracker
 # from feedback.views import FeedbackList, FeedbackDetail
 # from partner.views import UpdateAvailability, AgendaTable, AgendaEdit
 # from partner.views import AgendaDetail, AgendaDelete, RoomTable, RoomEdit
@@ -28,11 +28,19 @@ from member.views import set_active_elder, UpdateProfile
 urlpatterns = [    
     url(r'^logout/', base.user_logout, name='logout'),
     url(r'^status/', base.status, name='status'),
-    url(r'^parents/$', Parents.as_view(), name='parents'),
-    url(r'^parents/(?P<id>[0-9]*)/edit/$',
-        UpdateElder.as_view(), name='parents_edit'),
-    url(r'^parents/(?P<id>[0-9]*)/delete/$',
-        DeleteElder.as_view(), name='parents_del'),    
+    url(r'^parents/$', member.Parents.as_view(), name='parents'),
+    url(r'^parents/(?P<id>[0-9]*)/edit/$', member.UpdateElder.as_view(), name='parents_edit'),
+    url(r'^parents/(?P<id>[0-9]*)/delete/$', member.DeleteElder.as_view(), name='parents_del'),
+    url(r'^members/', member.MemberList.as_view(), name='member-list'),
+    url(r'^members/(?P<id>[0-9]*)/$', member.MemberDetail.as_view(), name='member-detail'),    
+    url(r'^elders/', member.ElderList.as_view(), name='elder-list'),
+    url(r'^elders/(?P<id>[0-9]*)/$', member.MemberDetail.as_view(), name='elder-detail'),
+    url(r'^caregivers/', member.CareGiverList.as_view(), name='caregiver-list'),
+    url(r'^caregivers/(?P<id>[0-9]*)/$', member.MemberDetail.as_view(), name='caregiver-detail'),
+    url(r'^trackers/', tracker.TrackerList.as_view(), name='tracker-list'),
+    url(r'^trackers/(?P<id>[0-9]*)/$', member.MemberDetail.as_view(), name='tracker-detail'),
+    url(r'^panics/', tracker.PanicList.as_view(), name='panic-list'),
+    url(r'^panics/(?P<id>[0-9]*)/$', member.MemberDetail.as_view(), name='panic-detail'),
     # url(r'^notification/elder/$',
     # NotifikasiElder.as_view(), name='notif_elder'),
     # url(r'^notification/elder/(?P<id>[0-9]*)/$',
@@ -85,8 +93,8 @@ urlpatterns = [
     # url(r'^feedback/$', FeedbackList.as_view(), name='feedback'),
     # url(r'^feedback/(?P<id>[0-9]*)/$',
     # FeedbackDetail.as_view(), name='feedback_detail'),
-    url(r'^profile/$', UpdateProfile.as_view(), name='profile'),
-    url(r'^activate/(?P<id>[0-9]*)/', set_active_elder, name='set_elder'),
+    url(r'^profile/$', member.UpdateProfile.as_view(), name='profile'),
+    url(r'^activate/(?P<id>[0-9]*)/', member.set_active_elder, name='set_elder'),
     # url(r'^availability/$',
     # UpdateAvailability.as_view(), name='availability'),
     # url(r'^agenda/$', AgendaTable.as_view(), name='agenda'),
