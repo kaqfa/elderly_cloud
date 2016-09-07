@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 from django.contrib.messages import constants as message_constants
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS as TCP
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     # 'wpadmin',
+    'suit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -111,6 +112,10 @@ TEMPLATES = [
     },
 ]
 
+TEMPLATE_CONTEXT_PROCESSORS = TCP + (
+    'django.core.context_processors.request',
+)
+
 WSGI_APPLICATION = 'elderly_cloud.wsgi.application'
 
 
@@ -130,13 +135,13 @@ DATABASES = {
 
 LANGUAGE_CODE = 'id'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 FIXTURE_DIRS = ('fixtures/',)
 
@@ -154,19 +159,49 @@ MEDIA_URL = '/media/'
 
 LOGIN_URL = '/'
 
-WPADMIN = {
-    'admin': {
-        # 'admin_site': 'elderly_cloud.admin.admin',
-        'title': 'Elderly Application',
-        'menu': {
-            'top': 'wpadmin.menu.menus.BasicTopMenu',
-            'left': 'wpadmin.menu.menus.BasicLeftMenu',
-        },
-        'dashboard': {
-            'breadcrumbs': True,
-        },
-        'custom_style': STATIC_URL + 'wpadmin/css/themes/ocean.css',
-    }
+# WPADMIN = {
+#     'admin': {
+#         # 'admin_site': 'elderly_cloud.admin.admin',
+#         'title': 'Elderly Application',
+#         'menu': {
+#             'top': 'wpadmin.menu.menus.BasicTopMenu',
+#             'left': 'wpadmin.menu.menus.BasicLeftMenu',
+#         },
+#         'dashboard': {
+#             'breadcrumbs': True,
+#         },
+#         'custom_style': STATIC_URL + 'wpadmin/css/themes/ocean.css',
+#     }
+# }
+
+SUIT_CONFIG = {
+    # header
+    'ADMIN_NAME': 'Administrasi Berbakti',
+    'HEADER_DATE_FORMAT': 'l, j. F Y',
+    'HEADER_TIME_FORMAT': 'H:i',
+
+    # forms
+    # 'SHOW_REQUIRED_ASTERISK': True,  # Default True
+    # 'CONFIRM_UNSAVED_CHANGES': True, # Default True
+
+    # menu
+    # 'SEARCH_URL': '/admin/auth/user/',
+    # 'MENU_ICONS': {
+    #    'sites': 'icon-leaf',
+    #    'auth': 'icon-lock',
+    # },
+    # 'MENU_OPEN_FIRST_CHILD': True, # Default True
+    # 'MENU_EXCLUDE': ('auth.group',),
+    'MENU': (
+        'sites',
+        {'app': 'member', 'icon':'icon-user', 
+         'models': ('auth.user', 'member.member', 'member.elder', 'member.caregiver', 'auth.group')},        
+        # {'label': 'Data Kondisi', 'icon':'icon-question-sign', 'url': '/admin/tracker/tracker/'},
+        {'app': 'tracker', 'icon':'icon-signal', 'models': ('tracker.trackcondition', 'tracker.trackpanic')}, 
+    ),
+
+    # misc
+    # 'LIST_PER_PAGE': 15
 }
 
 MESSAGE_TAGS = {message_constants.DEBUG: 'debug',

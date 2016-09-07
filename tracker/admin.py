@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Tracker
+from .models import Tracker, TrackCondition, TrackPanic
 
 
 class TrackerAdmin(admin.ModelAdmin):
@@ -8,4 +8,16 @@ class TrackerAdmin(admin.ModelAdmin):
     list_display = ['elder', 'condition', 'type', 'value']
 
 
+class ConditionAdmin(admin.ModelAdmin):
+	fields = ['elder', 'type', 'condition', 'location']
+	list_display = ['elder', 'condition', 'type', 'value']
+
+
+class PanicAdmin(admin.ModelAdmin):
+	fields = ['elder', 'type', 'condition', 'location']
+	list_display = ['elder', 'condition', 'type', 'value']
+
+
 admin.site.register(Tracker, TrackerAdmin)
+admin.site.register(TrackCondition, ConditionAdmin)
+admin.site.register(TrackPanic, PanicAdmin)

@@ -164,13 +164,14 @@ class Index(View):
                 'index.html', {'caregiver': caregiver, 'elders': elders})
 
     def partner(self, request):
-        today = datetime.now().date()
-        today_start = datetime.combine(today, time())
+        # today = datetime.now().date()
+        # today_start = datetime.combine(today, time())
         allUsers = User.objects.filter(is_staff = 0, is_active = 1).count()
         caregivers = CareGiver.objects.all().count()
         elders = Elder.objects.all().count()
-        todayTrackers = Tracker.objects.filter(created__gte = today_start).values_list('elder_id', flat = True)
-        notToday = Elder.objects.exclude(id = todayTrackers)
+        # todayTrackers = Tracker.objects.filter(created__gte = today_start).values_list('elder_id', flat = True)
+        # notToday = Elder.objects.exclude(id = todayTrackers)
+        notToday = Tracker.today_member_not_tracking()
         articles = Article.objects.all()
         return render(request, 'partner/index.html', 
                       {'all': allUsers, 'caregivers': caregivers, 

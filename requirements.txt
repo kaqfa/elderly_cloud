@@ -4,9 +4,9 @@ django-location-field==1.6.1
 django-model-utils==2.3.1
 django-pipeline==1.5.3
 django-polymorphic==0.7.1
-django-suit==0.2.14
+django-suit==0.2.21
 django-summernote==0.6.16
-django-wpadmin==1.7.4
+# django-wpadmin==1.7.4
 djangorestframework==3.2.2
 futures==3.0.3
 Pillow

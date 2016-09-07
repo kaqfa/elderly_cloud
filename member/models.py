@@ -19,7 +19,7 @@ GENDER_CHOICES = (('l', 'laki-laki'), ('p', 'perempuan'))
 class Member(User):
 
     class Meta:
-        proxy=True
+        proxy=True    
 
     def member_type(self):
         if hasattr(self, 'caregiver'):

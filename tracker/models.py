@@ -1,6 +1,9 @@
 from django.db import models
+from django.db.models import Q
 from model_utils.models import TimeStampedModel
 from location_field.models.plain import PlainLocationField
+from datetime import datetime, date, time
+from datetime import timedelta
 
 from member.models import Elder
 
@@ -45,3 +48,38 @@ class Tracker(TimeStampedModel):
 
     def __str__(self):
         return self.__unicode__()
+
+    @staticmethod
+    def today_tracking():
+        today = datetime.now().date()
+        today_start = datetime.combine(today, time())
+        return Tracker.objects.filter(created__gte = today_start)
+
+    @staticmethod
+    def today_member_not_tracking():
+        today_tracking = Tracker.today_tracking().values_list('elder_id', flat = True)
+        return Elder.objects.exclude(id__in = today_tracking)
+
+
+class ConditionManager(models.Manager):
+    def get_queryset(self):
+        return super(ConditionManager, self).get_queryset().filter(~Q(condition='tb'))
+
+
+class PanicManager(models.Manager):
+    def get_queryset(self):
+        return super(PanicManager, self).get_queryset().filter(condition='tb')
+
+
+class TrackCondition(Tracker):
+    objects = ConditionManager()
+
+    class Meta:
+        proxy = True
+
+
+class TrackPanic(Tracker):
+    objects = PanicManager()
+
+    class Meta:
+        proxy = True
