@@ -16,11 +16,14 @@ class UserSerializer(serializers.ModelSerializer):
 class CareGiverSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
     fullname = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=False)
+    email = serializers.EmailField(required=False)
     birthday = serializers.DateField(format='%d/%m/%Y', input_formats=['%d/%m/%Y'], required=False)
     
     def update(self, instance, validated_data):
         user=instance.user
-        fullname=validated_data.get('fullname', "");
+        fullname=validated_data.get('fullname', "")
+        changed=False
         if(fullname!=""):
             names = fullname.split(' ', 1)
             user.first_name = names[0]
@@ -28,6 +31,16 @@ class CareGiverSerializer(serializers.ModelSerializer):
                 user.last_name = names[1]
             else:
                 user.last_name = ""
+            changed=True
+        password=validated_data.get('password', "")
+        if password!="":
+            user.set_password(password)
+            changed=True
+        email=validated_data.get('email', "")
+        if email!="":
+            user.email=email
+            changed=True
+        if changed:
             user.save()
         for (key, value) in validated_data.items():
             setattr(instance, key, value)
