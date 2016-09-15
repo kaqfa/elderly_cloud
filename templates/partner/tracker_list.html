@@ -60,8 +60,11 @@
     var asInitVals = new Array();
     $(document).ready(function () {
         var oTable = $('#tbdata').dataTable({
-            // "bSort" : false,
+            "bSort" : false,
             "order": [],
+            // "columnDefs": [
+            //     { "type": "numeric-comma", targets: 0 }
+            // ]
             "oLanguage": {
                 "sSearch": "Cari semua kolom:"
             },
