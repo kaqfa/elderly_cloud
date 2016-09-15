@@ -60,15 +60,17 @@
     var asInitVals = new Array();
     $(document).ready(function () {
         var oTable = $('#tbdata').dataTable({
+            // "bSort" : false,
+            "order": [],
             "oLanguage": {
                 "sSearch": "Cari semua kolom:"
             },
-            "aoColumnDefs": [
-                {
-                    'bSortable': false,
-                    'aTargets': [0]
-                } //disables sorting for column one
-            ],
+            // "aoColumnDefs": [
+            //     {
+            //         'bSortable': false,
+            //         'aTargets': [0]
+            //     } //disables sorting for column one
+            // ],
             'iDisplayLength': 12,
             "sPaginationType": "full_numbers"            
         });

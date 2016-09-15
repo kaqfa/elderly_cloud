@@ -23,7 +23,7 @@ class TrackerList(ListView):
     template_name = "partner/tracker_list.html"
 
     def get_queryset(self):
-        return Tracker.objects.filter(~Q(condition='tb'))
+        return Tracker.objects.filter(~Q(condition='tb')).order_by('-created')
 
 
 class PanicList(ListView):
@@ -31,7 +31,7 @@ class PanicList(ListView):
     template_name = "partner/tracker_list.html"
 
     def get_queryset(self):
-        return Tracker.objects.filter(condition='tb')
+        return Tracker.objects.filter(condition='tb').order_by('-created')
 
 
 class Trackers(viewsets.ModelViewSet):
