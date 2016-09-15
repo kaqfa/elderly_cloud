@@ -59,6 +59,7 @@ class Tracker(TimeStampedModel):
     def today_member_not_tracking():
         today_tracking = Tracker.today_tracking().values_list('elder_id', flat = True)
         return Elder.objects.exclude(id__in = today_tracking)
+        
 
 
 class ConditionManager(models.Manager):
