@@ -109,7 +109,7 @@ class Index(View):
                         return self.caregiver(request)
                     else:                        
                         return self.partner(request)
-            else:                                
+            else:
                 return render(request, 'login.html',
                               {'error_login': form.errors})
 

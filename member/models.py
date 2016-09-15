@@ -39,10 +39,16 @@ class Member(User):
             return self.elder.phone
 
     def member_gender(self):
+        code = '1'
         if hasattr(self, 'caregiver'):
-            return self.caregiver.get_gender_display()
+            code = self.caregiver.get_gender_display()
         elif hasattr(self, 'elder'):
-            return self.elder.get_gender_display()
+            code = self.elder.get_gender_display()
+
+        if code == '1':
+            return 'Laki-laki'
+        else:
+            return 'Perempuan'
 
 
 class CareGiver(TimeStampedModel):
