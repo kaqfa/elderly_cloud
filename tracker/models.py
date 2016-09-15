@@ -43,11 +43,6 @@ class Tracker(TimeStampedModel):
         verbose_name = 'Penelusuran'
         verbose_name_plural = 'Data Penelusuran'
 
-    def __unicode__(self):
-        return str(self.elder)+'-'+self.get_condition_display()
-
-    def __str__(self):
-        return self.__unicode__()
 
     @staticmethod
     def today_tracking():
@@ -59,7 +54,13 @@ class Tracker(TimeStampedModel):
     def today_member_not_tracking():
         today_tracking = Tracker.today_tracking().values_list('elder_id', flat = True)
         return Elder.objects.exclude(id__in = today_tracking)
-        
+
+    def __unicode__(self):
+        return str(self.elder)+'-'+self.get_condition_display()
+
+    def __str__(self):
+        return self.__unicode__()    
+
 
 
 class ConditionManager(models.Manager):
