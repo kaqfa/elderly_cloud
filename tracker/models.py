@@ -8,6 +8,11 @@ from datetime import timedelta
 from member.models import Elder
 
 
+class TrackerManager(models.Manager):
+    def get_queryset(self):
+        return super(TrackerManager, self).get_queryset().order_by('-created')
+
+
 class Tracker(TimeStampedModel):
     TYPE_CHOICES = (('dc', 'daily condition'),
                     ('hr', 'heart rate'),
@@ -39,10 +44,11 @@ class Tracker(TimeStampedModel):
     location = PlainLocationField(based_fields=[elder],
                                   zoom=7, default='-6.889836,109.674592')
 
+    objects = TrackerManager()
+
     class Meta:
         verbose_name = 'Penelusuran'
         verbose_name_plural = 'Data Penelusuran'
-
 
     @staticmethod
     def today_tracking():
@@ -59,7 +65,7 @@ class Tracker(TimeStampedModel):
         return str(self.elder)+'-'+self.get_condition_display()
 
     def __str__(self):
-        return self.__unicode__()    
+        return self.__unicode__()
 
 
 
