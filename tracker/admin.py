@@ -5,7 +5,7 @@ from .models import Tracker, TrackCondition, TrackPanic
 
 class TrackerAdmin(admin.ModelAdmin):
     fields = ['elder', 'type', 'condition', 'location']
-    list_display = ['elder', 'condition', 'type', 'value']
+    list_display = ['elder', 'condition', 'type', 'value', 'created']
 
 
 class ConditionAdmin(admin.ModelAdmin):
