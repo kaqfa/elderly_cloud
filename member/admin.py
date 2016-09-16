@@ -12,7 +12,12 @@ class MemberAdmin(admin.ModelAdmin):
 
 
 class ElderAdmin(admin.ModelAdmin):
-    list_display = ['user', 'code', 'address', 'birthday', 'phone']
+    list_display = ['user', 'code', 'address', 'birthday', 'phone', 'num_tracks']
+    
+    def num_tracks(self, obj):
+        return obj.tracker_set.count()
+    num_tracks.allow_tags = True
+    num_tracks.short_description = ("Jumlah Penelusuran")
 
 
 class CareGivingAdmin(admin.ModelAdmin):
