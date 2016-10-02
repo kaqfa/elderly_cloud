@@ -32,7 +32,9 @@ class Tracker(TimeStampedModel):
                          ('sbl', 'sakit betis kiri'),
                          ('sbr', 'sakit betis kanan'),
                          ('stl', 'sakit telapak kaki kiri'),
-                         ('str', 'sakit telapak kaki kanan'))
+                         ('str', 'sakit telapak kaki kanan'),
+                         ('sltl', 'sakit lutut kiri'),
+                         ('sltr', 'sakit lutut kanan'))
 
     elder = models.ForeignKey(Elder, verbose_name='Orang Tua')
     type = models.CharField('Jenis Penelusuran', max_length=2,
