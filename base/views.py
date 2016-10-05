@@ -158,7 +158,7 @@ class Index(View):
         else:
             caregiver = CareGiver.objects.get(user=request.user)
             elders = Elder.get_cared_elder(
-                user=CareGiver.objects.get(user=request.user))
+                user = CareGiver.objects.get(user=request.user))
             return render(
                 request,
                 'index.html', {'caregiver': caregiver, 'elders': elders})
