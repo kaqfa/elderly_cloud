@@ -5,6 +5,9 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 
+from django.core.mail import send_mail
+from rest_framework.permissions import AllowAny
+from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
@@ -191,3 +194,33 @@ def status(request):
         return HttpResponse("Logged in")
     else:
         return HttpResponse("Logged out")
+
+class ResetPassword(viewsets.ViewSet):
+    queryset = CareGiver.objects.all()
+    permission_classes = (AllowAny,)
+
+    def create(self, request):
+        if 'email' in request.data:
+            context={
+                'request': self.request,
+                'format': self.format_kwarg,
+                'view': self
+            }
+            email=request.data['email']
+            if User.objects.filter(email=email):
+                user=User.objects.get(email=email)
+                password=User.objects.make_random_password()
+                user.set_password(password)
+                user.save()
+                send_mail(
+                    'Reset Password Request',
+                    'Berikut adalah password baru anda:\n'+password,
+                    'admin@berbakti.id',
+                    [email],
+                    fail_silently=False
+                )
+                return Response({'success':True})
+            else:
+                return Response({'success':False,'notfound':'no email found'},status=HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'success':False},status=HTTP_400_BAD_REQUEST)

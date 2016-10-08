@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 # from django.views.generic import TemplateView
 
-from base.views import Login, redirect
+from base.views import Login, redirect, ResetPassword
 from member.views import Elders, Signup, CareGivers, Profile
 from article.views import Articles
 from hospital.views import Hospitals
@@ -23,6 +23,7 @@ router.register(r'trackers', Trackers, 'Trackers')
 router.register(r'profile', Profile, 'Profile')
 router.register(r'hospital', Hospitals, 'Hospitals')
 router.register(r'article', Articles, 'Articles')
+router.register(r'reset', ResetPassword, 'Reset')
 
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + [    
     url(r'^summernote/', include('django_summernote.urls')),
